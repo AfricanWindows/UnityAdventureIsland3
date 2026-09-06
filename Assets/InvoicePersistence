@@ -1,0 +1,16 @@
+public class InvocicePersistence
+{
+   Invoice invoice;
+   IInvoicePersistence invoicePersistence;
+
+   public InvocicePersistence(Invoice invoice, IInvoicePersistence invoicePersistence)
+   {
+      this.invoice = invoice;
+      this.invoicePersistence = invoicePersistence;
+   }
+
+   public void save(string fileName)
+   {
+      invoicePersistence.save(invoice, fileName);
+   } 
+}
