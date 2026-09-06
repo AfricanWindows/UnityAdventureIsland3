@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerDeath : MonoBehaviour
+public class PlayerDeath : MonoBehaviour, IKillable
 {
     public static event Action OnPlayerDied;
 

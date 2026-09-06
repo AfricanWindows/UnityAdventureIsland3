@@ -86,8 +86,8 @@ public class PlayerHealthController : MonoBehaviour, IInjectable
         UpdateView();
     }
 
-    /// <summary>Entry point used by HealthPowerUp when a heart is collected.</summary>
-    public bool AddHealth(int amount)
+    /// <summary>Entry point used by HealthPowerUp. Returns how many hearts actually fitted.</summary>
+    public int AddHealth(int amount)
     {
         return model.Add(amount);
     }

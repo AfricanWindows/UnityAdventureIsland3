@@ -3,19 +3,19 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
-    /// CONCRETE PRODUCT. The laser fills in exactly two of the template's steps - it flies
-    /// straight up, and it is stopped by solid geometry - and inherits everything else:
-    /// the shot skeleton, the lifetime timer, the damage rule, the pool handshake.
+    /// CONCRETE PRODUCT. The laser fills in exactly one of the template's steps - it flies
+    /// straight up - and inherits everything else: the shot skeleton, the lifetime timer,
+    /// the damage rule, the scenery rule, the pool handshake.
     ///
-    /// Whether it pierces enemies is NOT decided here. It comes from the config, so the
-    /// same class covers both variants the exercise offers.
+    /// It used to carry its own copy of "stop at solid geometry". That moved into
+    /// BaseProjectile as a tick box, so the laser now says it with data (Stops On Scenery)
+    /// instead of code, and the axe reuses the same rule without a line of its own.
+    ///
+    /// Whether it pierces enemies is NOT decided here either. It comes from the config, so
+    /// the same class covers both variants the exercise offers.
     /// </summary>
     public sealed class LaserProjectile : BaseProjectile
     {
-        [Tooltip("Layers that stop the laser (ground, ceiling). Leave empty and ANY solid " +
-                 "non-trigger collider stops it, which is what this project needs today.")]
-        [SerializeField] private LayerMask blockingLayers;
-
         [Tooltip("Z rotation applied when fired. Use 90 if the sprite is drawn horizontally.")]
         [SerializeField] private float spriteRotationZ;
 
@@ -30,21 +30,6 @@ namespace Game.Projectiles
         protected override Quaternion GetRotation()
         {
             return Quaternion.Euler(0f, 0f, spriteRotationZ);
-        }
-
-        protected override bool IsBlockedBy(Collider2D other)
-        {
-            // Triggers are coins, power-ups and checkpoints - the laser flies through those.
-            if (other.isTrigger)
-                return false;
-
-            // No mask configured yet (this project has no Ground layer): treat every solid
-            // collider as a wall. Once a Ground layer exists, set the mask and the laser
-            // stops only there - fewer collision checks, same behaviour.
-            if (blockingLayers.value == 0)
-                return true;
-
-            return (blockingLayers.value & (1 << other.gameObject.layer)) != 0;
         }
     }
 }

@@ -138,6 +138,8 @@ GameObject:
   - component: {fileID: 4914497458084248181}
   - component: {fileID: 8444476018975068162}
   - component: {fileID: 852006832453174510}
+  - component: {fileID: 7788110000000000021}
+  - component: {fileID: 7788110000000000022}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -473,6 +475,33 @@ MonoBehaviour:
   speedParameter: Speed
   groundedParameter: 
   runThreshold: 0.05
+--- !u!114 &7788110000000000021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2efc4fd9b03564c84060f943739a59bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponsLostOnDeath
+  weaponsRoot: {fileID: 0}
+--- !u!114 &7788110000000000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb57f112811d6bc38e593af4738f549a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerController
+  config: {fileID: 11400000, guid: 6dd57403b6fc78c8f7657c81743f8ac0, type: 2}
+  viewComponent: {fileID: 0}
 --- !u!1 &8065002628259424788
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +619,6 @@ MonoBehaviour:
   unlockedFromStart: 0
   axePool: {fileID: 6605456052859109381}
   firePoint: {fileID: 0}
-  startAmmo: 0
 --- !u!114 &6605456052859109381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,8 +634,8 @@ MonoBehaviour:
   prefab: {fileID: -2751458972493023182, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
   config: {fileID: 11400000, guid: 1c0662647ccaceae8d8c721a959f29be, type: 2}
   container: {fileID: 0}
-  prewarmCount: 10
-  maxSize: 10
+  prewarmCount: 5
+  maxSize: 5
   allowGrowth: 0
   logTraffic: 0
 --- !u!1 &9105372525335112281

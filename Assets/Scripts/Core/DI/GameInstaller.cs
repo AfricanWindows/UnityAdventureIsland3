@@ -31,6 +31,9 @@ namespace Game.Core.DI
                  "once, here, which is the one place in the project allowed to search the scene.")]
         [SerializeField] private PlayerHealthView healthView;
 
+    [Tooltip("The power bar. Optional - same rule as the health label above.")]
+    [SerializeField] private PowerBarView powerBar;
+
         [Header("Diagnostics")]
         [Tooltip("Log every registration and every injected component on start-up.")]
         [SerializeField] private bool verbose = true;
@@ -71,6 +74,18 @@ namespace Game.Core.DI
                 _container.Register<IPlayerHealthView>(view);
             else
                 Debug.LogWarning("[DI] No PlayerHealthView in the scene - health will not be displayed.", this);
+
+            // Same story for the power bar: it lives in the UI canvas, so it cannot be
+            // dragged onto a player prefab. The composition root resolves it once.
+            PowerBarView bar = powerBar;
+
+            if (bar == null)
+                bar = FindAnyObjectByType<PowerBarView>(FindObjectsInactive.Include);
+
+            if (bar != null)
+                _container.Register<IPowerView>(bar);
+            else
+                Debug.LogWarning("[DI] No PowerBarView in the scene - the power bar will not be drawn.", this);
 
             if (verbose)
                 Debug.Log("[DI] Services registered.", this);

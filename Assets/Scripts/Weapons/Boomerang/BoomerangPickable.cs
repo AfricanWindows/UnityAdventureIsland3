@@ -1,13 +1,14 @@
+using Game.Weapons;
+
 /// <summary>
 /// The boomerang pickup sitting in the level - the exact counterpart of LaserPickable.
-/// Everything about being picked up - waiting for the player's trigger, checking the tag,
-/// handing the effect over, disappearing - is already written once in BasePickable. This
-/// class only answers WHAT Mario gets.
+/// Being picked up is written once in BasePickable; unlocking a weapon is written once in
+/// EquipWeaponPowerUp. This class only names which weapon.
 /// </summary>
 public class BoomerangPickable : BasePickable
 {
     protected override IPowerUp CreatePowerUp()
     {
-        return new BoomerangPowerUp();
+        return new EquipWeaponPowerUp<BoomerangWeapon>();
     }
 }

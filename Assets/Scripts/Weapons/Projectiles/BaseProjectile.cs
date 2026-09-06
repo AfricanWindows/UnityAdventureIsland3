@@ -24,6 +24,15 @@ namespace Game.Projectiles
                  "his own muzzle, so without this the shot would end on the frame it starts.")]
         [SerializeField] private string ignoreTag = "Player";
 
+        [Header("Scenery")]
+        [Tooltip("Tick for a projectile that dies when it touches the ground or a wall " +
+                 "(axe, laser). Leave off for one that flies over the level (boomerang).")]
+        [SerializeField] private bool stopsOnScenery;
+
+        [Tooltip("Which layers count as scenery. Leave empty and ANY solid non-trigger " +
+                 "collider stops it, which is what this project needs today.")]
+        [SerializeField] private LayerMask blockingLayers;
+
         private ProjectileStats _stats;
         private Action _release;
 
@@ -104,12 +113,33 @@ namespace Game.Projectiles
         protected virtual void OnAfterFire() { }
 
         /// <summary>
+        /// <summary>
         /// Non-damageable things that stop the flight - ground, ceiling, walls.
-        /// Default: nothing stops it, so a projectile that ignores scenery needs no code.
+        ///
+        /// The rule is DATA, not code: an axe that dies on the floor and a boomerang that
+        /// flies over it are the same class with a different tick box. This used to be an
+        /// override inside LaserProjectile, which meant every new projectile that wanted
+        /// the same behaviour had to copy the same eight lines (Open/Closed).
+        ///
+        /// Still virtual: a projectile with a genuinely different rule - one that bounces,
+        /// one that only stops on breakable walls - overrides it and loses nothing.
         /// </summary>
         protected virtual bool IsBlockedBy(Collider2D other)
         {
-            return false;
+            if (!stopsOnScenery)
+                return false;
+
+            // Triggers are pickups, checkpoints and other projectiles - fly through those.
+            if (other.isTrigger)
+                return false;
+
+            // No mask configured: treat every solid collider as a wall. Once the project
+            // has a Ground layer, set the mask and the projectile stops only there -
+            // fewer checks, same behaviour.
+            if (blockingLayers.value == 0)
+                return true;
+
+            return (blockingLayers.value & (1 << other.gameObject.layer)) != 0;
         }
 
         /// <summary>

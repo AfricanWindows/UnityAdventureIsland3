@@ -4,18 +4,23 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
-    /// The axe thrower. It decides WHEN an axe may leave Mario's hand - nothing else.
+    /// The axe thrower. It decides WHEN an axe may leave Mario's hand and where it starts -
+    /// nothing else. It does not build axes, does not own them, and does not destroy them;
+    /// it borrows one and the axe brings itself back (Single Responsibility).
     ///
-    /// Two things were taken away from the old version. The Instantiate/Destroy cycle went
-    /// to the pool, and the ammo count went to AmmoMagazine, a plain C# class this weapon
-    /// merely owns. What is left is one job: "the trigger was pulled, is a throw allowed,
-    /// where does it start" (Single Responsibility).
+    /// The axe is UNLIMITED once found, exactly as in Adventure Island: there is no ammo
+    /// count, no reloading and no counter. Two things replaced all of that, and neither of
+    /// them lives in this class:
+    ///   - AxePickable unlocks the weapon through the shared EquipWeaponPowerUp
+    ///   - WeaponsLostOnDeath takes it away again when Mario dies
+    /// So "how you get it" and "how you lose it" are rules of the game, not of the axe,
+    /// and they apply to every weapon without this file knowing about them (Open/Closed).
     ///
-    /// It still exposes AddAmmo and Reload, so AxeAmmoPowerUp needed no change at all, and
-    /// it still registers a counter with CounterRegistry, so the HUD label needed no change
-    /// either - the counter it registers is now the magazine rather than the weapon itself.
+    /// What DOES limit rapid fire is the pool: five axes exist, and a sixth throw has to
+    /// wait until one of them lands. That is a deliberate cap on things in flight, not an
+    /// ammo count - it refills by itself.
     /// </summary>
-    public sealed class AxeWeapon : BaseWeapon, IReloadWeapon
+    public sealed class AxeWeapon : BaseWeapon
     {
         [Tooltip("The pool that hands out axes. Drag the AxePool object here.")]
         [SerializeField] private AxePoolManager axePool;
@@ -23,52 +28,22 @@ namespace Game.Weapons
         [Tooltip("Where an axe appears. Empty = this object's own position.")]
         [SerializeField] private Transform firePoint;
 
-        [Tooltip("How many axes Mario starts the level with")]
-        [SerializeField] private int startAmmo = 0;
-
         private IObjectPool<ProjectileAxe> _pool;
         private Transform _firePoint;
         private IFacing _facing;
-        private AmmoMagazine _magazine;
 
         public override WeaponType Type { get { return WeaponType.Axe; } }
 
-        /// <summary>
-        /// Unlocked, off cooldown, AND holding at least one axe. The base class supplies
-        /// the first two; the only rule this weapon adds is the ammo one (Open/Closed).
-        /// </summary>
-        public override bool CanFire
-        {
-            get { return base.CanFire && _magazine != null && _magazine.HasRounds; }
-        }
-
         protected override void OnAwake()
         {
-            _magazine = new AmmoMagazine(startAmmo);
-
             _pool = axePool;
             _firePoint = firePoint != null ? firePoint : transform;
-            _facing = GetComponentInParent<IFacing>();
 
-            // The axe is never "locked" behind a power-up - running out of axes is its
-            // whole limit - so it unlocks itself instead of relying on an Inspector tick
-            // that nobody would remember to set.
-            Equip();
+            // Asks the owner which way he looks - it never reads his scale itself.
+            _facing = GetComponentInParent<IFacing>();
 
             if (_pool == null)
                 Debug.LogError("[Axe] AxeWeapon has no AxePoolManager assigned.", this);
-        }
-
-        private void OnEnable()
-        {
-            // Tell the UI where to find this counter (see CounterRegistry).
-            CounterRegistry.Register(CounterId.Axes, _magazine);
-            _magazine.Raise();
-        }
-
-        private void OnDisable()
-        {
-            CounterRegistry.Unregister(CounterId.Axes, _magazine);
         }
 
         protected override bool FireInternal()
@@ -80,31 +55,14 @@ namespace Game.Weapons
 
             if (axe == null)
             {
-                Debug.Log("[Axe] Pool exhausted - all axes are still in the air");
-                return false;
-            }
-
-            // Ammo is spent only once an axe really left the pool, so an exhausted pool
-            // never eats a round.
-            if (!_magazine.TrySpend(1))
-            {
-                axe.Despawn();
+                // Not a warning: with a fixed-size pool this is the "five in the air at
+                // once" rule doing its job. Nothing is fired until one comes back.
+                Debug.Log("[Axe] All five axes are still in the air");
                 return false;
             }
 
             axe.Launch(_firePoint.position, _facing != null ? _facing.FacingDirection : 1f);
             return true;
-        }
-
-        /// <summary>Used by AxeAmmoPowerUp when Mario picks axes up.</summary>
-        public void AddAmmo(int amount)
-        {
-            _magazine.Add(amount);
-        }
-
-        public void Reload()
-        {
-            AddAmmo(1);
         }
     }
 }

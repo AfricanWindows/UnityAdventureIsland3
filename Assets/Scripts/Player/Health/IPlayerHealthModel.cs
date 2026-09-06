@@ -1,24 +1,12 @@
-using System;
+using Game.Core;
 
 /// <summary>
-/// MODEL contract of the health feature (exercise item 2).
-/// The controller talks to this interface, never to the concrete class.
+/// MODEL contract of the health feature. The controller talks to this interface, never to
+/// the concrete class.
+///
+/// Like IPowerModel it adds nothing to IClampedCounter: hearts and power segments obey the
+/// same arithmetic. The separate name is what keeps the two apart at the injection point.
 /// </summary>
-public interface IPlayerHealthModel
+public interface IPlayerHealthModel : IClampedCounter
 {
-    int Current { get; }
-    int Max { get; }
-    bool IsFull { get; }
-
-    /// <summary>Raised every time the health value changes.</summary>
-    event Action Changed;
-
-    /// <summary>Raised once when health reaches zero.</summary>
-    event Action Empty;
-
-    /// <summary>Collecting a heart. False when already at the maximum.</summary>
-    bool Add(int amount);
-
-    /// <summary>Landing on spikes.</summary>
-    void Remove(int amount);
 }
