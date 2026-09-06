@@ -1,5 +1,5 @@
+using Game.Core.Controls;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Exercise item 8: the second jump Mario can make while already in the air.
@@ -8,13 +8,13 @@ using UnityEngine.InputSystem;
 /// before - jump from the ground - and was not modified by a single line: the new
 /// ability arrived as a new class (Open/Closed).
 ///
-/// Both scripts read the same key, but their conditions can never both be true:
+/// Both scripts read the same intention, but their conditions can never both be true:
 /// PlayerJump only fires while grounded, this one only while IsInAir() is true.
 ///
 /// The second jump is spent once and comes back the moment Mario lands.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerDoubleJump : MonoBehaviour
+public class PlayerDoubleJump : InputDrivenBehaviour
 {
     [Tooltip("Upward force of the second jump. Usually a bit weaker than the first one.")]
     [SerializeField] private float doubleJumpSpeed = 400f;
@@ -43,7 +43,7 @@ public class PlayerDoubleJump : MonoBehaviour
     {
         RefillOnLanding();
 
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (HasInput && InputSource.JumpPressed)
             TryDoubleJump();
     }
 

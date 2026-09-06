@@ -15,9 +15,8 @@ namespace Game.Weapons
     /// the fire flower already unlocks the fireball - the laser reuses that mechanism
     /// instead of inventing a parallel one.
     ///
-    /// (Not to be confused with Player/Liskov/BaseWeapon.cs, the plain-C# demo class from
-    /// an earlier exercise. This one lives in the Game.Weapons namespace and is untouched
-    /// by it.)
+    /// (The plain-C# BaseWeapon demo class from the Liskov exercise used to share this
+    /// name in the global namespace. It was deleted, so "BaseWeapon" is now unambiguous.)
     /// </summary>
     public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon
     {

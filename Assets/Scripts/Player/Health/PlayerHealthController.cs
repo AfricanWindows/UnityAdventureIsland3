@@ -1,8 +1,9 @@
 using System;
+using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
-/// CONTROLLER of the health feature (exercise item 2).
+/// CONTROLLER of the health feature.
 ///
 /// It is the only piece that talks to Unity: it listens to what happens in the game
 /// (spikes, hearts), tells the MODEL what to do, and pushes the result into the VIEW.
@@ -10,10 +11,14 @@ using UnityEngine;
 /// it draws nothing itself.
 ///
 /// It depends on the IPlayerHealthModel and IPlayerHealthView interfaces, not on the
-/// concrete classes.
+/// concrete classes - and, since the DI pass, it no longer FINDS the view either. The
+/// old FindFirstObjectByType call was a Service Locator: a hidden dependency that this
+/// class reached out and grabbed, which meant it could not be tested, could not be given
+/// a different view, and failed at runtime rather than at wiring time. The view is now
+/// handed in by GameInstaller (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour
+public class PlayerHealthController : MonoBehaviour, IInjectable
 {
     [Tooltip("Maximum hearts Mario can hold (exercise says 3)")]
     [SerializeField] private int maxHealth = 3;
@@ -21,7 +26,7 @@ public class PlayerHealthController : MonoBehaviour
     [Tooltip("Hearts Mario starts the level with")]
     [SerializeField] private int startHealth = 3;
 
-    [Tooltip("Optional. Leave empty and the controller finds the view in the scene.")]
+    [Tooltip("Optional override. Normally left empty: the view arrives through injection.")]
     [SerializeField] private PlayerHealthView viewComponent;
 
     private IPlayerHealthModel model;
@@ -31,9 +36,30 @@ public class PlayerHealthController : MonoBehaviour
     /// does not need a reference to a player that does not exist yet.</summary>
     public static event Action OnPlayerHealthEmpty;
 
+    /// <summary>
+    /// Called by GameInstaller before Awake. An explicit field on this object still wins:
+    /// a hand-wired reference is a deliberate decision, and injection should not overrule it.
+    /// </summary>
+    public void Inject(IServiceContainer container)
+    {
+        if (viewComponent != null)
+            return;
+
+        IPlayerHealthView injectedView;
+        if (container != null && container.TryResolve(out injectedView))
+            view = injectedView;
+    }
+
     private void Awake()
     {
         model = new PlayerHealthModel(maxHealth, startHealth);
+
+        if (viewComponent != null)
+            view = viewComponent;
+
+        if (view == null)
+            Debug.LogWarning("PlayerHealthController: no health view was injected or assigned - " +
+                             "health will not be shown.", this);
     }
 
     private void OnEnable()
@@ -54,20 +80,9 @@ public class PlayerHealthController : MonoBehaviour
         model.Empty -= HandleHealthEmpty;
     }
 
-    [Obsolete]
     private void Start()
     {
-        // Composition root of this triad. Mario is created by the Level Creator, so the
-        // UI label cannot be dragged into the prefab - it is resolved once, here, and
-        // never searched for again.
-        view = viewComponent;
-
-        if (view == null)
-            view = FindFirstObjectByType<PlayerHealthView>();
-
-        if (view == null)
-            Debug.LogWarning("PlayerHealthController: no PlayerHealthView in the scene, health will not be shown", this);
-
+        // First paint. By now every Awake has run, so the view exists if it is ever going to.
         UpdateView();
     }
 

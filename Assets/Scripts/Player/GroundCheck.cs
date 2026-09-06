@@ -3,8 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Tells whether we are standing on ANY solid object - floor tile, spikes, crate, enemy -
-/// by reading the physics contact normals instead of expecting a special component
-/// (like SC_Floor) on the other side.
+/// by reading the physics contact normals instead of expecting a special component on
+/// the other side. The old SC_Floor, which did the second thing and told nobody, is gone.
 ///
 /// It also reports whether that ground can carry us (a moving platform), because it is
 /// the only class that already knows what is under our feet. Answering that question

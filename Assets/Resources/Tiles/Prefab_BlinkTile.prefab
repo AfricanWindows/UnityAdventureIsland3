@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5467311013064111145}
   - component: {fileID: 5467311013064111144}
   - component: {fileID: 2093751782}
-  - component: {fileID: 8550517705240481189}
   - component: {fileID: 7357397727791877186}
   m_Layer: 0
   m_Name: Prefab_BlinkTile
@@ -141,18 +140,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8550517705240481189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5467311013064111151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6769a8f6931bdb6469e7d795d12462d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7357397727791877186
 MonoBehaviour:
   m_ObjectHideFlags: 0

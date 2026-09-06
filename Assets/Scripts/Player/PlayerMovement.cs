@@ -1,5 +1,5 @@
+using Game.Core.Controls;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Moves Mario left and right, and carries him along when the floor under his feet
@@ -11,10 +11,13 @@ using UnityEngine.InputSystem;
 ///
 /// He does not reach that speed instantly. Snapping straight to the maximum reads as a
 /// sprite being teleported rather than a character starting to walk, so the speed ramps
-/// up and brakes down at rates the designer sets. Everything else - the platform ride,
-/// the facing direction, the boost - keeps working exactly as before.
+/// up and brakes down at rates the designer sets.
+///
+/// It no longer reads a keyboard. The intention "he wants to go right" arrives through
+/// IInputSource, injected by GameInstaller, so this class works unchanged with a gamepad
+/// or inside a test (Dependency Inversion).
 /// </summary>
-public class PlayerMovement : MonoBehaviour, IFacing
+public class PlayerMovement : InputDrivenBehaviour, IFacing
 {
     [Tooltip("Normal walking speed, before any power up")]
     [SerializeField] private float speed = 5f;
@@ -73,17 +76,12 @@ public class PlayerMovement : MonoBehaviour, IFacing
         ApplyMovement();
     }
 
+    /// <summary>
+    /// One line, because deciding which key means "left" is no longer this class's job.
+    /// </summary>
     private void ReadInput()
     {
-        direction = 0f;
-
-        if (Keyboard.current == null)
-            return;
-
-        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-            direction = -1f;
-        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-            direction = 1f;
+        direction = HasInput ? InputSource.Horizontal : 0f;
     }
 
     private void ApplyMovement()

@@ -9,7 +9,7 @@ namespace Game.Projectiles
     ///   Product          = BaseProjectile
     ///   Concrete Product = LaserProjectile
     ///   Creator          = ProjectileFactory&lt;T&gt;   (this class)
-    ///   Concrete Creator = LaserFactory
+    ///   Concrete Creator = ConfiguredProjectileFactory&lt;T&gt;
     ///   Factory Method   = Create()
     ///
     /// The rest of the game asks "give me a laser" and learns nothing about builders,

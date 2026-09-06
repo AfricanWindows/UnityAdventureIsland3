@@ -13,8 +13,9 @@ namespace Game.Projectiles
     /// It is also the pool's Product: it implements IPoolable, so it can reset itself and
     /// send itself home - without ever naming the pool that owns it.
     ///
-    /// (This is the pooled hierarchy added in exercise 3. The older global BaseProjectile,
-    /// used by the fireball and the axe, is untouched and keeps working as before.)
+    /// This is now the ONLY projectile hierarchy in the project. The parallel global
+    /// BaseProjectile the fireball and the axe used to have was deleted; both were ported
+    /// onto this one, so there is a single Fire() template and a single hit rule.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class BaseProjectile : MonoBehaviour, IPoolable

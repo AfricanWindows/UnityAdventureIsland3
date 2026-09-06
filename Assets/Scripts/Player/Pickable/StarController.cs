@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /// <summary>The star: gives Mario temporary invincibility.</summary>
 public class StarController : BasePickable
 {

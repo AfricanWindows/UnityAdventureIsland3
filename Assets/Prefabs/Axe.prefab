@@ -107,10 +107,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad6cf4589dd248418efce6be6a520f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileAxe
-  speedX: 500
-  speedY: 30
-  lifetime: 3
-  damage: 1
+  ignoreTag: Player
+  upwardSpeed: 6
 --- !u!50 &2487451591007417260
 Rigidbody2D:
   serializedVersion: 5

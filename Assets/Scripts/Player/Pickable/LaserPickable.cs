@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /// <summary>
 /// The laser pickup sitting in the level. Exercise 3's power-up item.
 ///

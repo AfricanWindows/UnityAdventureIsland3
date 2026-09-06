@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3963144287572924018}
   - component: {fileID: 586424917801306816}
+  - component: {fileID: 7788110000000000012}
   m_Layer: 0
   m_Name: AxeWeapon
   m_TagString: Untagged
@@ -43,8 +44,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 238aa360d54e1434d81418826789bb7f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AxeWeapon
-  projectile: {fileID: 6685130501241294565, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AxeWeapon
+  cooldown: 0.25
+  unlockedFromStart: 0
+  axePool: {fileID: 7788110000000000012}
+  firePoint: {fileID: 0}
   startAmmo: 0
 --- !u!1 &1858872847461598144
 GameObject:
@@ -511,6 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4052872072408973675}
   - component: {fileID: 4485614292093434508}
+  - component: {fileID: 7788110000000000011}
   m_Layer: 0
   m_Name: FireballWeapon
   m_TagString: Untagged
@@ -544,8 +549,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d368ded81c2b19746ab7b42a6527fd1d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FireballWeapon
-  projectile: {fileID: 6685130501241294565, guid: c470d5c61dda9e04e92dcb4b7f86bab8, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.FireballWeapon
+  cooldown: 0.25
+  unlockedFromStart: 0
+  fireballPool: {fileID: 7788110000000000011}
+  firePoint: {fileID: 0}
 --- !u!1 &8544008963519329405
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,3 +599,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponsHandler
   weaponsRoot: {fileID: 0}
+--- !u!114 &7788110000000000011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391805120359113288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44562a65c76602835870fa384af8441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.FireballPoolManager
+  prefab: {fileID: 2711112754417157150, guid: c470d5c61dda9e04e92dcb4b7f86bab8, type: 3}
+  config: {fileID: 11400000, guid: cf1aac881e9f643ff20b632a3b9f5e88, type: 2}
+  container: {fileID: 0}
+  prewarmCount: 4
+  maxSize: 4
+  allowGrowth: 0
+  logTraffic: 1
+--- !u!114 &7788110000000000012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 205627417779376805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e2b17a53affbce0a7e5971c79048d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AxePoolManager
+  prefab: {fileID: -2751458972493023182, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
+  config: {fileID: 11400000, guid: 1c0662647ccaceae8d8c721a959f29be, type: 2}
+  container: {fileID: 0}
+  prewarmCount: 4
+  maxSize: 4
+  allowGrowth: 0
+  logTraffic: 1

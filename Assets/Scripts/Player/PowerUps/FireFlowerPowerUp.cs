@@ -1,3 +1,4 @@
+using Game.Weapons;
 using UnityEngine;
 
 public class FireFlowerPowerUp : IPowerUp

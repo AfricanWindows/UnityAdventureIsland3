@@ -107,9 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e307afd53aa244ba6060999c1ec512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileFireball
-  speed: 400
-  lifetime: 2
-  damage: 1
+  ignoreTag: Player
 --- !u!50 &2487451591007417260
 Rigidbody2D:
   serializedVersion: 5

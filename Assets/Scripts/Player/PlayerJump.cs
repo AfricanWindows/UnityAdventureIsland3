@@ -1,12 +1,13 @@
+using Game.Core.Controls;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
-/// Reads the jump input and pushes Mario up. It does not decide what "ground" is -
-/// that is GroundCheck's job - so Mario can jump off anything solid, spikes included.
+/// Reads the jump intention and pushes Mario up. It does not decide what "ground" is -
+/// that is GroundCheck's job - so Mario can jump off anything solid, spikes included,
+/// and it no longer decides which KEY means jump - that is IInputSource's job.
 /// </summary>
 [RequireComponent(typeof(GroundCheck))]
-public class PlayerJump : MonoBehaviour
+public class PlayerJump : InputDrivenBehaviour
 {
     [Tooltip("Upward force of a jump")]
     [SerializeField] private float jumpSpeed = 100;
@@ -27,7 +28,7 @@ public class PlayerJump : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (HasInput && InputSource.JumpPressed)
             Jump();
     }
 

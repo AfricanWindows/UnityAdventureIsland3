@@ -1,22 +1,20 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Game.Core.Controls;
+using UnityEngine;
 
 /// <summary>
 /// Collects every IWeapon found under the player and lets him switch and fire.
 ///
-/// New weapons are registered automatically and get their own number key, so adding
-/// one needs no change in this class (OCP) - only a new component on the player.
+/// New weapons are registered automatically and get their own number slot, so adding
+/// one needs no change in this class (Open/Closed) - only a new component on the player.
+///
+/// It knows nothing about keys any more: "slot 3 was chosen" and "the trigger was pulled"
+/// arrive through IInputSource. Which physical key means what moved into
+/// KeyboardInputSource, the only class in the project that should own it
+/// (Single Responsibility).
 /// </summary>
-public class WeaponsHandler : MonoBehaviour
+public class WeaponsHandler : InputDrivenBehaviour
 {
-    // Number keys, in order. Weapon 1 answers to Digit1, weapon 2 to Digit2, and so on.
-    private static readonly Key[] SelectionKeys =
-    {
-        Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5,
-        Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
-    };
-
     [Tooltip("Where to look for weapons. Empty = this object's parent (the player).")]
     [SerializeField] private Transform weaponsRoot;
 
@@ -46,12 +44,12 @@ public class WeaponsHandler : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current == null)
+        if (!HasInput)
             return;
 
-        ReadSelectionKeys();
+        ReadSelection();
 
-        if (Keyboard.current.leftCtrlKey.wasPressedThisFrame)
+        if (InputSource.AttackPressed)
             FireSelected();
     }
 
@@ -70,13 +68,17 @@ public class WeaponsHandler : MonoBehaviour
         weapons[index].Attack();
     }
 
-    private void ReadSelectionKeys()
+    /// <summary>
+    /// Asks the input source about as many slots as there are weapons - never more, so a
+    /// device with nine buttons and a player with two weapons costs two questions.
+    /// </summary>
+    private void ReadSelection()
     {
-        int keyCount = Mathf.Min(SelectionKeys.Length, weapons.Count);
+        int slots = Mathf.Min(InputSource.WeaponSlotCount, weapons.Count);
 
-        for (int i = 0; i < keyCount; i++)
+        for (int i = 0; i < slots; i++)
         {
-            if (Keyboard.current[SelectionKeys[i]].wasPressedThisFrame)
+            if (InputSource.WeaponSelectPressed(i))
             {
                 SelectWeapon(i);
                 return;
