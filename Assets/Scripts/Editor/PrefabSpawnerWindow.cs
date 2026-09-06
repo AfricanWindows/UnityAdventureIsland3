@@ -6,16 +6,19 @@ using UnityEngine;
 /// Places and removes level tiles directly in the Scene view.
 /// Left click adds the selected prefab, right click deletes the object under the cursor.
 ///
-/// The list of prefabs comes from TilePalette, so a new tile shows up here by itself.
+/// The drop down lists every prefab in Assets/Resources/Tiles, so dropping a new prefab
+/// into that folder is all it takes for it to appear here.
 /// </summary>
 public class PrefabSpawnerWindow : EditorWindow
 {
+    private const string TilesFolder = "Assets/Resources/Tiles";
+
     private static bool _isSpawningEnabled = false;
     private int _selectedIndex = 0;
     private GUIStyle _labelStyle;
     private Dictionary<string, GameObject> _prefabDictionary;
 
-    // The list comes from TilePalette, there is no duplicated array of names here.
+    // Filled by LoadPrefabs from the folder itself - no hand-kept array of names.
     private string[] _dropDownOptions = new string[0];
 
     [MenuItem("Tools/Prefab Spawner")]
@@ -47,7 +50,7 @@ public class PrefabSpawnerWindow : EditorWindow
 
         if(_dropDownOptions.Length == 0)
         {
-            EditorGUILayout.HelpBox("No palette prefab was found in Assets/Resources/Tiles.", MessageType.Warning);
+            EditorGUILayout.HelpBox("No prefab was found in " + TilesFolder + ".", MessageType.Warning);
             if(GUILayout.Button("Refresh List"))
                 LoadPrefabs();
 
@@ -149,21 +152,37 @@ public class PrefabSpawnerWindow : EditorWindow
         Undo.DestroyObjectImmediate(root);
     }
 
+    /// <summary>
+    /// Every prefab that sits in Assets/Resources/Tiles, in alphabetical order.
+    ///
+    /// The folder is the source of truth: no hand-kept array of tile names to update, so a
+    /// prefab appears in the drop down the moment it is dropped into the folder and the
+    /// list is refreshed (Open/Closed).
+    /// </summary>
     private void LoadPrefabs()
     {
         _prefabDictionary = new Dictionary<string, GameObject>();
         List<string> loadedNames = new List<string>();
 
-        // Prefabs that do not exist yet are skipped, so they never reach the drop down.
-        foreach (string n in TilePalette.GetAllPrefabNames())
+        // AssetDatabase, not Resources.LoadAll: this is editor-only code, and the folder
+        // is the source of truth here - not what happens to be loadable at runtime.
+        string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { TilesFolder });
+
+        for(int i = 0; i < guids.Length; i++)
         {
-            GameObject prefab = Resources.Load<GameObject>("Tiles/" + n);
-            if(prefab == null)
+            string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if(prefab == null || _prefabDictionary.ContainsKey(prefab.name))
                 continue;
 
-            _prefabDictionary.Add(n,prefab);
-            loadedNames.Add(n);
+            _prefabDictionary.Add(prefab.name, prefab);
+            loadedNames.Add(prefab.name);
         }
+
+        // FindAssets returns them in whatever order the database feels like, which would
+        // reshuffle the drop down after every reimport.
+        loadedNames.Sort(System.StringComparer.OrdinalIgnoreCase);
 
         _dropDownOptions = loadedNames.ToArray();
         _selectedIndex = Mathf.Clamp(_selectedIndex,0,Mathf.Max(0,_dropDownOptions.Length - 1));

@@ -50,6 +50,17 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
         get { return speed * speedMultiplier; }
     }
 
+    /// <summary>
+    /// His OWN horizontal speed, measured against the floor he stands on - not against the
+    /// world. This is what an animation must read: on a moving platform the Rigidbody says
+    /// he is travelling at 3 units per second while he is in fact standing still, and a run
+    /// cycle driven by that would play while he does not take a single step.
+    /// </summary>
+    public float OwnSpeedX
+    {
+        get { return ownSpeedX; }
+    }
+
     /// <summary>Which way Mario looks right now. Weapons aim by this, not by the scale.</summary>
     public float FacingDirection
     {
