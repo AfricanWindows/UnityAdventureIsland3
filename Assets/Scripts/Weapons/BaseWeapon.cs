@@ -1,3 +1,4 @@
+using Game.Core;
 using UnityEngine;
 
 namespace Game.Weapons
@@ -18,7 +19,7 @@ namespace Game.Weapons
     /// (The plain-C# BaseWeapon demo class from the Liskov exercise used to share this
     /// name in the global namespace. It was deleted, so "BaseWeapon" is now unambiguous.)
     /// </summary>
-    public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon
+    public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon, IResettable
     {
         [Tooltip("Seconds between two shots")]
         [SerializeField] private float cooldown = 0.25f;
@@ -106,6 +107,15 @@ namespace Game.Weapons
         /// </summary>
         /// <returns>True if a projectile was really fired.</returns>
         protected abstract bool FireInternal();
+
+        /// <summary>
+        /// A new game gives back exactly the weapons the player started with - the
+        /// ones ticked Unlocked From Start - and takes away everything he found.
+        /// </summary>
+        public void ResetToStart()
+        {
+            _isEquipped = unlockedFromStart;
+        }
 
         public void Equip()
         {

@@ -1,4 +1,5 @@
 using System;
+using Game.Core;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 /// It is an ICounter, so the SAME UI_CounterView that shows coins and health can show
 /// keys too - just pick CounterId.Keys on a label, no new UI class needed.
 /// </summary>
-public class PlayerKeys : MonoBehaviour, ICounter
+public class PlayerKeys : MonoBehaviour, ICounter, IResettable
 {
     private int keys = 0;
 
@@ -32,6 +33,13 @@ public class PlayerKeys : MonoBehaviour, ICounter
     private void OnDisable()
     {
         CounterRegistry.Unregister(CounterId.Keys, this);
+    }
+
+    /// <summary>A new game starts with no keys, so the doors are locked again.</summary>
+    public void ResetToStart()
+    {
+        keys = 0;
+        RaiseValueChanged();
     }
 
     public void AddKey(int amount)

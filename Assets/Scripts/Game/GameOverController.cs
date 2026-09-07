@@ -1,41 +1,63 @@
-using System.Collections;
+using Game.Core.DI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
-/// Listens for "no health left", shows the Game Over screen and restarts the level.
-/// It counts nothing itself - that is the health MODEL's job.
+/// Shows the GAME OVER popup when the last life is gone, and restarts the game when the
+/// player presses the button.
 ///
-/// It subscribes to a STATIC event instead of holding a reference to Mario, because
-/// Mario is created by the Level Creator and does not exist when this object wakes up.
+/// It reloads NOTHING. The old version called SceneManager.LoadScene, which resets the
+/// world by throwing it away; that is forbidden here, and it was also the wrong tool - it
+/// would have destroyed the UI and this controller along with the level. Restarting is now
+/// a message to ILevelFlow, which asks every object to restore itself.
+///
+/// This class counts nothing and decides nothing about lives: it listens for "health
+/// empty", shows a panel, and forwards a button press (Single Responsibility).
 /// </summary>
-public class GameOverController : MonoBehaviour
+public class GameOverController : MonoBehaviour, IInjectable
 {
-    [Tooltip("Panel with the GAME OVER text. Hidden while playing.")]
+    [Tooltip("Popup with the GAME OVER text and the RESTART button. Hidden while playing.")]
     [SerializeField] private GameObject gameOverPanel;
 
-    [SerializeField] private float restartDelay = 2f;
+    [Tooltip("The RESTART button inside the popup. Its onClick is wired up in code, so " +
+             "there is nothing to drag in the Inspector.")]
+    [SerializeField] private Button restartButton;
 
-    private bool isGameOver = false;
+    [Tooltip("Freeze the game while the popup is up.")]
+    [SerializeField] private bool freezeWhileShown = true;
+
+    private ILevelFlow flow;
+    private bool isGameOver;
+
+    public void Inject(IServiceContainer container)
+    {
+        if (container != null)
+            container.TryResolve(out flow);
+    }
 
     private void OnEnable()
     {
         PlayerHealthController.OnPlayerHealthEmpty += OnHealthEmpty;
+
+        if (restartButton != null)
+            restartButton.onClick.AddListener(Restart);
     }
 
     private void OnDisable()
     {
         PlayerHealthController.OnPlayerHealthEmpty -= OnHealthEmpty;
 
-        // The coroutine may be killed mid freeze (scene load, object destroyed).
-        // timeScale is global, so it is always restored here.
+        if (restartButton != null)
+            restartButton.onClick.RemoveListener(Restart);
+
+        // timeScale is global and survives everything. Leaving it at 0 here would freeze
+        // the game forever, so it is always restored.
         Time.timeScale = 1f;
     }
 
     private void Start()
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+        Hide();
     }
 
     private void OnHealthEmpty()
@@ -44,39 +66,34 @@ public class GameOverController : MonoBehaviour
             return;
 
         isGameOver = true;
-        StartCoroutine(GameOverRoutine());
-    }
 
-    private IEnumerator GameOverRoutine()
-    {
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
-        // Freeze the game so the player cannot keep moving during the screen.
-        Time.timeScale = 0f;
+        if (freezeWhileShown)
+            Time.timeScale = 0f;
 
-        // Realtime, because timeScale is 0.
-        yield return new WaitForSecondsRealtime(restartDelay);
-
-        Time.timeScale = 1f;
-        RestartLevel();
+        Debug.Log("[GameOver] No lives left");
     }
 
-    /// <summary>
-    /// Reloading the scene is what "reset every object of the level" means:
-    /// coins, hearts, enemies and Mario all come back in their starting state.
-    /// </summary>
-    private void RestartLevel()
+    /// <summary>Wired to the RESTART button. Public so the button can also call it directly.</summary>
+    public void Restart()
     {
-        Scene current = SceneManager.GetActiveScene();
+        Hide();
 
-        if (current.buildIndex < 0)
-        {
-            Debug.LogError("Scene '" + current.name + "' is not in Build Settings. " +
-                           "Open File > Build Profiles (Build Settings) and add it, otherwise it cannot be reloaded.");
-            return;
-        }
+        if (flow != null)
+            flow.RestartGame();
+        else
+            Debug.LogError("[GameOver] No ILevelFlow - cannot restart. Is there a " +
+                           "LevelFlowController in the scene?", this);
+    }
 
-        SceneManager.LoadScene(current.buildIndex);
+    private void Hide()
+    {
+        isGameOver = false;
+        Time.timeScale = 1f;
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
     }
 }

@@ -1,3 +1,4 @@
+using Game.Core;
 using Game.Core.DI;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ using UnityEngine;
 /// without a single line about them here.
 /// </summary>
 [DisallowMultipleComponent]
-public class PowerController : MonoBehaviour, IInjectable
+public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler
 {
     [Tooltip("The asset holding Start Power, Max Power and the drain interval. Swap the " +
              "asset to change the difficulty - no code, no prefab surgery.")]
@@ -82,8 +83,19 @@ public class PowerController : MonoBehaviour, IInjectable
         if (model == null)
             return;
 
+        // -= before += : subscribing twice would draw the bar twice per tick and lose a
+        // life twice when it empties. OnEnable runs again every time the player object is
+        // switched back on, so the pair is written defensively.
+        model.Changed -= UpdateView;
         model.Changed += UpdateView;
+        model.Empty -= HandleEmpty;
         model.Empty += HandleEmpty;
+
+        // Any death refills the bar - walking into an enemy, spikes, or the timer itself.
+        // The controller listens instead of the flow pushing, so the bar keeps working
+        // even in a scene that has no level flow at all.
+        PlayerDeath.OnPlayerDied -= ResetToStart;
+        PlayerDeath.OnPlayerDied += ResetToStart;
 
         drain.Start();
     }
@@ -94,6 +106,7 @@ public class PowerController : MonoBehaviour, IInjectable
             return;
 
         // The important half. Without this the Task.Delay loop outlives Play Mode.
+        PlayerDeath.OnPlayerDied -= ResetToStart;
         drain.Stop();
 
         model.Changed -= UpdateView;
@@ -105,6 +118,34 @@ public class PowerController : MonoBehaviour, IInjectable
         // First paint. By now every Awake has run, so the view exists if it ever will -
         // and this is what tells the bar how many sockets to build.
         UpdateView();
+    }
+
+    /// <summary>
+    /// A full bar and a fresh clock. Called when a level is entered, when the player
+    /// respawns, and by the whole-game restart - the three moments the timer must not
+    /// carry anything over from before.
+    /// </summary>
+    public void ResetToStart()
+    {
+        if (model == null)
+            return;
+
+        model.Reset(stats.StartPower);
+
+        // Restarted, not merely left running: otherwise the first segment after a
+        // respawn could vanish a fraction of a second later, because the previous
+        // level's tick was already half elapsed.
+        if (isActiveAndEnabled)
+            drain.Start();
+
+        UpdateView();
+    }
+
+
+    /// <summary>A level began: full bar, fresh clock. The spawn point is not our business.</summary>
+    public void OnLevelStarted(Vector3 spawnPosition)
+    {
+        ResetToStart();
     }
 
     /// <summary>Eating a fruit. Returns how many segments actually fitted.</summary>

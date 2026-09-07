@@ -16,7 +16,7 @@ public class PatrolEnemy : BaseEnemy
     private float startX;
     private float direction = -1f;
 
-    private void Awake()
+    protected override void OnAwake()
     {
         rigid = GetComponent<Rigidbody2D>();
         startX = transform.position.x;

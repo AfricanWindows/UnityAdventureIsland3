@@ -1,3 +1,4 @@
+using Game.Core;
 using UnityEngine;
 
 /// <summary>
@@ -5,7 +6,7 @@ using UnityEngine;
 /// The "touch the player and disappear" logic is written here ONCE.
 /// A child class only decides WHAT effect it gives, by creating an IPowerUp.
 /// </summary>
-public abstract class BasePickable : MonoBehaviour
+public abstract class BasePickable : MonoBehaviour, IResettable
 {
     [SerializeField] private string playerTag = "Player";
 
@@ -38,6 +39,17 @@ public abstract class BasePickable : MonoBehaviour
         collected = true;
         playerPowerUp.CollectPowerUp(powerUp);
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Only the whole-game restart calls this. Dying does NOT, which is the rule:
+    /// fruit already eaten stays eaten when the player returns to the start of the
+    /// level. OnEnable clears the collected flag, so switching the object back on is
+    /// the entire reset.
+    /// </summary>
+    public void ResetToStart()
+    {
+        gameObject.SetActive(true);
     }
 
     /// <summary>Each pickable decides what it gives to the player.</summary>

@@ -1,4 +1,5 @@
 using System;
+using Game.Core;
 using Game.Core.DI;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ using UnityEngine;
 /// handed in by GameInstaller (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour, IInjectable
+public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
 {
     [Tooltip("Maximum hearts Mario can hold (exercise says 3)")]
     [SerializeField] private int maxHealth = 3;
@@ -90,6 +91,15 @@ public class PlayerHealthController : MonoBehaviour, IInjectable
     public int AddHealth(int amount)
     {
         return model.Add(amount);
+    }
+
+    /// <summary>Three lives again. Only the whole-game restart calls this.</summary>
+    public void ResetToStart()
+    {
+        if (model == null)
+            return;
+
+        model.Reset(startHealth);
     }
 
     public void LoseHealth()

@@ -34,6 +34,12 @@ namespace Game.Core.DI
     [Tooltip("The power bar. Optional - same rule as the health label above.")]
     [SerializeField] private PowerBarView powerBar;
 
+    [Tooltip("The object that switches the levels. Optional - found automatically.")]
+    [SerializeField] private LevelFlowController levelFlow;
+
+    [Tooltip("Tag the player object carries. The camera and the level flow find him by it.")]
+    [SerializeField] private string playerTag = "Player";
+
         [Header("Diagnostics")]
         [Tooltip("Log every registration and every injected component on start-up.")]
         [SerializeField] private bool verbose = true;
@@ -86,6 +92,21 @@ namespace Game.Core.DI
                 _container.Register<IPowerView>(bar);
             else
                 Debug.LogWarning("[DI] No PowerBarView in the scene - the power bar will not be drawn.", this);
+
+            // Who the player is. Found ONCE, by tag, instead of by every class that
+            // wants him calling FindGameObjectWithTag in its own Update.
+            _container.Register<IPlayerProvider>(new TaggedPlayerProvider(playerTag));
+
+            // The game's course: which level runs, and what a restart means.
+            LevelFlowController flow = levelFlow;
+
+            if (flow == null)
+                flow = FindAnyObjectByType<LevelFlowController>(FindObjectsInactive.Include);
+
+            if (flow != null)
+                _container.Register<ILevelFlow>(flow);
+            else
+                Debug.LogWarning("[DI] No LevelFlowController in the scene - levels will not switch.", this);
 
             if (verbose)
                 Debug.Log("[DI] Services registered.", this);

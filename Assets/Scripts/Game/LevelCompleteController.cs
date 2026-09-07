@@ -1,28 +1,42 @@
+using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
-/// Shows the "LEVEL COMPLETE" screen when a door reports the level is finished.
-/// The door only detects - showing the screen is this class' job.
+/// Shows the LEVEL COMPLETE screen - but only when the LAST level is finished.
 ///
-/// It listens to a STATIC event, so it works with a door created by the Level Creator
-/// and does not need a reference to an object that did not exist at edit time.
+/// It used to listen to the door directly, which meant it fired at the end of every level
+/// and froze the game instead of letting the next one start. Now it listens to
+/// ILevelFlow.GameCompleted, so the flow controller decides what "finished" means and this
+/// class only draws (Single Responsibility).
 /// </summary>
-public class LevelCompleteController : MonoBehaviour
+public class LevelCompleteController : MonoBehaviour, IInjectable
 {
     [Tooltip("Panel with the LEVEL COMPLETE text. Hidden while playing.")]
     [SerializeField] private GameObject levelCompletePanel;
 
-    private void OnEnable()
+    [Tooltip("Freeze the game while the panel is up.")]
+    [SerializeField] private bool freezeWhileShown = true;
+
+    private ILevelFlow flow;
+
+    public void Inject(IServiceContainer container)
     {
-        LevelExitDoor.OnLevelCompleted += OnLevelCompleted;
+        if (container == null)
+            return;
+
+        container.TryResolve(out flow);
+
+        // Subscribed here rather than in OnEnable because injection happens before Awake,
+        // and the flow could in principle finish the game on the very first frame.
+        if (flow != null)
+            flow.GameCompleted += OnGameCompleted;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        LevelExitDoor.OnLevelCompleted -= OnLevelCompleted;
+        if (flow != null)
+            flow.GameCompleted -= OnGameCompleted;
 
-        // Time.timeScale is global and survives a scene load. Leaving it at 0 here
-        // would freeze the NEXT level too, so it is always restored.
         Time.timeScale = 1f;
     }
 
@@ -32,11 +46,12 @@ public class LevelCompleteController : MonoBehaviour
             levelCompletePanel.SetActive(false);
     }
 
-    private void OnLevelCompleted()
+    private void OnGameCompleted()
     {
         if (levelCompletePanel != null)
             levelCompletePanel.SetActive(true);
 
-        Time.timeScale = 0f;
+        if (freezeWhileShown)
+            Time.timeScale = 0f;
     }
 }
