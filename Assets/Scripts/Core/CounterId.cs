@@ -7,6 +7,5 @@
 public enum CounterId
 {
     Coins = 0,
-    Axes = 2,
-    Keys = 3
+    Axes = 2
 }

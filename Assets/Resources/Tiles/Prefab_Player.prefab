@@ -129,7 +129,6 @@ GameObject:
   - component: {fileID: 4317648927718729442}
   - component: {fileID: 4421290927304627351}
   - component: {fileID: 277688120179838768}
-  - component: {fileID: 2320863841026025248}
   - component: {fileID: 2824969180958447257}
   - component: {fileID: 4512935578239681708}
   - component: {fileID: 8572535940942234845}
@@ -141,6 +140,7 @@ GameObject:
   - component: {fileID: 7788110000000000021}
   - component: {fileID: 7788110000000000022}
   - component: {fileID: 7788110000000000023}
+  - component: {fileID: 7788110000000000024}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -344,18 +344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656c57edeb17c2d41a94dd78a9e02cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPowerUp
---- !u!114 &2320863841026025248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07208bb06849f89468cc0417d420ab3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerKeys
 --- !u!114 &2824969180958447257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,3 +708,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84a2588467ed534bef88e8322ec8067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCrouch
+--- !u!114 &7788110000000000024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c787d97dbf04ea12511e243e539ad153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FruitCounterController
+  fruitsPerLife: 20
+  viewComponent: {fileID: 0}

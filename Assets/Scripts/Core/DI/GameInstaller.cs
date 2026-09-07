@@ -34,6 +34,9 @@ namespace Game.Core.DI
     [Tooltip("The power bar. Optional - same rule as the health label above.")]
     [SerializeField] private PowerBarView powerBar;
 
+    [Tooltip("The \"Fruits: 0/20\" label. Optional - found automatically.")]
+    [SerializeField] private FruitCounterView fruitCounter;
+
     [Tooltip("The object that switches the levels. Optional - found automatically.")]
     [SerializeField] private LevelFlowController levelFlow;
 
@@ -92,6 +95,18 @@ namespace Game.Core.DI
                 _container.Register<IPowerView>(bar);
             else
                 Debug.LogWarning("[DI] No PowerBarView in the scene - the power bar will not be drawn.", this);
+
+            // The fruit label, same story as the two above: a UI object the player
+            // prefab cannot hold a reference to.
+            FruitCounterView fruits = fruitCounter;
+
+            if (fruits == null)
+                fruits = FindAnyObjectByType<FruitCounterView>(FindObjectsInactive.Include);
+
+            if (fruits != null)
+                _container.Register<IFruitCounterView>(fruits);
+            else
+                Debug.LogWarning("[DI] No FruitCounterView in the scene - the fruit count will not be shown.", this);
 
             // Who the player is. Found ONCE, by tag, instead of by every class that
             // wants him calling FindGameObjectWithTag in its own Update.

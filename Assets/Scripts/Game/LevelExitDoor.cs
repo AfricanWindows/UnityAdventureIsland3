@@ -2,12 +2,19 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Exercise item 8: the door that ends the level - but only if Mario
-/// already collected the key. It only DETECTS; showing the win screen
-/// is LevelCompleteController's job.
+/// The end of a level: the player touches it, the level is finished.
 ///
-/// The event is STATIC so that any door placed by the Level Creator works,
-/// without anybody having to drag a reference in the Inspector.
+/// It only DETECTS. What happens next - switching to the next level, or showing the win
+/// screen after the last one - belongs to LevelFlowController and LevelCompleteController
+/// (Single Responsibility).
+///
+/// It used to demand a key first. That was a leftover from an earlier exercise and is not
+/// in the final assignment, which says only "reach the end of the level, and the second
+/// one starts at once". The key was also carried between levels, so the one found in
+/// level one silently unlocked level two as well.
+///
+/// The event is STATIC so that any exit, in any level container, works without anybody
+/// having to drag a reference in the Inspector.
 /// </summary>
 public class LevelExitDoor : MonoBehaviour
 {
@@ -15,8 +22,11 @@ public class LevelExitDoor : MonoBehaviour
 
     public static event Action OnLevelCompleted;
 
-    private bool completed = false;
+    // A trigger can report the same contact more than once - a player with a body collider
+    // and a foot collider enters twice - and finishing the level twice would skip a level.
+    private bool completed;
 
+    // Cleared when the level is switched back on, so a replayed level can be finished again.
     private void OnEnable()
     {
         completed = false;
@@ -26,14 +36,6 @@ public class LevelExitDoor : MonoBehaviour
     {
         if (completed || col == null || !col.gameObject.CompareTag(playerTag))
             return;
-
-        PlayerKeys playerKeys = col.gameObject.GetComponent<PlayerKeys>();
-
-        if (playerKeys == null || !playerKeys.HasKey)
-        {
-            Debug.Log("<color=yellow>Door is locked - find the key first</color>");
-            return;
-        }
 
         completed = true;
 
