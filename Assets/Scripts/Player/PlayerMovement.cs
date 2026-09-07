@@ -44,6 +44,10 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     private Rigidbody2D rigid;
     private IPlatformProvider platformProvider;
 
+    // Every reason the player might not be allowed to walk, collected once. The array is
+    // what makes this open: a new lock is a new component, never an edit here.
+    private IMovementLock[] movementLocks;
+
     /// <summary>Speed actually used right now: normal speed times the active multiplier.</summary>
     public float CurrentSpeed
     {
@@ -71,6 +75,7 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     {
         rigid = GetComponent<Rigidbody2D>();
         platformProvider = GetComponent<IPlatformProvider>();
+        movementLocks = GetComponents<IMovementLock>();
     }
 
     /// <summary>
@@ -101,7 +106,9 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
             return;
 
         float platformSpeedX = GetPlatformSpeedX();
-        float targetOwnSpeed = direction * CurrentSpeed;
+        // Locked: he brakes to a stop, but the facing code below still runs, so holding S
+        // and pressing left or right turns him on the spot without moving him.
+        float targetOwnSpeed = IsMovementBlocked ? 0f : direction * CurrentSpeed;
 
         // One step of the ramp. MoveTowards never overshoots, so releasing the key lands
         // on exactly 0 instead of jittering around it.
@@ -129,6 +136,24 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     /// until the speed passes through zero, which is what makes a change of direction feel
     /// like a real turn instead of a slow drift across the middle.
     /// </summary>
+    /// <summary>
+    /// True while ANY lock is holding him - crouching today, a stun or a cut-scene
+    /// tomorrow. Nothing here knows what those are (Dependency Inversion).
+    /// </summary>
+    private bool IsMovementBlocked
+    {
+        get
+        {
+            for (int i = 0; i < movementLocks.Length; i++)
+            {
+                if (movementLocks[i].BlocksMovement)
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
     private float ChooseRate(float current, float target)
     {
         bool sameWay = current == 0f || target == 0f || Mathf.Sign(current) == Mathf.Sign(target);

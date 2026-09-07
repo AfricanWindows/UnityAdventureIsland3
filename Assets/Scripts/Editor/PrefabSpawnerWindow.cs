@@ -7,13 +7,20 @@ using UnityEngine;
 /// Left click adds the selected prefab, right click deletes the object under the cursor.
 ///
 /// The drop down lists every prefab in Assets/Resources/Tiles, so dropping a new prefab
-/// into that folder is all it takes for it to appear here.
+/// into that folder is all it takes for it to appear here. Spawn Parent decides where the
+/// tiles land in the Hierarchy: empty = the scene root, or drag a container such as World.
 /// </summary>
 public class PrefabSpawnerWindow : EditorWindow
 {
     private const string TilesFolder = "Assets/Resources/Tiles";
 
     private static bool _isSpawningEnabled = false;
+
+    // SerializeField, not a plain field: an EditorWindow is a ScriptableObject, and Unity
+    // wipes unserialised state on every script recompile. Without this the chosen parent
+    // would silently reset to null in the middle of building a level.
+    [SerializeField] private Transform _spawnParent;
+
     private int _selectedIndex = 0;
     private GUIStyle _labelStyle;
     private Dictionary<string, GameObject> _prefabDictionary;
@@ -58,6 +65,19 @@ public class PrefabSpawnerWindow : EditorWindow
         }
 
         _selectedIndex = EditorGUILayout.Popup("Select Option",_selectedIndex,_dropDownOptions);
+
+        // allowSceneObjects: true is the whole point - this must accept an object from the
+        // Hierarchy, not from the Project window.
+        _spawnParent = EditorGUILayout.ObjectField(
+            new GUIContent("Spawn Parent",
+                           "Drag a scene object here and every tile is created inside it. " +
+                           "Leave empty to place tiles at the root of the Hierarchy."),
+            _spawnParent, typeof(Transform), true) as Transform;
+
+        EditorGUILayout.LabelField(" ", _spawnParent != null
+            ? "New tiles go into: " + _spawnParent.name
+            : "New tiles go to the scene root.");
+
         EditorGUILayout.Space();
 
         if (GUILayout.Button("Toggle Prefab Spawning"))
@@ -123,15 +143,52 @@ public class PrefabSpawnerWindow : EditorWindow
             return;
 
         GameObject prefab = _prefabDictionary[_dropDownOptions[_selectedIndex]];
+        Transform parent = ResolveSpawnParent();
 
-        // PrefabUtility keeps the link to the prefab, plain Instantiate does not.
-        GameObject spawned = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+        // PrefabUtility keeps the link to the prefab, plain Instantiate does not - without
+        // it, a later edit of the prefab would never reach the tiles already placed.
+        //
+        // The parent goes in at CREATION time rather than through a SetParent afterwards:
+        // Undo.RegisterCreatedObjectUndo then covers the whole thing in one step, so Ctrl+Z
+        // removes the object instead of leaving an orphan behind at the scene root.
+        GameObject spawned = parent != null
+            ? PrefabUtility.InstantiatePrefab(prefab, parent) as GameObject
+            : PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+
         if(spawned == null)
             return;
 
+        // World position, set AFTER parenting, so the tile lands under the mouse whatever
+        // the container's own transform happens to be.
         spawned.transform.position = position;
+
         Undo.RegisterCreatedObjectUndo(spawned,"Spawn " + spawned.name);
         Selection.activeGameObject = spawned;
+    }
+
+    /// <summary>
+    /// Where new tiles go: the container the user dropped in, or null for the scene root.
+    ///
+    /// It knows nothing about what is being spawned, so it works for floors, enemies,
+    /// fruit and anything added later - the container is just a Transform (Open/Closed).
+    ///
+    /// A prefab ASSET dragged in by mistake is rejected here rather than at Instantiate:
+    /// parenting a scene object to an asset is not a thing, and the failure would otherwise
+    /// look like "spawning stopped working".
+    /// </summary>
+    private Transform ResolveSpawnParent()
+    {
+        if(_spawnParent == null)
+            return null;
+
+        if(EditorUtility.IsPersistent(_spawnParent))
+        {
+            Debug.LogWarning("Prefab Spawner: Spawn Parent is a project asset, not a scene " +
+                             "object. Spawning at the scene root instead.");
+            return null;
+        }
+
+        return _spawnParent;
     }
 
     private void DeleteAt(Vector2 mousePosition)

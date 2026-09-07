@@ -23,6 +23,9 @@ namespace Game.Core.Controls
         /// <summary>True only on the frame the trigger was pulled.</summary>
         bool AttackPressed { get; }
 
+        /// <summary>True while the player asks to lie down - HELD, not a single frame.</summary>
+        bool CrouchHeld { get; }
+
         /// <summary>True on the frame weapon number <paramref name="index"/> was picked.</summary>
         bool WeaponSelectPressed(int index);
 

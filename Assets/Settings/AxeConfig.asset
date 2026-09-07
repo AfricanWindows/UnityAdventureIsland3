@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Projectiles.ProjectileConfigSO
   stats:
     speed: 10
-    lifetime: 1
+    lifetime: 3
     damage: 1
     scale: 1
     piercesEnemies: 0

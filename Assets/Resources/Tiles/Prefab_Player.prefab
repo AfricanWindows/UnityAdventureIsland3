@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 852006832453174510}
   - component: {fileID: 7788110000000000021}
   - component: {fileID: 7788110000000000022}
+  - component: {fileID: 7788110000000000023}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -474,6 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimatorView
   speedParameter: Speed
   groundedParameter: 
+  crouchParameter: IsCrouching
   runThreshold: 0.05
 --- !u!114 &7788110000000000021
 MonoBehaviour:
@@ -706,3 +708,15 @@ MonoBehaviour:
   unlockedFromStart: 0
   boomerangPool: {fileID: 3200493314811406784}
   firePoint: {fileID: 0}
+--- !u!114 &7788110000000000023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84a2588467ed534bef88e8322ec8067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCrouch

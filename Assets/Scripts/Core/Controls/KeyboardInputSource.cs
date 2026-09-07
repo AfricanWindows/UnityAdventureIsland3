@@ -55,6 +55,17 @@ namespace Game.Core.Controls
             }
         }
 
+        /// <summary>Down arrow or S, held. Both, because both are muscle memory.</summary>
+        public bool CrouchHeld
+        {
+            get
+            {
+                Keyboard keyboard = Keyboard.current;
+                return keyboard != null &&
+                       (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed);
+            }
+        }
+
         public bool AttackPressed
         {
             get

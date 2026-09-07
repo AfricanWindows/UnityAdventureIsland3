@@ -26,6 +26,10 @@ public class PlayerAnimatorView : MonoBehaviour
              "is ever added - with just Idle and Run there is nothing for it to switch.")]
     [SerializeField] private string groundedParameter = "";
 
+    [Tooltip("Bool. True while the player is lying down. Leave empty if there is no lying " +
+             "animation yet.")]
+    [SerializeField] private string crouchParameter = "IsCrouching";
+
     [Header("Tuning")]
     [Tooltip("Below this speed he counts as standing. Stops the run cycle from flickering " +
              "on during the last fraction of the braking ramp.")]
@@ -34,32 +38,40 @@ public class PlayerAnimatorView : MonoBehaviour
     private Animator animator;
     private PlayerMovement movement;
     private IGroundCheck groundCheck;
+    private ICrouchState crouch;
 
     // Hashed once. Animator.SetFloat("Speed", ...) looks the name up by string on every
     // call, every frame; the int overload does not.
     private int speedHash;
     private int groundedHash;
+    private int crouchHash;
 
     private bool hasSpeed;
     private bool hasGrounded;
+    private bool hasCrouch;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         groundCheck = GetComponent<IGroundCheck>();
+        crouch = GetComponent<ICrouchState>();
 
         // An empty name means "this character has no such state", so an Idle/Run-only
         // controller never gets asked for a parameter it does not declare - which is what
         // Unity warns about, once per frame, forever.
         hasSpeed = !string.IsNullOrEmpty(speedParameter);
         hasGrounded = !string.IsNullOrEmpty(groundedParameter) && groundCheck != null;
+        hasCrouch = !string.IsNullOrEmpty(crouchParameter) && crouch != null;
 
         if (hasSpeed)
             speedHash = Animator.StringToHash(speedParameter);
 
         if (hasGrounded)
             groundedHash = Animator.StringToHash(groundedParameter);
+
+        if (hasCrouch)
+            crouchHash = Animator.StringToHash(crouchParameter);
 
         if (movement == null)
             Debug.LogError("PlayerAnimatorView: no PlayerMovement on " + gameObject.name, this);
@@ -78,5 +90,8 @@ public class PlayerAnimatorView : MonoBehaviour
 
         if (hasGrounded)
             animator.SetBool(groundedHash, groundCheck.IsGrounded);
+
+        if (hasCrouch)
+            animator.SetBool(crouchHash, crouch.IsCrouching);
     }
 }
