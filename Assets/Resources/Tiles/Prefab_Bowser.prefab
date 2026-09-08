@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3523726431067024072}
   - component: {fileID: 8542900906262972763}
   - component: {fileID: 3107075382077248216}
+  - component: {fileID: 7788110000000000102}
   m_Layer: 0
   m_Name: Prefab_Bowser
   m_TagString: Untagged
@@ -186,3 +187,16 @@ MonoBehaviour:
   shootInterval: 2
   shootDirection: -1
   firePoint: {fileID: 0}
+--- !u!114 &7788110000000000102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616520885454587753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03318330f1c96204d9f9e39ab50e2161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillPlayerOnTouch
+  playerTag: Player

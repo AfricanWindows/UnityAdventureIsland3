@@ -492,6 +492,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerController
   config: {fileID: 11400000, guid: 6dd57403b6fc78c8f7657c81743f8ac0, type: 2}
   viewComponent: {fileID: 0}
+--- !u!114 &7788110000000000023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84a2588467ed534bef88e8322ec8067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCrouch
+--- !u!114 &7788110000000000024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c787d97dbf04ea12511e243e539ad153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FruitCounterController
+  fruitsPerLife: 20
+  viewComponent: {fileID: 0}
 --- !u!1 &8065002628259424788
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,8 +565,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.FireballWeapon
   cooldown: 0.25
   unlockedFromStart: 0
-  fireballPool: {fileID: 1114877418642937684}
   firePoint: {fileID: 0}
+  fireballPool: {fileID: 1114877418642937684}
 --- !u!114 &1114877418642937684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +613,7 @@ Transform:
   m_GameObject: {fileID: 9004961795210391330}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.706, y: 0.306, z: 0}
+  m_LocalPosition: {x: 0.7, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -605,10 +631,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238aa360d54e1434d81418826789bb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AxeWeapon
-  cooldown: 0.25
+  cooldown: 0.1
   unlockedFromStart: 0
-  axePool: {fileID: 6605456052859109381}
   firePoint: {fileID: 0}
+  axePool: {fileID: 6605456052859109381}
 --- !u!114 &6605456052859109381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,8 +650,8 @@ MonoBehaviour:
   prefab: {fileID: -2751458972493023182, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
   config: {fileID: 11400000, guid: 1c0662647ccaceae8d8c721a959f29be, type: 2}
   container: {fileID: 0}
-  prewarmCount: 5
-  maxSize: 5
+  prewarmCount: 3
+  maxSize: 3
   allowGrowth: 0
   logTraffic: 0
 --- !u!1 &9105372525335112281
@@ -696,29 +722,3 @@ MonoBehaviour:
   unlockedFromStart: 0
   boomerangPool: {fileID: 3200493314811406784}
   firePoint: {fileID: 0}
---- !u!114 &7788110000000000023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b84a2588467ed534bef88e8322ec8067, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCrouch
---- !u!114 &7788110000000000024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c787d97dbf04ea12511e243e539ad153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FruitCounterController
-  fruitsPerLife: 20
-  viewComponent: {fileID: 0}

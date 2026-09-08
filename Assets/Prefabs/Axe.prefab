@@ -113,7 +113,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   upwardSpeed: 0
-  fallGravity: 1.5
+  fallGravity: 2
 --- !u!50 &2487451591007417260
 Rigidbody2D:
   serializedVersion: 5

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8904230acf6c1a41a5b246ee873441e, type: 3}
-  m_Name: AxeConfig
+  m_Name: EnemyShotConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.Projectiles.ProjectileConfigSO
   stats:
-    speed: 10
-    lifetime: 2
+    speed: 6
+    lifetime: 3
     damage: 1
     scale: 1
     piercesEnemies: 0

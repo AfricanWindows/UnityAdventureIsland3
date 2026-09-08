@@ -41,9 +41,13 @@ public class PatrolEnemy : BaseEnemy
             transform.Translate(new Vector3(direction * speed * Time.fixedDeltaTime, 0f, 0f));
     }
 
-    protected override void OnCollisionEnter2D(Collision2D col)
+    /// <summary>
+    /// Bumping into something. This is about WALLS only - hurting the player on
+    /// contact is a separate component (KillPlayerOnTouch), so this enemy is free to
+    /// be harmless simply by not carrying it.
+    /// </summary>
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        base.OnCollisionEnter2D(col);
         TryTurnOnWall(col);
     }
 

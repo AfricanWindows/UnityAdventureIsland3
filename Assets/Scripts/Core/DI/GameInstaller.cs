@@ -37,6 +37,9 @@ namespace Game.Core.DI
     [Tooltip("The \"Fruits: 0/20\" label. Optional - found automatically.")]
     [SerializeField] private FruitCounterView fruitCounter;
 
+    [Tooltip("The pool every shooting enemy borrows its shots from. Optional - found automatically.")]
+    [SerializeField] private Game.Weapons.EnemyProjectilePoolManager enemyShotPool;
+
     [Tooltip("The object that switches the levels. Optional - found automatically.")]
     [SerializeField] private LevelFlowController levelFlow;
 
@@ -111,6 +114,18 @@ namespace Game.Core.DI
             // Who the player is. Found ONCE, by tag, instead of by every class that
             // wants him calling FindGameObjectWithTag in its own Update.
             _container.Register<IPlayerProvider>(new TaggedPlayerProvider(playerTag));
+
+            // One shot pool shared by every shooting enemy in the game. Registered as
+            // the interface, so a snake never learns which manager object it came from.
+            Game.Weapons.EnemyProjectilePoolManager shots = enemyShotPool;
+
+            if (shots == null)
+                shots = FindAnyObjectByType<Game.Weapons.EnemyProjectilePoolManager>(FindObjectsInactive.Include);
+
+            if (shots != null)
+                _container.Register<IObjectPool<EnemyProjectile>>(shots);
+            else
+                Debug.LogWarning("[DI] No EnemyProjectilePoolManager in the scene - shooting enemies will not fire.", this);
 
             // The game's course: which level runs, and what a restart means.
             LevelFlowController flow = levelFlow;

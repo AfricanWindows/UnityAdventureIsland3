@@ -157,12 +157,8 @@ namespace Game.Projectiles
             if (!string.IsNullOrEmpty(ignoreTag) && other.CompareTag(ignoreTag))
                 return;
 
-            // TryGetComponent instead of GetComponent + null check: it does not allocate
-            // when nothing is found, and "nothing is found" is the common case here.
-            IDamageable target;
-            if (other.TryGetComponent(out target))
+            if (TryHit(other))
             {
-                target.TakeDamage(_stats.Damage);
                 Debug.Log(LogPrefix + " Hit " + other.name);
 
                 if (!_stats.PiercesEnemies)
@@ -176,6 +172,32 @@ namespace Game.Projectiles
                 Debug.Log(LogPrefix + " Hit " + other.name);
                 Despawn();
             }
+        }
+
+        /// <summary>
+        /// What this projectile does to what it touched, and whether that counted as a hit.
+        ///
+        /// The default is the game's shared rule: hurt anything that can be hurt. It is a
+        /// HOOK rather than fixed code because the enemies shoot too, and their shots do
+        /// the opposite - they ignore IDamageable and kill the player instead. Before this
+        /// existed, the enemy fireball was a whole second projectile class with its own
+        /// lifetime, its own Destroy and no pool, purely because it could not express that
+        /// one difference (Open/Closed).
+        ///
+        /// The step order around it - ignore tag, hit, pierce or die, else check scenery -
+        /// stays fixed, so no subclass can forget the lifetime or the pool handshake.
+        /// </summary>
+        /// <returns>True if something was hit, which is what ends the flight.</returns>
+        protected virtual bool TryHit(Collider2D other)
+        {
+            // TryGetComponent instead of GetComponent + null check: it does not allocate
+            // when nothing is found, and "nothing is found" is the common case here.
+            IDamageable target;
+            if (!other.TryGetComponent(out target))
+                return false;
+
+            target.TakeDamage(Stats.Damage);
+            return true;
         }
 
         /// <summary>Ends the flight and returns the object to whoever handed it out.</summary>

@@ -121,7 +121,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!58 &-3407852462079099371
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -170,7 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 055e9d9ee4b51ff48a85627461d82597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile
-  speedX: 300
-  speedY: 0
-  lifetime: 3
-  playerTag: Player
+  ignoreTag: 
+  stopsOnScenery: 0
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 0

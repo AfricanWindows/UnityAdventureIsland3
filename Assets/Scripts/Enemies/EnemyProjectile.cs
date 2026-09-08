@@ -1,42 +1,34 @@
+using Game.Projectiles;
 using UnityEngine;
 
 /// <summary>
-/// A shot fired BY an enemy. It kills Mario and ignores enemies,
-/// so enemies can never hurt each other.
+/// A shot fired BY an enemy - the snake's fireball. It kills the player and ignores other
+/// enemies, so enemies can never hurt each other.
+///
+/// It used to be a whole parallel projectile class: its own Rigidbody handling, its own
+/// Destroy(gameObject, lifetime), its own hit test, and no pool at all - the third
+/// hierarchy of the same idea after the fireball and the axe. It is now the same
+/// DirectionalProjectile everything else uses, and the only thing it still says for itself
+/// is WHO it hurts.
+///
+/// Set Ignore Tag to the enemies' own tag on the prefab so a snake never shoots itself.
 /// </summary>
-public class EnemyProjectile : MonoBehaviour
+public sealed class EnemyProjectile : DirectionalProjectile
 {
-    [SerializeField] private float speedX = 300f;
-    [SerializeField] private float speedY = 0f;
-    [SerializeField] private float lifetime = 3f;
-    [SerializeField] private string playerTag = "Player";
+    protected override string LogPrefix { get { return "[EnemyShot]"; } }
 
-    private Rigidbody2D rigid;
-
-    private void Awake()
+    /// <summary>
+    /// The one inherited step it replaces: enemy fire does not damage IDamageable - that
+    /// would let one snake kill another - it kills the player outright, exactly like
+    /// touching the enemy itself does.
+    /// </summary>
+    protected override bool TryHit(Collider2D other)
     {
-        rigid = GetComponent<Rigidbody2D>();
-    }
+        IKillable killable;
+        if (!other.TryGetComponent(out killable))
+            return false;
 
-    public void Launch(float direction)
-    {
-        transform.localScale = new Vector3(direction, 1f, 1f);
-
-        if (rigid != null)
-            rigid.AddForce(new Vector2(direction * speedX, speedY));
-
-        Destroy(gameObject, lifetime);
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col == null || !col.gameObject.CompareTag(playerTag))
-            return;
-
-        PlayerDeath playerDeath = col.gameObject.GetComponent<PlayerDeath>();
-        if (playerDeath != null)
-            playerDeath.Kill();
-
-        Destroy(gameObject);
+        killable.Kill();
+        return true;
     }
 }

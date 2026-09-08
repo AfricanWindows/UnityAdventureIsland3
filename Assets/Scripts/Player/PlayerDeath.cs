@@ -1,6 +1,14 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Dying: back to the start of the current level, and a broadcast so the rest of the game
+/// can react - the lives counter, the power bar and the weapons all listen.
+///
+/// It is the single implementation of IKillable, which is how enemies, their shots, spikes
+/// and the two timers kill the player without any of them knowing what respawning is or
+/// that a star can make him immune.
+/// </summary>
 public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler
 {
     public static event Action OnPlayerDied;
@@ -9,16 +17,6 @@ public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler
 
     private IInvincible[] invincibilitySources;
     private Rigidbody2D body;
-
-    private void OnEnable()
-    {
-        SC_Death.OnSpikeCollision += OnSpikeCollision;
-    }
-
-    private void OnDisable()
-    {
-        SC_Death.OnSpikeCollision -= OnSpikeCollision;
-    }
 
     void Awake()
     {
@@ -78,8 +76,4 @@ public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler
         return false;
     }
 
-    private void OnSpikeCollision()
-    {
-        Kill();
-    }
 }

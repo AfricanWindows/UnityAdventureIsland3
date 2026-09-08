@@ -1,54 +1,39 @@
-using Game.Core.DI;
+using Game.Core;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
-/// Shows the GAME OVER popup when the last life is gone, and restarts the game when the
-/// player presses the button.
+/// Shows the GAME OVER popup when the last life is gone.
 ///
 /// It reloads NOTHING. The old version called SceneManager.LoadScene, which resets the
 /// world by throwing it away; that is forbidden here, and it was also the wrong tool - it
-/// would have destroyed the UI and this controller along with the level. Restarting is now
-/// a message to ILevelFlow, which asks every object to restore itself.
+/// would have destroyed the UI and this controller along with the level.
 ///
-/// This class counts nothing and decides nothing about lives: it listens for "health
-/// empty", shows a panel, and forwards a button press (Single Responsibility).
+/// It does not own the RESTART button either: that is RestartGameButton, one component
+/// shared with the Level Complete screen. This class listens for "health empty", shows a
+/// panel, and hides it again when the game restarts - nothing else (Single Responsibility).
+///
+/// Hiding happens through IResettable, the same call that puts the enemies and the fruit
+/// back, so nobody has to remember to close the popup: it closes itself as part of the
+/// restart everything else already takes part in.
 /// </summary>
-public class GameOverController : MonoBehaviour, IInjectable
+public class GameOverController : MonoBehaviour, IResettable
 {
     [Tooltip("Popup with the GAME OVER text and the RESTART button. Hidden while playing.")]
     [SerializeField] private GameObject gameOverPanel;
 
-    [Tooltip("The RESTART button inside the popup. Its onClick is wired up in code, so " +
-             "there is nothing to drag in the Inspector.")]
-    [SerializeField] private Button restartButton;
-
     [Tooltip("Freeze the game while the popup is up.")]
     [SerializeField] private bool freezeWhileShown = true;
 
-    private ILevelFlow flow;
     private bool isGameOver;
-
-    public void Inject(IServiceContainer container)
-    {
-        if (container != null)
-            container.TryResolve(out flow);
-    }
 
     private void OnEnable()
     {
         PlayerHealthController.OnPlayerHealthEmpty += OnHealthEmpty;
-
-        if (restartButton != null)
-            restartButton.onClick.AddListener(Restart);
     }
 
     private void OnDisable()
     {
         PlayerHealthController.OnPlayerHealthEmpty -= OnHealthEmpty;
-
-        if (restartButton != null)
-            restartButton.onClick.RemoveListener(Restart);
 
         // timeScale is global and survives everything. Leaving it at 0 here would freeze
         // the game forever, so it is always restored.
@@ -57,7 +42,7 @@ public class GameOverController : MonoBehaviour, IInjectable
 
     private void Start()
     {
-        Hide();
+        ResetToStart();
     }
 
     private void OnHealthEmpty()
@@ -76,19 +61,8 @@ public class GameOverController : MonoBehaviour, IInjectable
         Debug.Log("[GameOver] No lives left");
     }
 
-    /// <summary>Wired to the RESTART button. Public so the button can also call it directly.</summary>
-    public void Restart()
-    {
-        Hide();
-
-        if (flow != null)
-            flow.RestartGame();
-        else
-            Debug.LogError("[GameOver] No ILevelFlow - cannot restart. Is there a " +
-                           "LevelFlowController in the scene?", this);
-    }
-
-    private void Hide()
+    /// <summary>A new game: no popup, and time running again.</summary>
+    public void ResetToStart()
     {
         isGameOver = false;
         Time.timeScale = 1f;
