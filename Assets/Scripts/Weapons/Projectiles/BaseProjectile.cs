@@ -48,7 +48,7 @@ namespace Game.Projectiles
 
         protected Rigidbody2D Body { get { return _body; } }
 
-        /// <summary>Prefix for this projectile's console messages, e.g. "[Laser]".</summary>
+        /// <summary>Prefix for this projectile's console messages, e.g. "[Axe]".</summary>
         protected virtual string LogPrefix { get { return "[Projectile]"; } }
 
         /// <summary>Filled in by the builder while the object is being assembled.</summary>
@@ -118,7 +118,7 @@ namespace Game.Projectiles
         ///
         /// The rule is DATA, not code: an axe that dies on the floor and a boomerang that
         /// flies over it are the same class with a different tick box. This used to be an
-        /// override inside LaserProjectile, which meant every new projectile that wanted
+        /// override inside one projectile class, which meant every new projectile that wanted
         /// the same behaviour had to copy the same eight lines (Open/Closed).
         ///
         /// Still virtual: a projectile with a genuinely different rule - one that bounces,

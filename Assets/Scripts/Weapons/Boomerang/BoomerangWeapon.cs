@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
-    /// The boomerang launcher - built exactly like LaserWeapon: a BaseWeapon subclass that
+    /// The boomerang launcher - a BaseWeapon subclass that
     /// only decides WHEN a boomerang may leave the hand and where it starts. It does not
     /// build, move or destroy boomerangs; it borrows one and the boomerang brings itself
     /// back.

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
-    /// The boomerang's pool. Like LaserPoolManager it exists because Unity cannot show a
+    /// The boomerang's pool. Like the axe's, it exists because Unity cannot show a
     /// generic MonoBehaviour in the Inspector - but this one does add something real: the
     /// pool is sized to ONE, and that single pooled boomerang IS the round of ammo.
     /// Throwing empties the pool, so Get() returns null until the boomerang finishes its

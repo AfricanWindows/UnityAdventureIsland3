@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7692531724374310423}
   - component: {fileID: 5523514547444480965}
   - component: {fileID: 3523726431067024072}
-  - component: {fileID: 4630277353484615959}
   - component: {fileID: 7788110000000000103}
   - component: {fileID: 6272563715190628184}
   m_Layer: 0
@@ -123,19 +122,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &4630277353484615959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 616520885454587753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b002bd77fc25c4f9d48dd820b0da60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StaticEnemy
-  health: 1
 --- !u!114 &7788110000000000103
 MonoBehaviour:
   m_ObjectHideFlags: 0

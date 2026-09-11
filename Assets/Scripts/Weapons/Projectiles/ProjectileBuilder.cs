@@ -5,14 +5,14 @@ namespace Game.Projectiles
     /// <summary>
     /// CONCRETE BUILDER - one class for every projectile in the game.
     ///
-    /// It replaces LaserBuilder and BoomerangBuilder, which were byte-for-byte identical
+    /// It replaced a hand-written builder per weapon, which were byte-for-byte identical
     /// apart from a type name and a log prefix: 85 lines each, differing in eleven. With
     /// six weapons planned that scheme was heading for roughly five hundred lines of
     /// copy-paste, and a bug fixed in one copy silently surviving in the other five.
     ///
     /// Nothing was lost by merging them, because a builder assembles a projectile - it
     /// never decides how one FLIES. That difference lives in the concrete product
-    /// (LaserProjectile, BoomerangProjectile), which is where behaviour belongs.
+    /// (ProjectileAxe, BoomerangProjectile), which is where behaviour belongs.
     ///
     /// Adding a weapon now adds no builder at all (Open/Closed): the generic argument
     /// changes and the code does not.
@@ -28,7 +28,7 @@ namespace Game.Projectiles
         private readonly TProjectile _prefab;
         private readonly Transform _parent;
 
-        // Named after the product, so the console still says [LaserProjectile] rather than
+        // Named after the product, so the console still says [ProjectileAxe] rather than
         // a generic "[Projectile]" - the merge cost nothing in diagnosability.
         private readonly string _logPrefix;
 

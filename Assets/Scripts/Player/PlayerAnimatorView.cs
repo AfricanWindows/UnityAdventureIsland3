@@ -30,6 +30,14 @@ public class PlayerAnimatorView : MonoBehaviour
              "animation yet.")]
     [SerializeField] private string crouchParameter = "IsCrouching";
 
+    [Tooltip("Bool. True for the moment a hazard shoves the player. Leave empty if there " +
+             "is no hurt animation.")]
+    [SerializeField] private string hurtParameter = "IsHurt";
+
+    [Tooltip("Bool. True while the death animation plays. Leave empty if there is no " +
+             "death animation.")]
+    [SerializeField] private string deathParameter = "IsDead";
+
     [Header("Tuning")]
     [Tooltip("Below this speed he counts as standing. Stops the run cycle from flickering " +
              "on during the last fraction of the braking ramp.")]
@@ -39,16 +47,22 @@ public class PlayerAnimatorView : MonoBehaviour
     private PlayerMovement movement;
     private IGroundCheck groundCheck;
     private ICrouchState crouch;
+    private PlayerHurt hurt;
+    private PlayerDeath death;
 
     // Hashed once. Animator.SetFloat("Speed", ...) looks the name up by string on every
     // call, every frame; the int overload does not.
     private int speedHash;
     private int groundedHash;
     private int crouchHash;
+    private int hurtHash;
+    private int deathHash;
 
     private bool hasSpeed;
     private bool hasGrounded;
     private bool hasCrouch;
+    private bool hasHurt;
+    private bool hasDeath;
 
     private void Awake()
     {
@@ -56,6 +70,8 @@ public class PlayerAnimatorView : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         groundCheck = GetComponent<IGroundCheck>();
         crouch = GetComponent<ICrouchState>();
+        hurt = GetComponent<PlayerHurt>();
+        death = GetComponent<PlayerDeath>();
 
         // An empty name means "this character has no such state", so an Idle/Run-only
         // controller never gets asked for a parameter it does not declare - which is what
@@ -63,6 +79,8 @@ public class PlayerAnimatorView : MonoBehaviour
         hasSpeed = !string.IsNullOrEmpty(speedParameter);
         hasGrounded = !string.IsNullOrEmpty(groundedParameter) && groundCheck != null;
         hasCrouch = !string.IsNullOrEmpty(crouchParameter) && crouch != null;
+        hasHurt = !string.IsNullOrEmpty(hurtParameter) && hurt != null;
+        hasDeath = !string.IsNullOrEmpty(deathParameter) && death != null;
 
         if (hasSpeed)
             speedHash = Animator.StringToHash(speedParameter);
@@ -72,6 +90,12 @@ public class PlayerAnimatorView : MonoBehaviour
 
         if (hasCrouch)
             crouchHash = Animator.StringToHash(crouchParameter);
+
+        if (hasHurt)
+            hurtHash = Animator.StringToHash(hurtParameter);
+
+        if (hasDeath)
+            deathHash = Animator.StringToHash(deathParameter);
 
         if (movement == null)
             Debug.LogError("PlayerAnimatorView: no PlayerMovement on " + gameObject.name, this);
@@ -93,5 +117,11 @@ public class PlayerAnimatorView : MonoBehaviour
 
         if (hasCrouch)
             animator.SetBool(crouchHash, crouch.IsCrouching);
+
+        if (hasHurt)
+            animator.SetBool(hurtHash, hurt.IsHurt);
+
+        if (hasDeath)
+            animator.SetBool(deathHash, death.IsDying);
     }
 }

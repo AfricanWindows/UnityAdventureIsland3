@@ -3,8 +3,8 @@ using UnityEngine;
 /// <summary>
 /// "Picking this up unlocks weapon T, and nothing else."
 ///
-/// One class for every weapon in the game. It replaces LaserPowerUp, BoomerangPowerUp,
-/// FireFlowerPowerUp and AxeAmmoPowerUp, which were four copies of the same six lines
+/// One class for every weapon in the game. It replaced four near-identical power-up
+/// classes, which were copies of the same six lines
 /// differing only in a type name - so a fix to one of them (the missing searchInactive
 /// flag, for instance) reached one weapon and silently missed the other three.
 ///

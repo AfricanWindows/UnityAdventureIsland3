@@ -7,7 +7,7 @@ namespace Game.Projectiles
     ///
     /// Mapping onto the pattern as taught:
     ///   Product          = BaseProjectile
-    ///   Concrete Product = LaserProjectile
+    ///   Concrete Product = ProjectileAxe
     ///   Creator          = ProjectileFactory&lt;T&gt;   (this class)
     ///   Concrete Creator = ConfiguredProjectileFactory&lt;T&gt;
     ///   Factory Method   = Create()

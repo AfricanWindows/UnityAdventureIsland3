@@ -48,7 +48,7 @@ namespace Game.Weapons
 
         protected virtual float Cooldown { get { return cooldown; } }
 
-        /// <summary>Built once and cached - "[Laser]", "[Fireball]"...</summary>
+        /// <summary>Built once and cached - "[Axe]", "[Boomerang]"...</summary>
         protected string LogPrefix
         {
             get

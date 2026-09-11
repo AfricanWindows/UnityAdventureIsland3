@@ -1,73 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &96821503744124902
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 628635381947198134}
-  - component: {fileID: 2632399645765721191}
-  - component: {fileID: 2460550617894821608}
-  m_Layer: 0
-  m_Name: LaserWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &628635381947198134
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96821503744124902}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3043177011782934736}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2632399645765721191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96821503744124902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b9c87dfff011b74ea20a08de2062c6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.LaserPoolManager
-  prefab: {fileID: 2915949689095971025, guid: 23c0c7d4ac9b9534f84b28ca6eb72ba2, type: 3}
-  config: {fileID: 11400000, guid: f4671d4554e04684c9c64b0feaeed767, type: 2}
-  container: {fileID: 0}
-  prewarmCount: 5
-  maxSize: 5
-  allowGrowth: 0
-  logTraffic: 1
---- !u!114 &2460550617894821608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96821503744124902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46d18d8fb3ff6d44697cfcbf6f1ad737, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.LaserWeapon
-  cooldown: 0
-  unlockedFromStart: 0
-  laserPool: {fileID: 2632399645765721191}
-  firePoint: {fileID: 0}
 --- !u!1 &4729304969442903462
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +65,6 @@ GameObject:
   - component: {fileID: 4512935578239681708}
   - component: {fileID: 8572535940942234845}
   - component: {fileID: 6296240038217909520}
-  - component: {fileID: 8794721527865431122}
   - component: {fileID: 4914497458084248181}
   - component: {fileID: 8444476018975068162}
   - component: {fileID: 852006832453174510}
@@ -141,6 +72,7 @@ GameObject:
   - component: {fileID: 7788110000000000022}
   - component: {fileID: 7788110000000000023}
   - component: {fileID: 7788110000000000024}
+  - component: {fileID: 7788110000000000401}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -162,9 +94,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1013766377263697598}
-  - {fileID: 2311868682876353980}
   - {fileID: 1329533104064966141}
-  - {fileID: 628635381947198134}
   - {fileID: 5122837146720154986}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -332,6 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a333964a36952d46916dfb7022eb90a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
+  deathAnimationSeconds: 1
 --- !u!114 &277688120179838768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,20 +331,6 @@ MonoBehaviour:
   maxHealth: 3
   startHealth: 3
   viewComponent: {fileID: 0}
---- !u!114 &8794721527865431122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25707862cf5ea0a468c8a8b4d3ee8eef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpeedBoost
-  duration: 5
-  speedBonus: 0.5
 --- !u!114 &4914497458084248181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,6 +381,8 @@ MonoBehaviour:
   speedParameter: Speed
   groundedParameter: 
   crouchParameter: IsCrouching
+  hurtParameter: IsHurt
+  deathParameter: IsDead
   runThreshold: 0.05
 --- !u!114 &7788110000000000021
 MonoBehaviour:
@@ -518,74 +437,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FruitCounterController
   fruitsPerLife: 20
   viewComponent: {fileID: 0}
---- !u!1 &8065002628259424788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2311868682876353980}
-  - component: {fileID: 8142185138380632127}
-  - component: {fileID: 1114877418642937684}
-  m_Layer: 0
-  m_Name: FireballWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2311868682876353980
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8065002628259424788}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.36699998, y: -0.1559999, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3043177011782934736}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8142185138380632127
+--- !u!114 &7788110000000000401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8065002628259424788}
+  m_GameObject: {fileID: 7737513687079717171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d368ded81c2b19746ab7b42a6527fd1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 83aed4761587cc8a44de3d62b917f5b1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.FireballWeapon
-  cooldown: 0.25
-  unlockedFromStart: 0
-  firePoint: {fileID: 0}
-  fireballPool: {fileID: 1114877418642937684}
---- !u!114 &1114877418642937684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8065002628259424788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f44562a65c76602835870fa384af8441, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.FireballPoolManager
-  prefab: {fileID: 2711112754417157150, guid: c470d5c61dda9e04e92dcb4b7f86bab8, type: 3}
-  config: {fileID: 11400000, guid: cf1aac881e9f643ff20b632a3b9f5e88, type: 2}
-  container: {fileID: 0}
-  prewarmCount: 10
-  maxSize: 10
-  allowGrowth: 0
-  logTraffic: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHurt
+  knockbackSeconds: 0.25
 --- !u!1 &9004961795210391330
 GameObject:
   m_ObjectHideFlags: 0

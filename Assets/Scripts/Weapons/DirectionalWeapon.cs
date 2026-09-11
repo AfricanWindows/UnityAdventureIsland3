@@ -8,7 +8,7 @@ namespace Game.Weapons
     /// Every weapon that throws something the way its owner is facing: the axe today, the
     /// fireball, the hammer from the assignment tomorrow.
     ///
-    /// It exists because FireballWeapon and AxeWeapon had become identical - the same
+    /// It exists because two thrown weapons had become identical - the same
     /// thirty-five lines twice, differing in a type name, an enum value and a log string.
     /// That is the same duplication already removed from the builders, the factories and
     /// the pool managers; it had simply grown back one layer higher.

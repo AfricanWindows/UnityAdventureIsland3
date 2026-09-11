@@ -193,7 +193,7 @@ namespace Game.Core
             _totalCreated++;
 
             // The item is told HOW to go home, not WHERE home is. It captures this call,
-            // never a LaserPoolManager, so a projectile stays usable with any pool - or
+            // never an AxePoolManager, so a projectile stays usable with any pool - or
             // with no pool at all (Dependency Inversion).
             item.SetReleaseCallback(delegate { Release(item); });
 

@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 88c66976dc562554fbb0cee191fcc088, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2d6ef200d1bb9d74596c59f122b3be82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -156,8 +156,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.4
+  m_Offset: {x: 0.05, y: 0.03}
+  m_Radius: 0.48
 --- !u!114 &4201896597222242396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +171,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoomerangProjectile
   ignoreTag: Player
+  stopsOnScenery: 0
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
   throwDistance: 5
   returnArcHeight: 2
   spinDegreesPerSecond: 720

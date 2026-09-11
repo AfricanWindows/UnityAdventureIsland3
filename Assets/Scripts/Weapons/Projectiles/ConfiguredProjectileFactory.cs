@@ -3,12 +3,12 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
-    /// CONCRETE CREATOR - one class for every projectile, replacing LaserFactory and
-    /// BoomerangFactory, which differed only in a type name.
+    /// CONCRETE CREATOR - one class for every projectile, replacing the hand-written
+    /// factory each weapon used to have, which differed only in a type name.
     ///
     /// Mapping onto the pattern as taught:
     ///   Product          = BaseProjectile
-    ///   Concrete Product = LaserProjectile, BoomerangProjectile, ...
+    ///   Concrete Product = ProjectileAxe, BoomerangProjectile, ...
     ///   Creator          = ProjectileFactory&lt;T&gt;            (abstract)
     ///   Concrete Creator = ConfiguredProjectileFactory&lt;T&gt;   (this class)
     ///   Factory Method   = Create()

@@ -148,6 +148,18 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         ResetToStart();
     }
 
+    /// <summary>
+    /// Losing power to a hazard - the stone costs three. Returns how many segments
+    /// were actually taken, which is fewer than asked when the bar was nearly empty.
+    ///
+    /// It goes through the model like everything else, so hitting zero this way raises
+    /// the same Empty event and costs the same life as running out of time.
+    /// </summary>
+    public int RemovePower(int amount)
+    {
+        return model != null ? model.Remove(amount) : 0;
+    }
+
     /// <summary>Eating a fruit. Returns how many segments actually fitted.</summary>
     public int AddPower(int amount)
     {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3107075382077248216}
   - component: {fileID: 7788110000000000102}
   m_Layer: 0
-  m_Name: Prefab_Bowser
+  m_Name: Prefab_SnakeRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: e379b85d99044984e993bd2a3c53ce2b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: af8f7e648004a2940a309bd6ed849f02, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -161,7 +161,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.25, y: 1.625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -182,8 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShooterEnemy
   health: 1
-  playerTag: Player
-  projectile: {fileID: 6685130501241294565, guid: b102a7af557f67d448c38affbfbfc3ef, type: 3}
+  shotPool: {fileID: 0}
   shootInterval: 2
   shootDirection: -1
   firePoint: {fileID: 0}

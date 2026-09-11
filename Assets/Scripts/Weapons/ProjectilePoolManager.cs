@@ -11,7 +11,7 @@ namespace Game.Weapons
     /// builder -&gt; director -&gt; factory -&gt; pool once, in Awake, and afterwards does
     /// nothing but forward calls.
     ///
-    /// This one class replaces LaserPoolManager and BoomerangPoolManager, which were the
+    /// This one class replaced a hand-written pool manager per weapon, which were the
     /// same 110 lines twice over. Everything that used to be duplicated - the null checks,
     /// the container creation, the event hook-up, the forwarding - is written here once.
     ///
@@ -60,7 +60,7 @@ namespace Game.Weapons
         private GenericObjectPool<TProjectile> _pool;
         private string _logPrefix;
 
-        /// <summary>Prefix for this pool's console messages, e.g. "[LaserProjectile]".</summary>
+        /// <summary>Prefix for this pool's console messages, e.g. "[ProjectileAxe]".</summary>
         protected string LogPrefix
         {
             get

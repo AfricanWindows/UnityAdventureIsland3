@@ -5,9 +5,7 @@ using UnityEngine;
 /// Moves Mario left and right, and carries him along when the floor under his feet
 /// is a moving platform.
 ///
-/// It OWNS its speed: no other class writes into the field from outside. A temporary
-/// boost is asked for through SetSpeedMultiplier, so the lightning effect never has to
-/// know what the normal speed is, or remember to put it back.
+/// It OWNS its speed: no other class writes into the field from outside.
 ///
 /// He does not reach that speed instantly. Snapping straight to the maximum reads as a
 /// sprite being teleported rather than a character starting to walk, so the speed ramps
@@ -31,7 +29,6 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
              "Acceleration - stopping should feel sharper than starting.")]
     [SerializeField] private float deceleration = 60f;
 
-    private float speedMultiplier = 1f;
     private float facingDirection = 1f;
     private float direction;
 
@@ -48,10 +45,10 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     // what makes this open: a new lock is a new component, never an edit here.
     private IMovementLock[] movementLocks;
 
-    /// <summary>Speed actually used right now: normal speed times the active multiplier.</summary>
+    /// <summary>Walking speed in use right now.</summary>
     public float CurrentSpeed
     {
-        get { return speed * speedMultiplier; }
+        get { return speed; }
     }
 
     /// <summary>
@@ -79,12 +76,6 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     }
 
     /// <summary>
-    /// Used by timed effects. 1.5 means "+50% while the effect lasts", 1 means normal.
-    /// </summary>
-    public void SetSpeedMultiplier(float multiplier)
-    {
-        speedMultiplier = multiplier > 0f ? multiplier : 1f;
-    }
 
     private void FixedUpdate()
     {

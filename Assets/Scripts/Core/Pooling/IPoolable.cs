@@ -8,7 +8,7 @@ namespace Game.Core
     ///
     /// The last part is the important one. The pool hands every object a callback, so the
     /// object returns itself by invoking a delegate instead of holding a reference to a
-    /// LaserPoolManager. A projectile therefore has NO idea which pool owns it, or that
+    /// AxePoolManager. A projectile therefore has NO idea which pool owns it, or that
     /// pools exist - it just says "I am done" (Dependency Inversion).
     /// </summary>
     public interface IPoolable

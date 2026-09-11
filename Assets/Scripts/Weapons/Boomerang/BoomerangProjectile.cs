@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace Game.Projectiles
 {
     /// <summary>
-    /// CONCRETE PRODUCT - the same slot LaserProjectile fills for its weapon.
+    /// CONCRETE PRODUCT - the same slot ProjectileAxe fills for its weapon.
     ///
     /// It rides one oval loop the way Mario faces and comes back to his hand. The loop
     /// also tracks Mario's CURRENT position, so it lands on him even if he kept running
