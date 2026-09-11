@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: cee43561d65af00428bf9c5a279fd49d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b9f72edf483c5044d9cab05cccc4cf18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -143,4 +143,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AxePickable
   playerTag: Player
-  axesAmount: 3
