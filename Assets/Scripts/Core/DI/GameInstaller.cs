@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Game.Core.Controls;
+using Game.Projectiles;
+using Game.Weapons;
 using UnityEngine;
 
 namespace Game.Core.DI
@@ -38,7 +40,13 @@ namespace Game.Core.DI
     [SerializeField] private FruitCounterView fruitCounter;
 
     [Tooltip("The pool every shooting enemy borrows its shots from. Optional - found automatically.")]
-    [SerializeField] private Game.Weapons.EnemyProjectilePoolManager enemyShotPool;
+    [SerializeField] private EnemyProjectilePoolManager enemyShotPool;
+
+    [Tooltip("The axe pool. Optional - found automatically, wherever it sits in the scene.")]
+    [SerializeField] private AxePoolManager axePool;
+
+    [Tooltip("The boomerang pool. Optional - found automatically.")]
+    [SerializeField] private BoomerangPoolManager boomerangPool;
 
     [Tooltip("The object that switches the levels. Optional - found automatically.")]
     [SerializeField] private LevelFlowController levelFlow;
@@ -115,17 +123,17 @@ namespace Game.Core.DI
             // wants him calling FindGameObjectWithTag in its own Update.
             _container.Register<IPlayerProvider>(new TaggedPlayerProvider(playerTag));
 
-            // One shot pool shared by every shooting enemy in the game. Registered as
-            // the interface, so a snake never learns which manager object it came from.
-            Game.Weapons.EnemyProjectilePoolManager shots = enemyShotPool;
-
-            if (shots == null)
-                shots = FindAnyObjectByType<Game.Weapons.EnemyProjectilePoolManager>(FindObjectsInactive.Include);
-
-            if (shots != null)
-                _container.Register<IObjectPool<EnemyProjectile>>(shots);
-            else
-                Debug.LogWarning("[DI] No EnemyProjectilePoolManager in the scene - shooting enemies will not fire.", this);
+            // Every pool in the game, published under the interface its users ask for.
+            // Three lines instead of three copies of the same eight - the repetition moved
+            // into RegisterPool below, where it is written once (Don't Repeat Yourself).
+            //
+            // This is also what frees a pool from the player prefab. A prefab cannot hold
+            // a reference to a scene object, so the axe and the boomerang used to need
+            // their pools ON the player. Registered here, a pool can sit on any object in
+            // the scene and the weapons still find it - without naming it.
+            RegisterPool<EnemyProjectilePoolManager, EnemyProjectile>(enemyShotPool, "shooting enemies");
+            RegisterPool<AxePoolManager, ProjectileAxe>(axePool, "the axe");
+            RegisterPool<BoomerangPoolManager, BoomerangProjectile>(boomerangPool, "the boomerang");
 
             // The game's course: which level runs, and what a restart means.
             LevelFlowController flow = levelFlow;
@@ -140,6 +148,51 @@ namespace Game.Core.DI
 
             if (verbose)
                 Debug.Log("[DI] Services registered.", this);
+        }
+
+        /// <summary>
+        /// Publishes one pool under IObjectPool&lt;TProjectile&gt; - the only face of a pool
+        /// that anything else in the game is allowed to see (Interface Segregation).
+        ///
+        /// GENERIC because the three pools differ in exactly two things: what they hand
+        /// out, and which manager holds them. Both are type arguments, so the find, the
+        /// registration, the log and the warning are written ONCE. A fourth pool is one
+        /// more line at the call site and no new code here (Open/Closed).
+        ///
+        /// TManager is a type argument rather than a search for the abstract base class on
+        /// purpose: Unity's find is given the exact concrete component, which is what it
+        /// was always given before this method existed.
+        ///
+        /// Nothing that uses a pool ever appears in this signature - a weapon and a snake
+        /// are unknown here, and the pool is unknown to them (Dependency Inversion).
+        /// </summary>
+        /// <param name="assigned">The Inspector reference, or null to search the scene.</param>
+        /// <param name="users">Who goes without if it is missing, for the warning.</param>
+        private void RegisterPool<TManager, TProjectile>(TManager assigned, string users)
+            where TManager : ProjectilePoolManager<TProjectile>
+            where TProjectile : BaseProjectile
+        {
+            TManager pool = assigned;
+
+            // Include inactive: a pool parked on a switched-off object still has to be
+            // registered, or the first weapon to fire would find nothing.
+            if (pool == null)
+                pool = FindAnyObjectByType<TManager>(FindObjectsInactive.Include);
+
+            if (pool == null)
+            {
+                Debug.LogWarning("[DI] No " + typeof(TManager).Name + " in the scene - " +
+                                 users + " will not fire.", this);
+                return;
+            }
+
+            // Registered as the INTERFACE. A weapon therefore never learns which manager,
+            // or which object in the scene, its projectiles came from.
+            _container.Register<IObjectPool<TProjectile>>(pool);
+
+            if (verbose)
+                Debug.Log("[DI] " + typeof(TProjectile).Name + " pool registered from '" +
+                          pool.name + "'.", this);
         }
 
         /// <summary>

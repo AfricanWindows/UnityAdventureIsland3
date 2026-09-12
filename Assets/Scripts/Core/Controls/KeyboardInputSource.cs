@@ -14,15 +14,6 @@ namespace Game.Core.Controls
     /// </summary>
     public class KeyboardInputSource : IInputSource
     {
-        // Number keys, in order: weapon 1 answers to Digit1, weapon 2 to Digit2...
-        private static readonly Key[] SelectionKeys =
-        {
-            Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5,
-            Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
-        };
-
-        public int WeaponSlotCount { get { return SelectionKeys.Length; } }
-
         /// <summary>Both WASD and the arrow keys, resolved to a single axis.</summary>
         public float Horizontal
         {
@@ -66,6 +57,10 @@ namespace Game.Core.Controls
             }
         }
 
+        /// <summary>
+        /// Left Ctrl throws whatever the player is carrying. One button, because he has
+        /// one weapon - the number keys that used to pick a slot are gone with the slots.
+        /// </summary>
         public bool AttackPressed
         {
             get
@@ -73,18 +68,6 @@ namespace Game.Core.Controls
                 Keyboard keyboard = Keyboard.current;
                 return keyboard != null && keyboard.leftCtrlKey.wasPressedThisFrame;
             }
-        }
-
-        public bool WeaponSelectPressed(int index)
-        {
-            if (index < 0 || index >= SelectionKeys.Length)
-                return false;
-
-            Keyboard keyboard = Keyboard.current;
-            if (keyboard == null)
-                return false;
-
-            return keyboard[SelectionKeys[index]].wasPressedThisFrame;
         }
     }
 }

@@ -109,19 +109,30 @@ namespace Game.Weapons
         protected abstract bool FireInternal();
 
         /// <summary>
-        /// A new game gives back exactly the weapons the player started with - the
-        /// ones ticked Unlocked From Start - and takes away everything he found.
+        /// A new game gives back exactly the weapon the player started with - the one
+        /// ticked Unlocked From Start - and takes away anything he found.
+        ///
+        /// This is the only writer of the equipped flag besides the weapon slot, and the
+        /// two cannot disagree: the slot restores the weapon it remembered at start-up
+        /// rather than reading these flags, so a restart lands in the same state whichever
+        /// of the two IResettables it happens to call first.
         /// </summary>
         public void ResetToStart()
         {
             _isEquipped = unlockedFromStart;
         }
 
+        /// <summary>
+        /// Put in the player's hand. Called by his IWeaponSlot and by nothing else - one
+        /// weapon at a time is the slot's rule to keep, and a second writer of this flag
+        /// would be a second opinion about what he is carrying.
+        /// </summary>
         public void Equip()
         {
             _isEquipped = true;
         }
 
+        /// <summary>Taken away - by a swap, or by dying. The slot decides, not the weapon.</summary>
         public void UnEquip()
         {
             _isEquipped = false;

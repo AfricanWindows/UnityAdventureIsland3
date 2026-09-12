@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponsHandler
   weaponsRoot: {fileID: 0}
+  verbose: 1
 --- !u!1 &7737513687079717171
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +461,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1329533104064966141}
   - component: {fileID: 6685290971137788850}
-  - component: {fileID: 6605456052859109381}
   m_Layer: 0
   m_Name: AxeWeapon
   m_TagString: Untagged
@@ -498,26 +498,7 @@ MonoBehaviour:
   cooldown: 0.1
   unlockedFromStart: 0
   firePoint: {fileID: 0}
-  axePool: {fileID: 6605456052859109381}
---- !u!114 &6605456052859109381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9004961795210391330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3e2b17a53affbce0a7e5971c79048d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AxePoolManager
-  prefab: {fileID: -2751458972493023182, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
-  config: {fileID: 11400000, guid: 1c0662647ccaceae8d8c721a959f29be, type: 2}
-  container: {fileID: 0}
-  prewarmCount: 3
-  maxSize: 3
-  allowGrowth: 0
-  logTraffic: 0
+  axePool: {fileID: 0}
 --- !u!1 &9105372525335112281
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +508,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5122837146720154986}
-  - component: {fileID: 3200493314811406784}
   - component: {fileID: 576022168538632684}
   m_Layer: 0
   m_Name: BoomerangWeapon
@@ -551,25 +531,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3043177011782934736}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3200493314811406784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105372525335112281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71bfd98216601b740adfb21d716b6bb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.BoomerangPoolManager
-  prefab: {fileID: 4201896597222242396, guid: b27be72228745fb429bfdf32be970252, type: 3}
-  config: {fileID: 11400000, guid: d2ececb0db79e7d4d9f9cb34c3f8f790, type: 2}
-  container: {fileID: 0}
-  prewarmCount: 1
-  maxSize: 1
-  allowGrowth: 0
-  logTraffic: 1
 --- !u!114 &576022168538632684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,5 +545,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.BoomerangWeapon
   cooldown: 0
   unlockedFromStart: 0
-  boomerangPool: {fileID: 3200493314811406784}
+  boomerangPool: {fileID: 0}
   firePoint: {fileID: 0}

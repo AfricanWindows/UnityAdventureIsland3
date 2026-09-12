@@ -11,6 +11,11 @@ namespace Game.Core.Controls
     ///
     /// Now they depend on this, a gamepad is ONE new implementation registered in
     /// GameInstaller, and a unit test is a fake that returns whatever it likes.
+    ///
+    /// It once also asked which weapon SLOT was chosen, for the number keys 1-9. The
+    /// player carries one weapon and a new one replaces it, so there is nothing to choose
+    /// between: those two members were removed rather than left unanswered, and every
+    /// input device is two members simpler for it (Interface Segregation).
     /// </summary>
     public interface IInputSource
     {
@@ -25,11 +30,5 @@ namespace Game.Core.Controls
 
         /// <summary>True while the player asks to lie down - HELD, not a single frame.</summary>
         bool CrouchHeld { get; }
-
-        /// <summary>True on the frame weapon number <paramref name="index"/> was picked.</summary>
-        bool WeaponSelectPressed(int index);
-
-        /// <summary>How many weapon slots this device can address at all.</summary>
-        int WeaponSlotCount { get; }
     }
 }

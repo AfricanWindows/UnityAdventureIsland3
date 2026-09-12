@@ -41,7 +41,8 @@ namespace Game.Weapons
         [SerializeField] private ProjectileConfigSO config;
 
         [Tooltip("Parent for every pooled object. Leave empty and one is created at the " +
-                 "root of the scene, which is what you want: the container must never move.")]
+                 "root of the scene. If you assign your own, it must sit at the ROOT - a " +
+                 "container inside a level is switched off together with that level.")]
         [SerializeField] private Transform container;
 
         [Header("Pool size")]
@@ -84,7 +85,7 @@ namespace Game.Weapons
                 return;
             }
 
-            Transform parent = container != null ? container : CreateRootContainer();
+            Transform parent = ResolveContainer();
 
             // The only place the concrete types are named. Everything downstream talks
             // through interfaces: the director sees IProjectileBuilder, the pool sees
@@ -107,6 +108,38 @@ namespace Game.Weapons
 
         /// <summary>Subclass hook, run once the pool exists. Nothing needs it today.</summary>
         protected virtual void OnPoolReady() { }
+
+        /// <summary>
+        /// The container assigned in the Inspector, or a fresh one at the root of the scene.
+        ///
+        /// The warning is worth more than it looks. The levels are switched with
+        /// SetActive, so a container parked inside one of them is switched off with that
+        /// level - and a pooled object whose PARENT is inactive stays invisible no matter
+        /// what the pool does to the object itself. The weapon would fire, the pool would
+        /// report a hand-out, and nothing would appear on screen. Same story, less fatal,
+        /// for a container that rides on something that moves: every sleeping projectile
+        /// would be dragged along and re-transformed for nothing.
+        /// </summary>
+        private Transform ResolveContainer()
+        {
+            if (container == null)
+                return CreateRootContainer();
+
+            // The test is "inside a Level", not "has a parent". Parking the pool under a
+            // tidy-up object such as Scripts is fine - that object is never switched off.
+            // A LEVEL is, every time the player moves on, and an inactive parent takes its
+            // sleeping projectiles down with it: the weapon would fire, the pool would
+            // report a hand-out, and nothing would appear on screen.
+            Level owningLevel = container.GetComponentInParent<Level>(true);
+
+            if (owningLevel != null)
+                Debug.LogWarning(LogPrefix + " pool container '" + container.name +
+                                 "' sits inside level '" + owningLevel.name + "'. Move it out: " +
+                                 "that container is switched off when the level changes, and " +
+                                 "every pooled object inside it goes dark with it.", this);
+
+            return container;
+        }
 
         /// <summary>
         /// Parks the pooled objects on their own object at the root of the scene.
