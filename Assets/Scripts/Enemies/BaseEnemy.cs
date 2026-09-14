@@ -19,6 +19,12 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
 {
     [SerializeField] private int health = 1;
 
+    [Tooltip("Where it comes back after being beaten. OFF = where it fell, which is what the " +
+             "assignment asks for. ON = where the level put it - tick this for anything that " +
+             "MOVES, or every respawn leaves it a few steps further from home until it has " +
+             "crept across the level.")]
+    [SerializeField] private bool reviveAtStartPosition;
+
     // Set only once Awake has actually run. An enemy inside a level that has never been
     // entered has NOT run it - its Awake waits for its container to be switched on - and
     // restoring a "start state" of zero health at the world origin would quietly move every
@@ -75,14 +81,23 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     }
 
     /// <summary>
-    /// Back into the game WHERE IT FELL, with its health restored - what the countdown
-    /// timer asks for. The place is deliberately not reset: the assignment says a beaten
-    /// enemy returns to the spot where it was beaten.
+    /// Back into the game with its health restored - what the countdown timer asks for.
+    ///
+    /// By default it returns to the spot where it was beaten, because the assignment says so.
+    /// That answer only works for an enemy that stays put: one that walks or hops dies further
+    /// from home every time, so respawning it where it fell would walk it out of its platform
+    /// and eventually off the level. Tick Revive At Start Position on those.
+    ///
+    /// The position it returns to is the one captured in Awake - the one set in the editor -
+    /// so there is nothing to type in and nothing to keep in step when the enemy is moved.
     /// </summary>
     public virtual void Revive()
     {
         if (!defeated)
             return;
+
+        if (reviveAtStartPosition && startCaptured)
+            transform.SetPositionAndRotation(startPosition, startRotation);
 
         Restore();
     }

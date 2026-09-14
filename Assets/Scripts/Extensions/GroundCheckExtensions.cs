@@ -1,11 +1,13 @@
 /// <summary>
-/// Utility methods for IGroundCheck (exercise item 8).
+/// Utility methods for IGroundCheck.
 ///
 /// It extends the INTERFACE, not GameObject: there is no GetComponent hidden inside,
 /// so calling it every frame costs nothing, and any future way of detecting ground
 /// works with it without a change here.
 ///
-/// No state, no game logic - just a question asked in a readable way.
+/// No state, no game logic - just a question asked in the words the caller is thinking in.
+/// PlayerJump asks "is he in the air?" every physics step, and "!groundCheck.IsGrounded" is
+/// the same thing said inside out.
 /// </summary>
 public static class GroundCheckExtensions
 {

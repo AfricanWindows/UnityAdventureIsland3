@@ -12,11 +12,14 @@ GameObject:
   - component: {fileID: 6462570083672394391}
   - component: {fileID: 7695383126585039607}
   - component: {fileID: 2477972424268064931}
-  - component: {fileID: 5637683703361051943}
   - component: {fileID: 7788110000000000101}
   - component: {fileID: 7788110000000000202}
+  - component: {fileID: 8917580277928637479}
+  - component: {fileID: 2184037090547304813}
+  - component: {fileID: 4436018377885861181}
+  - component: {fileID: 2659343063416116030}
   m_Layer: 0
-  m_Name: Prefab_Goomba
+  m_Name: Prefab_SnakeHop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +89,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 80d8ff7d600eafd40874c24b9939e0e5, type: 3}
+  m_Sprite: {fileID: 1500095546, guid: a544f200c58dfdf49b240e9958076048, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,7 +112,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 999
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -158,34 +161,18 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.021325886}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.1, y: 1.3}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8, y: 1.2573482}
   m_EdgeRadius: 0
---- !u!114 &5637683703361051943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8240637340748994525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17266800fe8a6334f94bab87c1f7e3f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PatrolEnemy
-  health: 1
-  playerTag: Player
-  speed: 2
-  patrolDistance: 0
 --- !u!114 &7788110000000000101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,3 +200,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRespawnTimer
   respawnDelaySeconds: 10
   verbose: 0
+--- !u!114 &8917580277928637479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43d43af30ac6894c90655080db3061f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroundCheck
+  minGroundNormal: 0.5
+--- !u!114 &2184037090547304813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3817ffc29205ab4ca334734adfe6f24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VariableHeightJump
+  jumpSpeed: 6
+  cutMultiplier: 0
+  fallGravityMultiplier: 1.5
+--- !u!114 &4436018377885861181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89adfc4c005e0244b8ab02becace85e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoppingEnemy
+  health: 1
+  reviveAtStartPosition: 1
+  pauseTime: 1
+  hopSpeed: 3
+  direction: -1
+--- !u!114 &2659343063416116030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8ae721578715e48903ef93ebd7a95d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivateNearPlayer
+  range: 10

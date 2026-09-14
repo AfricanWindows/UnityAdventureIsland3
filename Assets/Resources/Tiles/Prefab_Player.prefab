@@ -66,7 +66,6 @@ GameObject:
   - component: {fileID: 4512935578239681708}
   - component: {fileID: 8572535940942234845}
   - component: {fileID: 6296240038217909520}
-  - component: {fileID: 4914497458084248181}
   - component: {fileID: 8444476018975068162}
   - component: {fileID: 852006832453174510}
   - component: {fileID: 7788110000000000021}
@@ -74,6 +73,7 @@ GameObject:
   - component: {fileID: 7788110000000000023}
   - component: {fileID: 7788110000000000024}
   - component: {fileID: 7788110000000000401}
+  - component: {fileID: 2883155758908194693}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -249,8 +249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3546c9d378c54f4c877a140d2e786f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerJump
-  jumpSpeed: 550
-  jumpCooldown: 0.15
 --- !u!114 &4421290927304627351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,19 +330,6 @@ MonoBehaviour:
   maxHealth: 3
   startHealth: 3
   viewComponent: {fileID: 0}
---- !u!114 &4914497458084248181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9d4d59a1899814f927a506fc50a44f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerDoubleJump
-  doubleJumpSpeed: 400
 --- !u!95 &8444476018975068162
 Animator:
   serializedVersion: 7
@@ -451,6 +436,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHurt
   knockbackSeconds: 0.25
+--- !u!114 &2883155758908194693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3817ffc29205ab4ca334734adfe6f24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VariableHeightJump
+  jumpSpeed: 13
+  cutMultiplier: 0.4
+  fallGravityMultiplier: 1.8
 --- !u!1 &9004961795210391330
 GameObject:
   m_ObjectHideFlags: 0

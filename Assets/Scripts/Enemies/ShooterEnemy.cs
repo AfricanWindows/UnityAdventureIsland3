@@ -10,8 +10,12 @@ using UnityEngine;
 /// seconds, so a level full of snakes allocates nothing while it fires (Pooling System).
 /// It does not build, move or destroy the shot; it decides WHEN and WHERE only
 /// (Single Responsibility).
+///
+/// It is IActivatable, so an ActivateNearPlayer next to it can hold its fire until the player
+/// is close. The two classes know nothing about each other - the range calls an interface, and
+/// this decides for itself that "asleep" means "stop shooting and start the countdown over".
 /// </summary>
-public class ShooterEnemy : BaseEnemy, IInjectable
+public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable
 {
     [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
              "so a level full of snakes needs no wiring at all.")]
@@ -30,6 +34,10 @@ public class ShooterEnemy : BaseEnemy, IInjectable
     private IObjectPool<EnemyProjectile> pool;
     private Transform muzzle;
     private float timer;
+
+    // Awake by default, so a snake with no range simply shoots. Only ActivateNearPlayer ever
+    // turns this off.
+    private bool active = true;
 
     /// <summary>
     /// Called by GameInstaller before Awake. One pool is shared by every shooting
@@ -65,9 +73,22 @@ public class ShooterEnemy : BaseEnemy, IInjectable
         timer = 0f;
     }
 
+    /// <summary>The player came into range. Wait a full interval, then open fire.</summary>
+    public void Activate()
+    {
+        active = true;
+        timer = 0f;
+    }
+
+    /// <summary>The player left. Stop shooting.</summary>
+    public void Deactivate()
+    {
+        active = false;
+    }
+
     private void Update()
     {
-        if (pool == null || shootInterval <= 0f)
+        if (!active || pool == null || shootInterval <= 0f)
             return;
 
         timer += Time.deltaTime;

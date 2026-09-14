@@ -46,6 +46,19 @@ namespace Game.Core.Controls
             }
         }
 
+        /// <summary>
+        /// The same key, asked as a state: isPressed, not wasPressedThisFrame. Holding it
+        /// is what makes the jump a tall one - see IInputSource.JumpHeld.
+        /// </summary>
+        public bool JumpHeld
+        {
+            get
+            {
+                Keyboard keyboard = Keyboard.current;
+                return keyboard != null && keyboard.spaceKey.isPressed;
+            }
+        }
+
         /// <summary>Down arrow or S, held. Both, because both are muscle memory.</summary>
         public bool CrouchHeld
         {
