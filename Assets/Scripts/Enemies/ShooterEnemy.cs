@@ -1,3 +1,4 @@
+using System;
 using Game.Core;
 using Game.Core.DI;
 using Game.Weapons;
@@ -15,7 +16,7 @@ using UnityEngine;
 /// is close. The two classes know nothing about each other - the range calls an interface, and
 /// this decides for itself that "asleep" means "stop shooting and start the countdown over".
 /// </summary>
-public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable
+public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
 {
     [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
              "so a level full of snakes needs no wiring at all.")]
@@ -38,6 +39,12 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable
     // Awake by default, so a snake with no range simply shoots. Only ActivateNearPlayer ever
     // turns this off.
     private bool active = true;
+
+    /// <summary>
+    /// Raised the moment a shot leaves. EnemyAnimatorView listens; the snake neither knows it
+    /// nor cares, which is why it never grew an Animator field.
+    /// </summary>
+    public event Action Attacked;
 
     /// <summary>
     /// Called by GameInstaller before Awake. One pool is shared by every shooting
@@ -104,10 +111,14 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable
     {
         EnemyProjectile shot = pool.Get();
 
-        // Null is the pool's ceiling doing its job - the snake simply skips this shot.
+        // Null is the pool's ceiling doing its job - the snake simply skips this shot, and
+        // announces nothing, so the mouth does not open on a shot that never happened.
         if (shot == null)
             return;
 
         shot.Launch(muzzle.position, shootDirection);
+
+        if (Attacked != null)
+            Attacked();
     }
 }
