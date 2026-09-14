@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AxeConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.Projectiles.ProjectileConfigSO
   stats:
-    speed: 10
+    speed: 16
     lifetime: 2
     damage: 1
-    scale: 1
+    scale: 4
     piercesEnemies: 0
   animatorController: {fileID: 0}

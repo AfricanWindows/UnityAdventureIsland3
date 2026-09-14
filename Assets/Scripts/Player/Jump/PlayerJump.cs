@@ -26,12 +26,20 @@ using UnityEngine;
 [RequireComponent(typeof(GroundCheck))]
 public class PlayerJump : InputDrivenBehaviour
 {
+    [Tooltip("JUMP BUFFER. How long a press is remembered, in seconds. Pressing jump a moment " +
+             "BEFORE landing still jumps, as soon as the feet touch the ground. Without it that " +
+             "press is simply thrown away, and the jump feels like it sometimes does not work. " +
+             "0 = no buffer, the old behaviour.")]
+    [SerializeField] private float jumpBufferTime = 0.1f;
+
     private IGroundCheck groundCheck;
     private JumpBehaviour jump;
 
-    // Set by Update, consumed by the next physics step. A press is never lost and never used
-    // twice, whatever the frame rate does. This is also why no cooldown is needed any more.
-    private bool jumpRequested;
+    // When jump was last pressed. Set by Update, used up by the physics step that actually
+    // jumps. A time rather than a yes/no flag, because the question is not only "was it
+    // pressed?" but "was it pressed RECENTLY enough?" - an old press must not jump the player
+    // the moment he lands from a fall that started long ago.
+    private float lastJumpPressTime = float.NegativeInfinity;
 
     // True while the rise of the current jump can still be cut short by letting go. It ends at
     // the top of the arc or the moment the key is released, whichever comes first.
@@ -53,14 +61,14 @@ public class PlayerJump : InputDrivenBehaviour
     /// <summary>A respawned player must not inherit the half-finished jump he died in.</summary>
     private void OnEnable()
     {
-        jumpRequested = false;
+        lastJumpPressTime = float.NegativeInfinity;
         riseIsCuttable = false;
     }
 
     private void Update()
     {
         if (HasInput && InputSource.JumpPressed)
-            jumpRequested = true;
+            lastJumpPressTime = Time.time;
     }
 
     private void FixedUpdate()
@@ -68,11 +76,7 @@ public class PlayerJump : InputDrivenBehaviour
         if (jump == null || groundCheck == null)
             return;
 
-        if (jumpRequested)
-        {
-            jumpRequested = false;
-            TryBeginJump();
-        }
+        TryBeginJump();
 
         UpdateRise();
 
@@ -82,10 +86,23 @@ public class PlayerJump : InputDrivenBehaviour
             jump.ApplyAirPhysics(Time.fixedDeltaTime);
     }
 
+    /// <summary>
+    /// Checked on EVERY physics step, not only on the step after the press - that is the whole
+    /// buffer. A press made in the air stays valid for jumpBufferTime, and the first step within
+    /// that window where the feet are on the ground turns it into a jump.
+    /// </summary>
     private void TryBeginJump()
     {
+        // No press, or a press too old to count.
+        if (Time.time - lastJumpPressTime > jumpBufferTime)
+            return;
+
         if (!groundCheck.IsGrounded)
             return;
+
+        // Used up. Without this the same press would jump again on the next step, while the
+        // physics still reports the feet on the ground.
+        lastJumpPressTime = float.NegativeInfinity;
 
         riseIsCuttable = true;
         jump.Begin();
