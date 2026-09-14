@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3546c9d378c54f4c877a140d2e786f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerJump
+  jumpBufferTime: 0.1
 --- !u!114 &4421290927304627351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,7 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimatorView
   speedParameter: Speed
-  groundedParameter: 
+  groundedParameter: IsGrounded
   crouchParameter: IsCrouching
   hurtParameter: IsHurt
   deathParameter: IsDead

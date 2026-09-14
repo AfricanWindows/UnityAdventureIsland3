@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VerticalPatrolEnemy
   health: 1
-  reviveAtStartPosition: 0
+  reviveAtStartPosition: 1
 --- !u!114 &6781966833769499013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7035f122c5cdd5f56e6f6da67ef5797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRespawnTimer
-  respawnDelaySeconds: 5
+  respawnDelaySeconds: 10
   verbose: 0
 --- !u!95 &6308652472926506010
 Animator:
