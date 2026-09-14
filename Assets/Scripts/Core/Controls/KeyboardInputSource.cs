@@ -37,17 +37,19 @@ namespace Game.Core.Controls
             }
         }
 
+        /// <summary>Up arrow or W - the same pair as every other direction.</summary>
         public bool JumpPressed
         {
             get
             {
                 Keyboard keyboard = Keyboard.current;
-                return keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
+                return keyboard != null &&
+                       (keyboard.wKey.wasPressedThisFrame || keyboard.upArrowKey.wasPressedThisFrame);
             }
         }
 
         /// <summary>
-        /// The same key, asked as a state: isPressed, not wasPressedThisFrame. Holding it
+        /// The same keys, asked as a state: isPressed, not wasPressedThisFrame. Holding either
         /// is what makes the jump a tall one - see IInputSource.JumpHeld.
         /// </summary>
         public bool JumpHeld
@@ -55,7 +57,8 @@ namespace Game.Core.Controls
             get
             {
                 Keyboard keyboard = Keyboard.current;
-                return keyboard != null && keyboard.spaceKey.isPressed;
+                return keyboard != null &&
+                       (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed);
             }
         }
 
@@ -71,7 +74,7 @@ namespace Game.Core.Controls
         }
 
         /// <summary>
-        /// Left Ctrl throws whatever the player is carrying. One button, because he has
+        /// Z throws whatever the player is carrying. One button, because he has
         /// one weapon - the number keys that used to pick a slot are gone with the slots.
         /// </summary>
         public bool AttackPressed
@@ -79,7 +82,7 @@ namespace Game.Core.Controls
             get
             {
                 Keyboard keyboard = Keyboard.current;
-                return keyboard != null && keyboard.leftCtrlKey.wasPressedThisFrame;
+                return keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
             }
         }
     }
