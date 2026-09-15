@@ -45,6 +45,17 @@ public abstract class JumpBehaviour : MonoBehaviour
     public abstract void Begin();
 
     /// <summary>
+    /// How long this jump stays in the air before coming back down to a given height, measured
+    /// from where it took off: 0 = the same height, -2 = two units lower, 1 = one unit higher.
+    ///
+    /// Only the jump can answer this - it alone knows its push-off speed and what it does to
+    /// gravity on the way down - so it is asked HERE, instead of every aiming enemy redoing that
+    /// physics with its own copy of the numbers. That is what lets a frog land on a chosen spot
+    /// without knowing how its jump works (Information Expert).
+    /// </summary>
+    public abstract float GetAirTime(float landingHeight);
+
+    /// <summary>
     /// The key was released while still rising, so the player asked for a SHORT jump.
     /// Called at most once per jump. A jump with one fixed height ignores it.
     /// </summary>

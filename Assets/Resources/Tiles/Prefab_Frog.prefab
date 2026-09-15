@@ -19,9 +19,10 @@ GameObject:
   - component: {fileID: 4436018377885861181}
   - component: {fileID: 2659343063416116030}
   - component: {fileID: -4114737123648051989}
-  - component: {fileID: 5360979416837332660}
+  - component: {fileID: 2030717837504458021}
+  - component: {fileID: 248447855382955097}
   m_Layer: 0
-  m_Name: Prefab_SnakeHop
+  m_Name: Prefab_Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +37,7 @@ Transform:
   m_GameObject: {fileID: 8240637340748994525}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.91, y: 2.28, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -91,7 +92,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1500095546, guid: a544f200c58dfdf49b240e9958076048, type: 3}
+  m_Sprite: {fileID: -592636264, guid: f48e328c6e5e1cd46bde0943e7806232, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -163,17 +164,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.021325886}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.1, y: 1.3}
+    oldSize: {x: 0.8, y: 0.8}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.8, y: 1.2573482}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!114 &7788110000000000101
 MonoBehaviour:
@@ -227,9 +228,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3817ffc29205ab4ca334734adfe6f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VariableHeightJump
-  jumpSpeed: 6
+  jumpSpeed: 7
   cutMultiplier: 0
-  fallGravityMultiplier: 1.5
+  fallGravityMultiplier: 1
 --- !u!114 &4436018377885861181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,7 +246,7 @@ MonoBehaviour:
   health: 1
   reviveAtStartPosition: 1
   minPause: 1
-  maxPause: 1
+  maxPause: 5
 --- !u!114 &2659343063416116030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +270,7 @@ Animator:
   m_GameObject: {fileID: 8240637340748994525}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b58e7a1bb40ad064db63f224f1ba45d0, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9c3f9fa48e6c03b4b9caeb73d38d46b9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -281,7 +282,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5360979416837332660
+--- !u!114 &2030717837504458021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,8 +291,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8240637340748994525}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4358d8d3a800bda4fa2bc449a0653ac4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d40c52518cde9b40bb81f06d086ab26, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ForwardHopAim
-  direction: -1
-  hopSpeed: 3
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHopAim
+  maxDistance: 10
+--- !u!114 &248447855382955097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403fb506ff1ec124cb23bf83ae4bd13b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimatorView
+  attackTrigger: 
+  groundedParameter: IsGrounded

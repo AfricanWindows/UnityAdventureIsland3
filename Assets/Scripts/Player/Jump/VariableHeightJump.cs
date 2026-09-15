@@ -33,8 +33,30 @@ public class VariableHeightJump : JumpBehaviour
     public override void Begin()
     {
         // Overwriting the speed rather than adding to it means a jump is the same height
-        // whether he was walking, already falling a little, or riding a lift upwards.
+        // whether he was walking or already falling a little.
         SetVerticalSpeed(jumpSpeed);
+    }
+
+    public override float GetAirTime(float landingHeight)
+    {
+        float gravity = -Physics2D.gravity.y * Body.gravityScale;
+
+        // No gravity means the jump never comes down. There is no honest answer, so the caller
+        // gets one second rather than a division by zero.
+        if (gravity <= 0f)
+            return 1f;
+
+        // Up: the push-off speed runs out under the Rigidbody's own gravity.
+        float timeUp = jumpSpeed / gravity;
+        float apexHeight = jumpSpeed * jumpSpeed / (2f * gravity);
+
+        // Down: from the top of the arc to the landing height, under the heavier fall gravity.
+        // A spot higher than the top of the arc cannot be reached; the hop is then timed to
+        // its top, which sends it as close as it can get.
+        float drop = Mathf.Max(0f, apexHeight - landingHeight);
+        float timeDown = Mathf.Sqrt(2f * drop / (gravity * fallGravityMultiplier));
+
+        return timeUp + timeDown;
     }
 
     public override void Cut()

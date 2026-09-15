@@ -1,47 +1,44 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
-/// A snake that hops: stands still, jumps forward, lands, stands still again. Always the same
-/// way - it never turns around and never mirrors its sprite.
+/// An enemy that hops: stands still, jumps, lands, stands still again - the snake and the frog.
 ///
-/// It decides WHEN to jump. HOW high the jump is, and what gravity does on the way down,
-/// belongs to the JumpBehaviour sitting next to it - the very same component the player
-/// carries. That is the whole point of splitting the jump in two: the physics was written
-/// once, and "on a timer" instead of "on the space bar" is the only thing that differs
-/// between a snake and Mario.
+/// It owns the CYCLE and nothing else. The three other questions are answered by components
+/// sitting next to it:
+///   HOW the jump behaves (height, gravity) - JumpBehaviour, the same one the player carries
+///   WHERE the hop goes                     - HopAim: always forward (snake), at the player (frog)
+///   WHETHER it moves at all                - IActivatable, switched by ActivateNearPlayer
+/// So the snake and the frog are this same class with a different HopAim and different
+/// numbers; neither needs a line of code of its own (Strategy, Open/Closed).
 ///
-/// It does not walk: the forward speed is given once, at the push-off, and taken away on
+/// It does not walk: the sideways speed is given once, at the push-off, and taken away on
 /// landing, so it really stands still between hops.
-///
-/// It is IActivatable, so a range trigger can let it sleep until the player is close. It does
-/// not know the trigger exists and works perfectly well without one: it starts awake, and
-/// ActivateNearPlayer is what puts it to sleep, not a setting here.
 ///
 /// Like every enemy here it owns only its behaviour: hurting the player on contact is
 /// KillPlayerOnTouch, coming back after being beaten is EnemyRespawnTimer, and health is
-/// BaseEnemy. A harmless snake is simply one that carries no touch effect.
+/// BaseEnemy.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(GroundCheck))]
 public class HoppingEnemy : BaseEnemy, IActivatable
 {
-    [Tooltip("Seconds spent standing between hops, counted from the moment it LANDS - so " +
-             "the pause is the same whether the hop was long or short.")]
-    [SerializeField] private float pauseTime = 1f;
+    [Tooltip("Shortest pause on the ground between hops, in seconds, counted from the moment " +
+             "it LANDS - so the pause is the same whether the hop was long or short.")]
+    [FormerlySerializedAs("pauseTime")]
+    [SerializeField] private float minPause = 1f;
 
-    [Tooltip("Forward speed given at the push-off, in units per second. Together with the " +
-             "JumpBehaviour's jump speed this decides how far one hop carries.")]
-    [SerializeField] private float hopSpeed = 3f;
-
-    [Tooltip("Which way it hops, for good. -1 = left, 1 = right.")]
-    [SerializeField] private float direction = -1f;
+    [Tooltip("Longest pause. Every pause is picked at random between Min and Max, so the hops " +
+             "cannot be timed. Set both to the same number for a steady rhythm.")]
+    [SerializeField] private float maxPause = 1f;
 
     private Rigidbody2D rigid;
     private IGroundCheck groundCheck;
     private JumpBehaviour jump;
+    private HopAim aim;
 
-    // Awake by default, so a snake with no range trigger simply hops. Only ActivateNearPlayer
-    // ever turns this off.
+    // Awake by default, so an enemy with no range simply hops. Only ActivateNearPlayer ever
+    // turns this off.
     private bool active = true;
 
     // Set when it lands, so the pause is a pause on the GROUND and the time spent flying
@@ -56,22 +53,26 @@ public class HoppingEnemy : BaseEnemy, IActivatable
         rigid = GetComponent<Rigidbody2D>();
         groundCheck = GetComponent<IGroundCheck>();
 
-        // Asked for as the abstract base, exactly as PlayerJump does it, so this class never
-        // names a concrete jump and a different one is a different component.
+        // Both asked for as abstract bases, so this class never names a concrete jump or aim.
         jump = GetComponent<JumpBehaviour>();
+        aim = GetComponent<HopAim>();
 
         if (jump == null)
             Debug.LogError("HoppingEnemy: no JumpBehaviour on " + gameObject.name +
                            " - add a Variable Height Jump component.", this);
+
+        if (aim == null)
+            Debug.LogError("HoppingEnemy: no HopAim on " + gameObject.name +
+                           " - add a Forward Hop Aim or a Player Hop Aim component.", this);
     }
 
     /// <summary>
-    /// Also runs when a beaten snake is revived, so it always stands for a moment before
+    /// Also runs when a beaten enemy is revived, so it always stands for a moment before
     /// hopping again instead of leaping the instant it comes back.
     /// </summary>
     private void OnEnable()
     {
-        nextHopTime = Time.time + pauseTime;
+        nextHopTime = Time.time + NextPause();
         wasInAir = false;
     }
 
@@ -79,7 +80,7 @@ public class HoppingEnemy : BaseEnemy, IActivatable
     public void Activate()
     {
         active = true;
-        nextHopTime = Time.time + pauseTime;
+        nextHopTime = Time.time + NextPause();
     }
 
     /// <summary>
@@ -93,7 +94,7 @@ public class HoppingEnemy : BaseEnemy, IActivatable
 
     private void FixedUpdate()
     {
-        if (jump == null || rigid == null || groundCheck == null)
+        if (jump == null || aim == null || rigid == null || groundCheck == null)
             return;
 
         if (groundCheck.IsInAir())
@@ -111,7 +112,7 @@ public class HoppingEnemy : BaseEnemy, IActivatable
         if (wasInAir)
         {
             wasInAir = false;
-            nextHopTime = Time.time + pauseTime;
+            nextHopTime = Time.time + NextPause();
         }
 
         StandStill();
@@ -124,6 +125,12 @@ public class HoppingEnemy : BaseEnemy, IActivatable
             Hop();
     }
 
+    /// <summary>A fresh random pause between Min and Max. A Max below Min counts as Min.</summary>
+    private float NextPause()
+    {
+        return Random.Range(minPause, Mathf.Max(minPause, maxPause));
+    }
+
     /// <summary>Kills the speed left over from the last hop, so it really stands.</summary>
     private void StandStill()
     {
@@ -132,11 +139,9 @@ public class HoppingEnemy : BaseEnemy, IActivatable
 
     private void Hop()
     {
-        // Forward first, then up. The jump component owns the vertical speed and knows nothing
-        // about direction, which is what keeps it usable by anything with a Rigidbody2D.
-        float forward = direction >= 0f ? 1f : -1f;
-
-        rigid.linearVelocity = new Vector2(forward * hopSpeed, rigid.linearVelocity.y);
+        // Sideways first, then up. The aim is asked NOW, at the push-off - for the frog this is
+        // the moment it looks at where the player is standing.
+        rigid.linearVelocity = new Vector2(aim.GetHorizontalSpeed(jump), rigid.linearVelocity.y);
         jump.Begin();
     }
 }

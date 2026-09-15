@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PowerConfig
   m_EditorClassIdentifier: Assembly-CSharp::PowerConfigSO
   stats:
-    startPower: 13
+    startPower: 15
     maxPower: 15
     drainIntervalSeconds: 3
