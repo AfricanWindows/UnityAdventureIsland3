@@ -6,7 +6,7 @@ namespace Game.Projectiles
     /// sequence to whatever builder it was handed.
     ///
     /// Swap the builder and the very same recipe produces a different representation - a
-    /// laser instead of a fireball, or a debug projectile with gizmos - with no change here.
+    /// different kind of axe, or a debug projectile with gizmos - with no change here.
     /// </summary>
     public class ProjectileDirector<TProjectile> where TProjectile : BaseProjectile
     {

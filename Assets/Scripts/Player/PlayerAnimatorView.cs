@@ -9,9 +9,8 @@ using UnityEngine;
 /// touches only this file (Single Responsibility). A character with no Animator simply
 /// does not carry this component.
 ///
-/// It reads PlayerMovement.OwnSpeedX rather than the Rigidbody. On a moving platform the
-/// Rigidbody reports the platform's speed as if it were his, so a run cycle driven by it
-/// would play while he stands still on a lift.
+/// It reads PlayerMovement.OwnSpeedX rather than the Rigidbody, so the run cycle follows the
+/// steps he takes and not anything else that moves his body.
 /// </summary>
 [RequireComponent(typeof(Animator))]
 [DisallowMultipleComponent]

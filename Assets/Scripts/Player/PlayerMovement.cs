@@ -2,8 +2,7 @@ using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
-/// Moves Mario left and right, and carries him along when the floor under his feet
-/// is a moving platform.
+/// Moves the player left and right.
 ///
 /// It OWNS its speed: no other class writes into the field from outside.
 ///
@@ -11,7 +10,7 @@ using UnityEngine;
 /// sprite being teleported rather than a character starting to walk, so the speed ramps
 /// up and brakes down at rates the designer sets.
 ///
-/// It no longer reads a keyboard. The intention "he wants to go right" arrives through
+/// It does not read a keyboard. The intention "he wants to go right" arrives through
 /// IInputSource, injected by GameInstaller, so this class works unchanged with a gamepad
 /// or inside a test (Dependency Inversion).
 /// </summary>
@@ -32,37 +31,25 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     private float facingDirection = 1f;
     private float direction;
 
-    // Mario's OWN horizontal speed, measured against the floor he stands on - not the
-    // world. Keeping it separate from the platform's speed is what lets the ramp work
-    // while riding a moving platform: he accelerates relative to the floor, exactly as
-    // he would on solid ground.
+    // His own walking speed, moved one step of the ramp towards the target every physics step.
     private float ownSpeedX;
 
     private Rigidbody2D rigid;
-    private IPlatformProvider platformProvider;
 
     // Every reason the player might not be allowed to walk, collected once. The array is
     // what makes this open: a new lock is a new component, never an edit here.
     private IMovementLock[] movementLocks;
 
-    /// <summary>Walking speed in use right now.</summary>
-    public float CurrentSpeed
-    {
-        get { return speed; }
-    }
-
     /// <summary>
-    /// His OWN horizontal speed, measured against the floor he stands on - not against the
-    /// world. This is what an animation must read: on a moving platform the Rigidbody says
-    /// he is travelling at 3 units per second while he is in fact standing still, and a run
-    /// cycle driven by that would play while he does not take a single step.
+    /// His own walking speed - what the run animation reads, so the run cycle follows the
+    /// steps he takes rather than anything else that happens to move his body.
     /// </summary>
     public float OwnSpeedX
     {
         get { return ownSpeedX; }
     }
 
-    /// <summary>Which way Mario looks right now. Weapons aim by this, not by the scale.</summary>
+    /// <summary>Which way the player looks right now. Weapons aim by this, not by the scale.</summary>
     public float FacingDirection
     {
         get { return facingDirection; }
@@ -71,11 +58,8 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        platformProvider = GetComponent<IPlatformProvider>();
         movementLocks = GetComponents<IMovementLock>();
     }
-
-    /// <summary>
 
     private void FixedUpdate()
     {
@@ -84,7 +68,7 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
     }
 
     /// <summary>
-    /// One line, because deciding which key means "left" is no longer this class's job.
+    /// One line, because deciding which key means "left" is not this class's job.
     /// </summary>
     private void ReadInput()
     {
@@ -96,22 +80,18 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
         if (rigid == null)
             return;
 
-        float platformSpeedX = GetPlatformSpeedX();
         // Locked: he brakes to a stop, but the facing code below still runs, so holding S
         // and pressing left or right turns him on the spot without moving him.
-        float targetOwnSpeed = IsMovementBlocked ? 0f : direction * CurrentSpeed;
+        float targetOwnSpeed = IsMovementBlocked ? 0f : direction * speed;
 
         // One step of the ramp. MoveTowards never overshoots, so releasing the key lands
         // on exactly 0 instead of jittering around it.
         ownSpeedX = Mathf.MoveTowards(ownSpeedX, targetOwnSpeed,
                                       ChooseRate(ownSpeedX, targetOwnSpeed) * Time.fixedDeltaTime);
 
-        // Walking ON a platform means platform speed PLUS his own steps. Standing still on
-        // one means matching its speed exactly, so he keeps the spot he is standing on -
-        // both cases fall out of the same line, because ownSpeedX is simply 0 when idle.
-        // The velocity is REWRITTEN every step, which is also why friction can no longer
-        // drag him a second time.
-        rigid.linearVelocity = new Vector2(platformSpeedX + ownSpeedX, rigid.linearVelocity.y);
+        // The horizontal velocity is REWRITTEN every step rather than added to, which is also
+        // why friction can never drag him a second time.
+        rigid.linearVelocity = new Vector2(ownSpeedX, rigid.linearVelocity.y);
 
         // Turning the sprite stays instant. The ramp is about how fast he MOVES; making
         // him look the wrong way for a tenth of a second just reads as broken.
@@ -122,11 +102,6 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
         }
     }
 
-    /// <summary>
-    /// Speeding up uses one rate, slowing down another. Turning around counts as braking
-    /// until the speed passes through zero, which is what makes a change of direction feel
-    /// like a real turn instead of a slow drift across the middle.
-    /// </summary>
     /// <summary>
     /// True while ANY lock is holding him - crouching today, a stun or a cut-scene
     /// tomorrow. Nothing here knows what those are (Dependency Inversion).
@@ -145,28 +120,16 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
         }
     }
 
+    /// <summary>
+    /// Speeding up uses one rate, slowing down another. Turning around counts as braking
+    /// until the speed passes through zero, which is what makes a change of direction feel
+    /// like a real turn instead of a slow drift across the middle.
+    /// </summary>
     private float ChooseRate(float current, float target)
     {
         bool sameWay = current == 0f || target == 0f || Mathf.Sign(current) == Mathf.Sign(target);
         bool speedingUp = sameWay && Mathf.Abs(target) > Mathf.Abs(current);
 
         return speedingUp ? acceleration : deceleration;
-    }
-
-    /// <summary>
-    /// Horizontal speed of the floor under our feet, or 0 on normal ground.
-    /// The platform is only asked HOW FAR it moved - it never pushes us itself,
-    /// so a lift or a conveyor needs no change here.
-    /// </summary>
-    private float GetPlatformSpeedX()
-    {
-        if (platformProvider == null)
-            return 0f;
-
-        IRideablePlatform platform = platformProvider.CurrentPlatform;
-        if (platform == null)
-            return 0f;
-
-        return platform.Delta.x / Time.fixedDeltaTime;
     }
 }

@@ -15,17 +15,14 @@ namespace Game.Weapons
     /// the player's weapon slot through the shared EquipWeaponPowerUp, and the slot takes
     /// it away when he dies.
     ///
-    /// Everything about throwing lives in DirectionalWeapon. What is left here is the
-    /// WeaponType and an optional Inspector pool - normally empty, because the pool
-    /// arrives from GameInstaller.
+    /// Everything about throwing lives in DirectionalWeapon. What is left here is an
+    /// optional Inspector pool - normally empty, because the pool arrives from GameInstaller.
     /// </summary>
     public sealed class AxeWeapon : DirectionalWeapon<ProjectileAxe>
     {
         [Tooltip("Optional override. Normally EMPTY: the pool arrives through injection, " +
                  "so the pool object can live anywhere in the scene.")]
         [SerializeField] private AxePoolManager axePool;
-
-        public override WeaponType Type { get { return WeaponType.Axe; } }
 
         protected override IObjectPool<ProjectileAxe> ResolveInspectorPool()
         {

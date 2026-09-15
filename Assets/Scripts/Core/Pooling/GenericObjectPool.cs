@@ -14,7 +14,7 @@ namespace Game.Core
     /// the pool manager, whose only job is to build this object (Single Responsibility).
     ///
     /// It also never creates anything itself - it asks an IFactory. So the pool works for
-    /// lasers, fireballs, coins or enemies without a single change (Open/Closed).
+    /// axes, boomerangs, enemy shots or anything else without a single change (Open/Closed).
     ///
     /// Note: Unity ships UnityEngine.Pool.ObjectPool&lt;T&gt;, which does roughly this.
     /// The exercise asks for our own, so here it is.
@@ -32,23 +32,19 @@ namespace Game.Core
 
         // HashSet, not List: Remove/Contains are O(1), which is how "was this item really
         // handed out?" is answered cheaply. That check is what stops a double Release from
-        // putting the same laser into the queue twice and handing it to two shots at once.
+        // putting the same axe into the queue twice and handing it to two throws at once.
         private readonly HashSet<T> _active;
 
         private int _totalCreated;
 
         /// <summary>Raised after an item was handed out. Lets a manager log or count
-        /// without the pool itself knowing what a "laser" is.</summary>
+        /// without the pool itself knowing what an "axe" is.</summary>
         public event Action<T> ItemTaken;
 
         /// <summary>Raised after an item really went back (a double release raises nothing).</summary>
         public event Action<T> ItemReleased;
 
         public int CountInactive { get { return _inactive.Count; } }
-        public int CountActive { get { return _active.Count; } }
-
-        /// <summary>Everything this pool ever created, including what is in flight.</summary>
-        public int CountAll { get { return _totalCreated; } }
 
         /// <param name="factory">Where new items come from. The only dependency.</param>
         /// <param name="prewarmCount">How many to create up front, before the first shot.</param>
@@ -76,11 +72,8 @@ namespace Game.Core
         /// Pays the Instantiate cost during loading, where a hitch is invisible, instead of
         /// during the first shot, where it is not.
         /// </summary>
-        /// <returns>How many items were actually created.</returns>
-        public int Prewarm(int count)
+        private void Prewarm(int count)
         {
-            int created = 0;
-
             for (int i = 0; i < count; i++)
             {
                 T item = CreateNew();
@@ -89,10 +82,7 @@ namespace Game.Core
 
                 item.gameObject.SetActive(false);
                 _inactive.Enqueue(item);
-                created++;
             }
-
-            return created;
         }
 
         /// <summary>

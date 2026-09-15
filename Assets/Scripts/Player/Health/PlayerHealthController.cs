@@ -7,7 +7,7 @@ using UnityEngine;
 /// CONTROLLER of the health feature.
 ///
 /// It is the only piece that talks to Unity: it listens to what happens in the game
-/// (spikes, hearts), tells the MODEL what to do, and pushes the result into the VIEW.
+/// (the player dying), tells the MODEL what to do, and pushes the result into the VIEW.
 /// It holds no health rule of its own - "maximum 3" lives in PlayerHealthModel - and
 /// it draws nothing itself.
 ///
@@ -87,12 +87,6 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
         UpdateView();
     }
 
-    /// <summary>Entry point used by HealthPowerUp. Returns how many hearts actually fitted.</summary>
-    public int AddHealth(int amount)
-    {
-        return model.Add(amount);
-    }
-
     /// <summary>Three lives again. Only the whole-game restart calls this.</summary>
     public void ResetToStart()
     {
@@ -102,7 +96,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
         model.Reset(startHealth);
     }
 
-    public void LoseHealth()
+    private void LoseHealth()
     {
         model.Remove(1);
     }

@@ -12,12 +12,8 @@ namespace Game.Weapons
     /// the rule that Mario must find the power-up first cannot be skipped by a subclass
     /// that simply does not implement the check.
     ///
-    /// It implements the project's existing IUseableWeapon (Equip/UnEquip), which is how
-    /// the fire flower already unlocks the fireball - the laser reuses that mechanism
-    /// instead of inventing a parallel one.
-    ///
-    /// (The plain-C# BaseWeapon demo class from the Liskov exercise used to share this
-    /// name in the global namespace. It was deleted, so "BaseWeapon" is now unambiguous.)
+    /// It implements IUseableWeapon, so the weapon slot and the pick-ups work with any weapon
+    /// without ever naming this class (Dependency Inversion).
     /// </summary>
     public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon, IResettable
     {
@@ -34,9 +30,6 @@ namespace Game.Weapons
         private bool _isEquipped;
         private string _logPrefix;
 
-        /// <summary>Which weapon this is. Every subclass must answer.</summary>
-        public abstract WeaponType Type { get; }
-
         /// <summary>True once the matching power-up has been collected.</summary>
         public bool IsEquipped { get { return _isEquipped; } }
 
@@ -48,22 +41,25 @@ namespace Game.Weapons
 
         protected virtual float Cooldown { get { return cooldown; } }
 
-        /// <summary>Built once and cached - "[Axe]", "[Boomerang]"...</summary>
+        /// <summary>
+        /// Built once and cached - "[AxeWeapon]", "[BoomerangWeapon]". The class name, so a new
+        /// weapon needs no name of its own to be told apart in the console.
+        /// </summary>
         protected string LogPrefix
         {
             get
             {
                 if (_logPrefix == null)
-                    _logPrefix = "[" + Type + "]";
+                    _logPrefix = "[" + GetType().Name + "]";
 
                 return _logPrefix;
             }
         }
 
-        /// <summary>What the console says when Mario fires a weapon he has not found yet.</summary>
+        /// <summary>What the console says when the player fires a weapon he has not found yet.</summary>
         protected virtual string LockedMessage
         {
-            get { return LogPrefix + " Locked - pick up the " + Type + "PowerUp first"; }
+            get { return LogPrefix + " Locked - pick it up first"; }
         }
 
         // Private on purpose: a subclass that declared its own Awake would silently replace

@@ -5,12 +5,12 @@ namespace Game.Projectiles
     /// <summary>
     /// Where a projectile's numbers actually live: once, in one asset on disk.
     ///
-    /// The alternative is fields on the prefab, which means every copy of the laser owns
+    /// The alternative is fields on the prefab, which means every copy of the axe owns
     /// its own speed and damage, and re-balancing the weapon turns into hunting down
     /// prefabs. With a ScriptableObject the value exists exactly once, designers edit it
     /// without opening a scene, and nothing is duplicated into memory per instance.
     ///
-    /// A second laser variant is a second asset - no new code (Open/Closed).
+    /// A second axe variant is a second asset - no new code (Open/Closed).
     /// </summary>
     [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "Weapons/Projectile Config")]
     public class ProjectileConfigSO : ScriptableObject

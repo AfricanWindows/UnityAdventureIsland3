@@ -2,7 +2,7 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
-/// Base class for everything Mario can pick up (fire flower, extra life, axes...).
+/// Base class for everything the player can pick up (fruit, hearts, the star, weapons...).
 /// The "touch the player and disappear" logic is written here ONCE.
 /// A child class only decides WHAT effect it gives, by creating an IPowerUp.
 /// </summary>

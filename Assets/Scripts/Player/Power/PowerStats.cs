@@ -39,9 +39,6 @@ public struct PowerStats
         get { return drainIntervalSeconds > 0.05f ? drainIntervalSeconds : 0.05f; }
     }
 
-    /// <summary>How long the bar lasts untouched, in seconds. Shown in the inspector.</summary>
-    public float SecondsOfLife { get { return StartPower * DrainIntervalSeconds; } }
-
     public PowerStats(int startPower, int maxPower, float drainIntervalSeconds)
     {
         this.startPower = startPower;

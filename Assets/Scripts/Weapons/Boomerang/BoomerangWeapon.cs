@@ -38,8 +38,6 @@ namespace Game.Weapons
         private IFacing _facing;
         private BoomerangProjectile _inFlight;
 
-        public override WeaponType Type { get { return WeaponType.Boomerang; } }
-
         /// <summary>Unlocked, off cooldown, AND the one boomerang is already home.</summary>
         public override bool CanFire
         {

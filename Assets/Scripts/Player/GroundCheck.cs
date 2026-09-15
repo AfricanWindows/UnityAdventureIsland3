@@ -4,21 +4,14 @@ using UnityEngine;
 /// <summary>
 /// Tells whether we are standing on ANY solid object - floor tile, spikes, crate, enemy -
 /// by reading the physics contact normals instead of expecting a special component on
-/// the other side. The old SC_Floor, which did the second thing and told nobody, is gone.
-///
-/// It also reports whether that ground can carry us (a moving platform), because it is
-/// the only class that already knows what is under our feet. Answering that question
-/// twice, in two different ways, is how the two answers start to disagree.
+/// the other side.
 /// </summary>
-public class GroundCheck : MonoBehaviour, IGroundCheck, IPlatformProvider
+public class GroundCheck : MonoBehaviour, IGroundCheck
 {
     [Tooltip("How flat a surface must be to count as ground. 1 = perfectly flat, 0 = vertical wall.")]
     [SerializeField] private float minGroundNormal = 0.5f;
 
     private readonly List<Collider2D> groundContacts = new List<Collider2D>();
-
-    // Looked up once per contact, so no GetComponent runs during FixedUpdate.
-    private readonly List<IRideablePlatform> contactPlatforms = new List<IRideablePlatform>();
 
     public bool IsGrounded
     {
@@ -26,23 +19,6 @@ public class GroundCheck : MonoBehaviour, IGroundCheck, IPlatformProvider
         {
             DropDeadContacts();
             return groundContacts.Count > 0;
-        }
-    }
-
-    /// <summary>The moving floor we are standing on, or null for normal ground.</summary>
-    public IRideablePlatform CurrentPlatform
-    {
-        get
-        {
-            DropDeadContacts();
-
-            for (int i = 0; i < contactPlatforms.Count; i++)
-            {
-                if (contactPlatforms[i] != null)
-                    return contactPlatforms[i];
-            }
-
-            return null;
         }
     }
 
@@ -63,40 +39,24 @@ public class GroundCheck : MonoBehaviour, IGroundCheck, IPlatformProvider
 
     private void OnCollisionExit2D(Collision2D col)
     {
-        RemoveContact(col.collider);
+        groundContacts.Remove(col.collider);
     }
 
     private void OnDisable()
     {
         groundContacts.Clear();
-        contactPlatforms.Clear();
     }
 
     private void UpdateContact(Collision2D col)
     {
-        if (IsStandingOn(col))
-            AddContact(col.collider);
-        else
-            RemoveContact(col.collider);
-    }
-
-    private void AddContact(Collider2D collider)
-    {
-        if (groundContacts.Contains(collider))
+        if (!IsStandingOn(col))
+        {
+            groundContacts.Remove(col.collider);
             return;
+        }
 
-        groundContacts.Add(collider);
-        contactPlatforms.Add(collider.GetComponent<IRideablePlatform>());
-    }
-
-    private void RemoveContact(Collider2D collider)
-    {
-        int index = groundContacts.IndexOf(collider);
-        if (index < 0)
-            return;
-
-        groundContacts.RemoveAt(index);
-        contactPlatforms.RemoveAt(index);
+        if (!groundContacts.Contains(col.collider))
+            groundContacts.Add(col.collider);
     }
 
     /// <summary>Drops contacts whose object was destroyed or disabled meanwhile.</summary>
@@ -105,10 +65,7 @@ public class GroundCheck : MonoBehaviour, IGroundCheck, IPlatformProvider
         for (int i = groundContacts.Count - 1; i >= 0; i--)
         {
             if (groundContacts[i] == null || !groundContacts[i].gameObject.activeInHierarchy)
-            {
                 groundContacts.RemoveAt(i);
-                contactPlatforms.RemoveAt(i);
-            }
         }
     }
 

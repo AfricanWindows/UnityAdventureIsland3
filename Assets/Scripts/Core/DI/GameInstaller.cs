@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Game.Core.Controls;
 using Game.Projectiles;
 using Game.Weapons;
@@ -59,13 +58,6 @@ namespace Game.Core.DI
         [SerializeField] private bool verbose = true;
 
         private readonly ServiceContainer _container = new ServiceContainer();
-
-        /// <summary>
-        /// Exposed for objects that are created AFTER the scene loaded (a pooled enemy, a
-        /// spawned boss). They cannot be injected in Awake because they did not exist yet,
-        /// so whoever spawns them calls InjectInto on the new object.
-        /// </summary>
-        public IServiceContainer Container { get { return _container; } }
 
         private void Awake()
         {
@@ -223,23 +215,6 @@ namespace Game.Core.DI
 
             if (verbose)
                 Debug.Log("[DI] Injected " + injected + " component(s).", this);
-        }
-
-        /// <summary>
-        /// Injects one freshly created object tree. Call this right after Instantiate, or
-        /// from a pool factory, so runtime-spawned objects get the same services the scene
-        /// objects were given.
-        /// </summary>
-        public void InjectInto(GameObject root)
-        {
-            if (root == null)
-                return;
-
-            List<IInjectable> found = new List<IInjectable>();
-            root.GetComponentsInChildren(true, found);
-
-            for (int i = 0; i < found.Count; i++)
-                found[i].Inject(_container);
         }
     }
 }

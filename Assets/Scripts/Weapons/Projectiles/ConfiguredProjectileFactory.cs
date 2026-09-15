@@ -1,15 +1,16 @@
+using Game.Core;
 using UnityEngine;
 
 namespace Game.Projectiles
 {
     /// <summary>
-    /// CONCRETE CREATOR - one class for every projectile, replacing the hand-written
-    /// factory each weapon used to have, which differed only in a type name.
+    /// FACTORY - one class for every projectile, replacing the hand-written factory each
+    /// weapon used to have, which differed only in a type name.
     ///
     /// Mapping onto the pattern as taught:
     ///   Product          = BaseProjectile
     ///   Concrete Product = ProjectileAxe, BoomerangProjectile, ...
-    ///   Creator          = ProjectileFactory&lt;T&gt;            (abstract)
+    ///   Creator          = IFactory&lt;T&gt;                     (the abstraction)
     ///   Concrete Creator = ConfiguredProjectileFactory&lt;T&gt;   (this class)
     ///   Factory Method   = Create()
     ///
@@ -20,7 +21,7 @@ namespace Game.Projectiles
     /// The director and the config arrive through the constructor: this class chooses
     /// nothing and looks nothing up.
     /// </summary>
-    public class ConfiguredProjectileFactory<TProjectile> : ProjectileFactory<TProjectile>
+    public class ConfiguredProjectileFactory<TProjectile> : IFactory<TProjectile>
         where TProjectile : BaseProjectile
     {
         private readonly ProjectileDirector<TProjectile> _director;
@@ -35,7 +36,7 @@ namespace Game.Projectiles
         }
 
         /// <summary>The factory method: run the recipe, hand back the product.</summary>
-        public override TProjectile Create()
+        public TProjectile Create()
         {
             if (_director == null || _config == null)
             {

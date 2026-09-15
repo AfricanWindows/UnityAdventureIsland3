@@ -35,7 +35,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
     /// <summary>Raised when the last level is finished.</summary>
     public event Action GameCompleted;
 
-    public Level CurrentLevel
+    private Level CurrentLevel
     {
         get
         {
@@ -81,8 +81,6 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
 
         EnterLevel(0);
     }
-
-    /// <summary>
 
     /// <summary>The door was opened. Next level, or the end of the game.</summary>
     public void GoToNextLevel()
@@ -147,7 +145,6 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
             Debug.Log("[Flow] Entered " + SafeName(CurrentLevel));
     }
 
-    /// <summary>
     /// <summary>
     /// Announces the start of a level to whoever on the player cares: PlayerDeath moves
     /// him and remembers the new respawn point, PowerController refills the bar.

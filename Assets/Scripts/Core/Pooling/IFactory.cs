@@ -3,9 +3,9 @@ namespace Game.Core
     /// <summary>
     /// Makes one T on demand, and that is the whole contract.
     ///
-    /// The pool depends on THIS and on nothing else, so it never learns what a laser is,
+    /// The pool depends on THIS and on nothing else, so it never learns what an axe is,
     /// who assembles it, or that Instantiate exists at all (Dependency Inversion).
-    /// Swapping the way lasers are created - a different prefab, a different builder,
+    /// Swapping the way axes are created - a different prefab, a different builder,
     /// an addressable load - never touches a single line inside the pool.
     /// </summary>
     /// <typeparam name="T">What comes out. Covariant, so an IFactory of a concrete

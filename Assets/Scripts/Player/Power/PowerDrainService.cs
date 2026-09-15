@@ -28,9 +28,6 @@ public class PowerDrainService
 
     private CancellationTokenSource _cts;
 
-    /// <summary>True while the loop is running.</summary>
-    public bool IsRunning { get { return _cts != null; } }
-
     public PowerDrainService(IPowerModel model, float intervalSeconds)
     {
         if (model == null)

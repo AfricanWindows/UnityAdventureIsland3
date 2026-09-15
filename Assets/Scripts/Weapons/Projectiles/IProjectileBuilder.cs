@@ -8,8 +8,8 @@ namespace Game.Projectiles
     ///
     /// That split is the whole point. The version shown in class had a SetSpeed() with no
     /// parameter and a hard-coded 400 inside it, which makes the builder a second place
-    /// where balancing lives. Here the builder is reusable for a fast laser, a slow one,
-    /// or a boss variant, without editing it.
+    /// where balancing lives. Here the builder is reusable for a fast axe, a slow one,
+    /// or an enemy shot, without editing it.
     /// </summary>
     /// <typeparam name="TProjectile">The concrete product this builder produces.</typeparam>
     public interface IProjectileBuilder<out TProjectile> where TProjectile : BaseProjectile

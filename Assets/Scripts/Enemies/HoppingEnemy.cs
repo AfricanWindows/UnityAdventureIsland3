@@ -10,10 +10,8 @@ using UnityEngine;
 /// once, and "on a timer" instead of "on the space bar" is the only thing that differs
 /// between a snake and Mario.
 ///
-/// It does not walk, so it deliberately does NOT reuse PatrolEnemy: that one writes a
-/// horizontal speed every single step, which would drag the snake sideways while it is
-/// supposed to be standing. Here the forward speed is given once, at the push-off, and taken
-/// away on landing.
+/// It does not walk: the forward speed is given once, at the push-off, and taken away on
+/// landing, so it really stands still between hops.
 ///
 /// It is IActivatable, so a range trigger can let it sleep until the player is close. It does
 /// not know the trigger exists and works perfectly well without one: it starts awake, and

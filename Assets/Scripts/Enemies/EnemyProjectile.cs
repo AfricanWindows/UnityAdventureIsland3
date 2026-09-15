@@ -2,14 +2,11 @@ using Game.Projectiles;
 using UnityEngine;
 
 /// <summary>
-/// A shot fired BY an enemy - the snake's fireball. It kills the player and ignores other
+/// A shot fired BY an enemy - the snake's shot. It kills the player and ignores other
 /// enemies, so enemies can never hurt each other.
 ///
-/// It used to be a whole parallel projectile class: its own Rigidbody handling, its own
-/// Destroy(gameObject, lifetime), its own hit test, and no pool at all - the third
-/// hierarchy of the same idea after the fireball and the axe. It is now the same
-/// DirectionalProjectile everything else uses, and the only thing it still says for itself
-/// is WHO it hurts.
+/// It is the same DirectionalProjectile the axe uses - pooled, with the same lifetime and
+/// the same flight - and the only thing it says for itself is WHO it hurts.
 ///
 /// Set Ignore Tag to the enemies' own tag on the prefab so a snake never shoots itself.
 /// </summary>

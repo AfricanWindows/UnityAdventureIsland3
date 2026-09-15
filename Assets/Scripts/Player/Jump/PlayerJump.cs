@@ -12,9 +12,6 @@ using UnityEngine;
 /// It does not decide what "ground" is either, so the player can jump off anything solid,
 /// spikes included, and it does not decide which KEY means jump - that is IInputSource's job.
 ///
-/// The double jump that used to sit next to this class is gone: the final assignment does not
-/// ask for it, and a second jump in mid-air is not how Adventure Island plays.
-///
 /// WHY THE WORK IS SPLIT OVER TWO UPDATE METHODS
 /// Update runs once per rendered frame and is the only place a "was pressed this frame" event
 /// can be caught - FixedUpdate can run twice, or not at all, in the same frame and would drop

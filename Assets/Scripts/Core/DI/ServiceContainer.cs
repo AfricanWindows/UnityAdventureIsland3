@@ -40,16 +40,6 @@ namespace Game.Core.DI
             _services[typeof(T)] = instance;
         }
 
-        public T Resolve<T>() where T : class
-        {
-            object service;
-
-            if (!_services.TryGetValue(typeof(T), out service))
-                throw new ServiceNotFoundException(typeof(T));
-
-            return (T)service;
-        }
-
         public bool TryResolve<T>(out T service) where T : class
         {
             object found;
@@ -62,11 +52,6 @@ namespace Game.Core.DI
 
             service = null;
             return false;
-        }
-
-        public bool IsRegistered<T>() where T : class
-        {
-            return _services.ContainsKey(typeof(T));
         }
     }
 }

@@ -34,26 +34,25 @@ public abstract class PlayerContactEffect : MonoBehaviour
         playerInside = false;
     }
 
-    // Virtual, not private: PatrolEnemy also reads collisions, to turn around at walls.
-    protected virtual void OnCollisionEnter2D(Collision2D col)
+    private void OnCollisionEnter2D(Collision2D col)
     {
         if (col != null)
             TryAffect(col.gameObject);
     }
 
-    protected virtual void OnCollisionExit2D(Collision2D col)
+    private void OnCollisionExit2D(Collision2D col)
     {
         if (col != null)
             ClearIfPlayer(col.gameObject);
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerEnter2D(Collider2D col)
     {
         if (col != null)
             TryAffect(col.gameObject);
     }
 
-    protected virtual void OnTriggerExit2D(Collider2D col)
+    private void OnTriggerExit2D(Collider2D col)
     {
         if (col != null)
             ClearIfPlayer(col.gameObject);

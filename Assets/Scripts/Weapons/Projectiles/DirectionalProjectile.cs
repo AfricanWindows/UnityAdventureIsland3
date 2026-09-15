@@ -6,11 +6,7 @@ namespace Game.Projectiles
     /// A projectile that is thrown the way its owner is facing.
     ///
     /// It exists so "remember which way I was thrown, turn the sprite to match, fly that
-    /// way" is written ONCE. Before the merge, the fireball and the axe each carried their
-    /// own copy of that idea in a parallel class hierarchy - a second BaseProjectile in the
-    /// global namespace, with its own damage rule, its own lifetime and its own
-    /// Instantiate/Destroy cycle. Two hierarchies meant two places to fix every bug, and a
-    /// reader had to check which BaseProjectile a file meant (Don't Repeat Yourself).
+    /// way" is written ONCE, for the axe and the enemy shot alike (Don't Repeat Yourself).
     ///
     /// Everything else - the Fire() template, the lifetime timer, the shared IDamageable
     /// hit rule, the pool handshake - is inherited from BaseProjectile and not restated.

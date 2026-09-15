@@ -12,10 +12,6 @@ namespace Game.Projectiles
     ///
     /// It is also the pool's Product: it implements IPoolable, so it can reset itself and
     /// send itself home - without ever naming the pool that owns it.
-    ///
-    /// This is now the ONLY projectile hierarchy in the project. The parallel global
-    /// BaseProjectile the fireball and the axe used to have was deleted; both were ported
-    /// onto this one, so there is a single Fire() template and a single hit rule.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class BaseProjectile : MonoBehaviour, IPoolable
@@ -26,7 +22,7 @@ namespace Game.Projectiles
 
         [Header("Scenery")]
         [Tooltip("Tick for a projectile that dies when it touches the ground or a wall " +
-                 "(axe, laser). Leave off for one that flies over the level (boomerang).")]
+                 "(axe). Leave off for one that flies over the level (boomerang).")]
         [SerializeField] private bool stopsOnScenery;
 
         [Tooltip("Which layers count as scenery. Leave empty and ANY solid non-trigger " +
@@ -40,7 +36,7 @@ namespace Game.Projectiles
         // "GetComponent in the hot path" mistake - it is a lookup, not a field read.
         private Rigidbody2D _body;
 
-        // Guards the two ways a laser can end at the same instant: hitting two enemies in
+        // Guards the two ways a shot can end at the same instant: hitting two enemies in
         // one physics step, or being hit at the exact frame its lifetime runs out.
         private bool _isLive;
 
@@ -113,7 +109,6 @@ namespace Game.Projectiles
         protected virtual void OnAfterFire() { }
 
         /// <summary>
-        /// <summary>
         /// Non-damageable things that stop the flight - ground, ceiling, walls.
         ///
         /// The rule is DATA, not code: an axe that dies on the floor and a boomerang that
@@ -144,7 +139,7 @@ namespace Game.Projectiles
 
         /// <summary>
         /// The shared hit rule, written once: hurt whatever can be hurt through the SAME
-        /// IDamageable the fireball and the axe already use, then leave unless this
+        /// IDamageable every weapon uses, then leave unless this
         /// projectile is configured to pierce.
         /// </summary>
         private void OnTriggerEnter2D(Collider2D other)
@@ -179,10 +174,8 @@ namespace Game.Projectiles
         ///
         /// The default is the game's shared rule: hurt anything that can be hurt. It is a
         /// HOOK rather than fixed code because the enemies shoot too, and their shots do
-        /// the opposite - they ignore IDamageable and kill the player instead. Before this
-        /// existed, the enemy fireball was a whole second projectile class with its own
-        /// lifetime, its own Destroy and no pool, purely because it could not express that
-        /// one difference (Open/Closed).
+        /// the opposite - they ignore IDamageable and kill the player instead. That one
+        /// difference is a single override, not a second projectile class (Open/Closed).
         ///
         /// The step order around it - ignore tag, hit, pierce or die, else check scenery -
         /// stays fixed, so no subclass can forget the lifetime or the pool handshake.
