@@ -75,6 +75,19 @@ public abstract class PlayerContactEffect : MonoBehaviour
             playerInside = false;
     }
 
+    /// <summary>
+    /// Forget the touch that is going on right now.
+    ///
+    /// OnEnable is the only other place the flag is cleared, so a subclass that puts itself
+    /// back to its starting state WITHOUT being switched off - the egg, which only hides its
+    /// sprite - would otherwise stay armed against a touch that ended long ago and could
+    /// never fire again.
+    /// </summary>
+    protected void ClearContact()
+    {
+        playerInside = false;
+    }
+
     /// <summary>The one step each hazard defines for itself.</summary>
     protected abstract void Affect(GameObject player);
 }

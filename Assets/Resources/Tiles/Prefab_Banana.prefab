@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8471677791417188516}
   - component: {fileID: 365055006981214169}
   - component: {fileID: 4641016453816332969}
+  - component: {fileID: 2592747191501545803}
   m_Layer: 0
   m_Name: Prefab_Banana
   m_TagString: Untagged
@@ -167,3 +168,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FruitPickable
   playerTag: Player
   powerAmount: 1
+  fruitCount: 1
+--- !u!114 &2592747191501545803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948113487010781166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb7b9f6938f6754b94fd7fd4c265a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverEffect
+  speed: 2
+  height: 0.12

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5768445892518221873}
   - component: {fileID: 1263170808108120732}
   - component: {fileID: 8523655383074392065}
+  - component: {fileID: 7956649306390567451}
   m_Layer: 0
   m_Name: Prefab_Axe
   m_TagString: Untagged
@@ -143,3 +144,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AxePickable
   playerTag: Player
+--- !u!114 &7956649306390567451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720811410521716770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb7b9f6938f6754b94fd7fd4c265a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverEffect
+  speed: 2
+  height: 0.12
+  speedVariation: 0.2

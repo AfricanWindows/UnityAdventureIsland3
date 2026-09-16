@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 6308652472926506010}
   - component: {fileID: 416626821497140907}
   - component: {fileID: 8223456532280776449}
+  - component: {fileID: 4909311288327196676}
+  - component: {fileID: -8463348355618067281}
   m_Layer: 0
   m_Name: Prefab_Bird
   m_TagString: Untagged
@@ -255,3 +257,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActivateNearPlayer
   range: 10
+--- !u!114 &4909311288327196676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6802702584780200687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065fae7abf43b314dbdfc523d809e446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickableDropper
+  contentMode: 1
+  specificItem: {fileID: 4641016453816332969, guid: 601d43eb2d776e4429f19f92fa051484, type: 3}
+  randomPool: []
+  spawnOffset: {x: 0, y: 0.1}
+--- !u!114 &-8463348355618067281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6802702584780200687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98bd10aab6a711149b6a4b2381a82436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropOnDefeat
+  dropChance: 1
+  dropper: {fileID: 0}
+  toss: {fileID: 0}

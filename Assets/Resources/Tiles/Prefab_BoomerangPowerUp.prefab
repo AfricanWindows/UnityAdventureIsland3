@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2361132969283070803}
   - component: {fileID: 2008418974307917469}
   - component: {fileID: -5073353847003989615}
+  - component: {fileID: 6477226116859744791}
   m_Layer: 0
   m_Name: Prefab_BoomerangPowerUp
   m_TagString: Untagged
@@ -153,3 +154,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoomerangPickable
   playerTag: Player
+--- !u!114 &6477226116859744791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405817376917032936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb7b9f6938f6754b94fd7fd4c265a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverEffect
+  speed: 2
+  height: 0.12
+  speedVariation: 0.2
