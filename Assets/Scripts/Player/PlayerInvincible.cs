@@ -14,7 +14,7 @@ public class PlayerInvincible : TimedPlayerEffect, IInvincible
         get { return IsActive; }
     }
 
-    /// <summary>Entry point used by StarPowerUp.</summary>
+    /// <summary>Entry point used by InvincibilityPowerUp - the fairy.</summary>
     public void ActivateInvincibility()
     {
         Activate();

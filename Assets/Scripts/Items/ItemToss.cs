@@ -5,7 +5,7 @@ using UnityEngine;
 /// Throws an object along a short arc and leaves it where it lands - the little hop an
 /// item makes when it comes out of an egg.
 ///
-/// WHY NOT PHYSICS. Every pickup in this game (the axe, the star, the fruit) carries a
+/// WHY NOT PHYSICS. Every pickup in this game (the axe, the fairy, the fruit) carries a
 /// trigger collider and no Rigidbody2D, because a pickup is a thing you walk into, not a
 /// thing the world pushes around. Throwing them with real physics would mean adding a body
 /// and a solid collider to all of them, and then owning every question that follows: what

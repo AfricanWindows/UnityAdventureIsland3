@@ -7,7 +7,7 @@
 ///
 /// This mirrors how PlayerDeath already asks every IInvincible on the object whether the
 /// player can be hurt: one question, many independent answerers, and the asker never
-/// learns what a star or a fairy is (Dependency Inversion).
+/// learns what the fairy is (Dependency Inversion).
 ///
 /// It locks WALKING only. Jumping, aiming and facing are separate questions, so a lock
 /// that should also stop those says so through its own interface (Interface Segregation).

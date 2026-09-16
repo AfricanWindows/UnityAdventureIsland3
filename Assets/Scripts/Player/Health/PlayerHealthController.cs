@@ -65,7 +65,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
 
     private void OnEnable()
     {
-        // PlayerDeath already decides WHEN Mario is hit (it checks the star invincibility
+        // PlayerDeath already decides WHEN Mario is hit (it checks the fairy invincibility
         // and respawns him). Here we only turn that into "-1 heart".
         PlayerDeath.OnPlayerDied += LoseHealth;
 

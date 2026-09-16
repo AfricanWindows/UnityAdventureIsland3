@@ -49,13 +49,13 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
         body = GetComponent<Rigidbody2D>();
         power = GetComponentInChildren<PowerController>(true);
 
-        // The star, and the fairy later.
+        // The fairy, and the death animation.
         invincibilitySources = GetComponents<IInvincible>();
     }
 
     public bool TryHurt(int powerCost, Vector2 knockback)
     {
-        // Genuinely invincible - the star, the fairy: the hit is ignored entirely.
+        // Genuinely invincible - the fairy: the hit is ignored entirely.
         if (IsProtected())
             return false;
 

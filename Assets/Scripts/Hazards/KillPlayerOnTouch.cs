@@ -5,7 +5,7 @@ using UnityEngine;
 /// assignment, which is described as instant death.
 ///
 /// It asks for IKillable, so it never learns what PlayerDeath is, how respawning works, or
-/// that a star can make the player immune - PlayerDeath answers all of that behind the
+/// that the fairy can make the player immune - PlayerDeath answers all of that behind the
 /// interface (Dependency Inversion).
 ///
 /// It is a COMPONENT rather than a base class on purpose. An enemy is not "a kind of

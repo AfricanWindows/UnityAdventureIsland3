@@ -159,6 +159,7 @@ MonoBehaviour:
   randomPool:
   - {fileID: 8523655383074392065, guid: c410ac921d691204498c7ea4fba881c5, type: 3}
   - {fileID: -5073353847003989615, guid: 42398bdcb279c574b9d04c70499df265, type: 3}
+  - {fileID: 5425885593692318505, guid: e5910a075c56adf419d6ade13a651e44, type: 3}
   spawnOffset: {x: 0, y: 0.1}
 --- !u!114 &5646287028838991747
 MonoBehaviour:

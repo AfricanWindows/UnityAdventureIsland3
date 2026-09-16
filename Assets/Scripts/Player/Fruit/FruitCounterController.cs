@@ -10,10 +10,17 @@ using UnityEngine;
 /// lap and the leftover live in FruitCounterModel - and it draws nothing itself.
 ///
 /// Eating twenty fruit costs a LIFE, and that goes through the project's existing death
-/// path (IKillable, implemented by PlayerDeath) rather than through a second mechanism.
-/// So the player respawns at the start of the level, loses a heart, drops his weapon and
-/// gets a fresh power bar - all of it already written, none of it repeated here. This is
-/// the same shape PowerController uses when the timer runs out.
+/// path rather than through a second mechanism. So the player respawns at the start of the
+/// level, loses a heart, drops his weapon and gets a fresh power bar - all of it already
+/// written, none of it repeated here.
+///
+/// It kills through IForceKillable and NOT through IKillable, which is the same distinction
+/// the abyss makes: this is a RULE of the game, not a blow. The fairy protects the player
+/// from everything that hurts him, and the twentieth fruit does not hurt him - it is simply
+/// the price of eating. Going through IKillable would have let a player under a fairy eat
+/// his twentieth fruit for free, which is a hole in a rule rather than a reward for the
+/// power-up. PowerController deliberately does the opposite with the empty bar: there the
+/// refusal is wanted, and the bar is simply refilled.
 ///
 /// The count is per LEVEL: ILevelStartHandler wipes it when a level begins, so the fruit
 /// eaten in level one cannot kill the player in level two. That interface already existed
@@ -31,7 +38,7 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
 
     private IFruitCounterModel model;
     private IFruitCounterView view;
-    private IKillable death;
+    private IForceKillable death;
 
     /// <summary>Fruit eaten in this level since the last lap.</summary>
     public int Current { get { return model != null ? model.Current : 0; } }
@@ -49,7 +56,7 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
     private void Awake()
     {
         model = new FruitCounterModel(fruitsPerLife);
-        death = GetComponent<IKillable>();
+        death = GetComponent<IForceKillable>();
 
         if (viewComponent != null)
             view = viewComponent;
@@ -59,7 +66,7 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
                              "assigned - the fruit count will not be shown.", this);
 
         if (death == null)
-            Debug.LogError("FruitCounterController: no IKillable on " + gameObject.name +
+            Debug.LogError("FruitCounterController: no IForceKillable on " + gameObject.name +
                            " - eating twenty fruit will do nothing.", this);
     }
 
@@ -121,6 +128,6 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
         Debug.Log("[Fruit] " + model.Threshold + " eaten - lost a life");
 
         if (death != null)
-            death.Kill();
+            death.ForceKill();
     }
 }

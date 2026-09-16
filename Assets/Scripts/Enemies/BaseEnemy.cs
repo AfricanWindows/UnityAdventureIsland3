@@ -15,7 +15,7 @@ using UnityEngine;
 /// features possible: the object survives to be brought back by the timer, and it survives
 /// to be restored by the whole-game restart. Destroy would have made both impossible.
 /// </summary>
-public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IResettable
+public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IResettable, IForceKillable
 {
     [SerializeField] private int health = 1;
 
@@ -65,6 +65,27 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
 
         if (health <= 0)
             Die();
+    }
+
+    /// <summary>
+    /// Wiped out however much health is left - the fairy's touch.
+    ///
+    /// Written here once, so no enemy in the game needed anything added to it: whatever
+    /// answers ForceKill is destroyed, and every enemy answers it through this class. The
+    /// respawn timer still hears the same Defeated event, so a fairy-killed enemy comes back
+    /// exactly like one beaten with an axe (Open/Closed).
+    ///
+    /// It goes around TakeDamage on purpose. Health is the protection an enemy has against
+    /// WEAPONS, and this is the door that exists for things no protection survives - which
+    /// is also how the ghost will work: immune to every weapon, and still gone the moment
+    /// the fairy brushes past.
+    /// </summary>
+    public void ForceKill()
+    {
+        if (defeated)
+            return;
+
+        Die();
     }
 
     /// <summary>

@@ -1,5 +1,5 @@
 /// <summary>
-/// The dropper for things the player picks up: weapons, fruit, the star, and later the
+/// The dropper for things the player picks up: weapons, fruit, the fairy, and later the
 /// animals and the fairy.
 ///
 /// It is empty on purpose. Unity cannot add an open generic MonoBehaviour to a GameObject,

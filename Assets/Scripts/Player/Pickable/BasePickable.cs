@@ -2,7 +2,7 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
-/// Base class for everything the player can pick up (fruit, hearts, the star, weapons...).
+/// Base class for everything the player can pick up (fruit, weapons, the fairy...).
 /// The "touch the player and disappear" logic is written here ONCE.
 /// A child class only decides WHAT effect it gives, by creating an IPowerUp.
 /// </summary>

@@ -19,6 +19,12 @@ using UnityEngine;
 /// that is also being thrown out of an egg - it gives way while the throw is in charge, and
 /// takes over from wherever the item landed. No connection between the two components, and
 /// no execution order to get right (each stays usable on its own).
+///
+/// It bobs in LOCAL space, which is what makes it work on a child object as well: the fairy
+/// sprite flying beside the player is parented to him, so hovering in world coordinates
+/// would fight his own movement and the bob would flatten out the moment he walked. In local
+/// space the item simply bobs beside whatever carries it. For an object with no moving
+/// parent - every dropped item - local and world are the same thing.
 /// </summary>
 public class HoverEffect : MonoBehaviour
 {
@@ -57,23 +63,23 @@ public class HoverEffect : MonoBehaviour
         // The centre sits BELOW (or above) the current position by however far the wave is
         // from zero at this phase, so the very first frame draws the item exactly where it
         // was placed. Without this every item would twitch the moment it appeared.
-        origin = transform.position - new Vector3(0f, CurrentOffset(), 0f);
-        lastApplied = transform.position;
+        origin = transform.localPosition - new Vector3(0f, CurrentOffset(), 0f);
+        lastApplied = transform.localPosition;
     }
 
     private void Update()
     {
         // Vector3's == is a fuzzy compare, which is exactly right here: it ignores floating
         // point noise and reacts only to a real move.
-        if (transform.position != lastApplied)
-            origin = transform.position - new Vector3(0f, CurrentOffset(), 0f);
+        if (transform.localPosition != lastApplied)
+            origin = transform.localPosition - new Vector3(0f, CurrentOffset(), 0f);
 
         time += Time.deltaTime;
 
         Vector3 position = origin;
         position.y += CurrentOffset();
 
-        transform.position = position;
+        transform.localPosition = position;
         lastApplied = position;
     }
 

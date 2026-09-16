@@ -24,7 +24,7 @@ using UnityEngine;
 /// It is the single implementation of IKillable, which is how enemies, their shots, hazards
 /// and the two timers kill the player without any of them knowing what respawning is.
 /// </summary>
-public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler, IInvincible, IMovementLock
+public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStartHandler, IInvincible, IMovementLock
 {
     [Tooltip("How long the death animation is given before the player reappears at the " +
              "start of the level. Match it to the clip.")]
@@ -113,6 +113,40 @@ public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler, IInvinc
         if (IsAnySourceInvincible())
             return;
 
+        BeginDeath();
+    }
+
+    /// <summary>
+    /// Dying with no way out - the abyss, and nothing else in the game.
+    ///
+    /// It is the same death, minus one question: whether anything is protecting him. The
+    /// fairy and the death animation both answer through IInvincible, and this
+    /// method simply never asks. That is the whole implementation of "only the pit can kill
+    /// the player even with the fairy" - a rule that lives in one place instead of as a tick
+    /// box on every hazard in two levels.
+    ///
+    /// The player is on the RECEIVING end of IForceKillable here, while the fairy is on the
+    /// giving end of the same interface. One idea - "an end nothing survives" - serving both
+    /// directions, which is why there is no second interface for pits.
+    /// </summary>
+    public void ForceKill()
+    {
+        BeginDeath();
+    }
+
+    /// <summary>
+    /// The one road into dying, so the two entry points above cannot drift apart.
+    ///
+    /// The isDying guard used to come for free: Kill() asked IsAnySourceInvincible, and this
+    /// component reports itself invincible while the animation plays. ForceKill does not ask,
+    /// so the guard has to be stated here - otherwise falling into a pit during the death
+    /// animation would start a second death on top of the first.
+    /// </summary>
+    private void BeginDeath()
+    {
+        if (isDying)
+            return;
+
         StartCoroutine(DieRoutine());
     }
 
@@ -144,10 +178,6 @@ public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler, IInvinc
     }
 
     /// <summary>
-    /// True while ANY invincibility source is active - the star, this death, and the fairy
-    /// tomorrow, with no change needed here.
-    /// </summary>
-    /// <summary>
     /// Switches the whole control surface off and on. Disabling the components - rather
     /// than asking each of them to check a flag - means jumping and throwing really do
     /// not run, instead of running and quietly having no effect.
@@ -158,6 +188,13 @@ public class PlayerDeath : MonoBehaviour, IKillable, ILevelStartHandler, IInvinc
             inputComponents[i].enabled = value;
     }
 
+    /// <summary>
+    /// True while ANY invincibility source is active - the fairy, and this death
+    /// itself. Adding a third one needs no change here: they all answer IInvincible.
+    ///
+    /// Note who does NOT consult this: ForceKill. The abyss is the one thing in the game
+    /// that never asks.
+    /// </summary>
     private bool IsAnySourceInvincible()
     {
         for (int i = 0; i < invincibilitySources.Length; i++)

@@ -176,7 +176,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     /// The bar ran out. Refill FIRST, then die.
     ///
     /// The order matters: Kill() respawns the player, and he must come back with a full
-    /// bar. It also means an ignored kill - the star makes PlayerDeath refuse - still
+    /// bar. It also means an ignored kill - the fairy makes PlayerDeath refuse - still
     /// leaves a running bar instead of a player stuck at zero with a clock that can never
     /// fire Empty again.
     /// </summary>

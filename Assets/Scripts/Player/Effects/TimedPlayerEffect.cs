@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Game.Core;
 using UnityEngine;
 
 /// <summary>
@@ -7,8 +8,12 @@ using UnityEngine;
 /// (invincibility today, shield or speed boost tomorrow).
 /// The timer logic is written here ONCE - a child class only gives it a meaning.
 /// Knows nothing about how the effect LOOKS: it only reports state through OnActiveChanged.
+///
+/// It also knows its own starting state - OFF - which is all IResettable asks for. Without
+/// that, a new game started while the fairy was still counting down would hand the player a
+/// red, immortal character with someone else's ten seconds left on the clock.
 /// </summary>
-public abstract class TimedPlayerEffect : MonoBehaviour
+public abstract class TimedPlayerEffect : MonoBehaviour, IResettable
 {
     [SerializeField] private float duration = 5f;
 
@@ -45,6 +50,18 @@ public abstract class TimedPlayerEffect : MonoBehaviour
         }
 
         SetActiveState(false);
+    }
+
+    /// <summary>
+    /// A new game: no effect is running, whatever was left on the clock.
+    ///
+    /// Deactivate does the whole job, and it announces the change like any other ending, so
+    /// the red tint and the fairy sprite go away with it - the views are not touched here
+    /// and never need to be (Single Responsibility).
+    /// </summary>
+    public void ResetToStart()
+    {
+        Deactivate();
     }
 
     private IEnumerator RunEffect()
