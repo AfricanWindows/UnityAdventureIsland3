@@ -1,3 +1,4 @@
+using System;
 using Game.Core;
 using UnityEngine;
 
@@ -15,8 +16,22 @@ namespace Game.Weapons
     /// It implements IUseableWeapon, so the weapon slot and the pick-ups work with any weapon
     /// without ever naming this class (Dependency Inversion).
     /// </summary>
-    public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon, IResettable
+    public abstract class BaseWeapon : MonoBehaviour, IUseableWeapon, IResettable, IAttacker
     {
+        /// <summary>
+        /// Raised on the frame a shot really leaves - the same announcement the shooting
+        /// snake already makes, through the same interface.
+        ///
+        /// It is here and not in each weapon because the moment is decided here: only a shot
+        /// that passed the equipped gate, the cooldown and its own FireInternal counts. A
+        /// listener therefore never animates a trigger pull that did nothing.
+        ///
+        /// The weapon does not know who listens. PlayerAnimatorView does today, a sound or a
+        /// muzzle flash might tomorrow, and none of that belongs to the thing that decides
+        /// WHEN to shoot (Single Responsibility, Open/Closed).
+        /// </summary>
+        public event Action Attacked;
+
         [Tooltip("Seconds between two shots")]
         [SerializeField] private float cooldown = 0.25f;
 
@@ -93,8 +108,13 @@ namespace Game.Weapons
             // weapon that could not fire - empty pool, no ammo - would still be punished
             // with the full wait, and the player would be blocked for a reason that never
             // happened.
-            if (FireInternal())
-                _lastFireTime = Time.time;
+            if (!FireInternal())
+                return;
+
+            _lastFireTime = Time.time;
+
+            if (Attacked != null)
+                Attacked();
         }
         // ==================================================
 

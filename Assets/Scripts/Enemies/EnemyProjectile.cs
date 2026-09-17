@@ -25,6 +25,11 @@ public sealed class EnemyProjectile : DirectionalProjectile
         if (!other.TryGetComponent(out killable))
             return false;
 
+        // The animal he is riding can eat the shot. True either way: the shot hit something
+        // and is spent, it simply cost an animal instead of a life.
+        if (other.gameObject.TryAbsorbHit(gameObject))
+            return true;
+
         killable.Kill();
         return true;
     }

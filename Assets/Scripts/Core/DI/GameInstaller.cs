@@ -47,6 +47,9 @@ namespace Game.Core.DI
     [Tooltip("The boomerang pool. Optional - found automatically.")]
     [SerializeField] private BoomerangPoolManager boomerangPool;
 
+    [Tooltip("The pool both shooting animals borrow from. Optional - found automatically.")]
+    [SerializeField] private AnimalShotPoolManager animalShotPool;
+
     [Tooltip("The object that switches the levels. Optional - found automatically.")]
     [SerializeField] private LevelFlowController levelFlow;
 
@@ -126,6 +129,7 @@ namespace Game.Core.DI
             RegisterPool<EnemyProjectilePoolManager, EnemyProjectile>(enemyShotPool, "shooting enemies");
             RegisterPool<AxePoolManager, ProjectileAxe>(axePool, "the axe");
             RegisterPool<BoomerangPoolManager, BoomerangProjectile>(boomerangPool, "the boomerang");
+            RegisterPool<AnimalShotPoolManager, AnimalShot>(animalShotPool, "the shooting animals");
 
             // The game's course: which level runs, and what a restart means.
             LevelFlowController flow = levelFlow;

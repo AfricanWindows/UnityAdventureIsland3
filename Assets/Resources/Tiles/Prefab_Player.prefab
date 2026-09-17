@@ -154,6 +154,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponsHandler
   weaponsRoot: {fileID: 0}
   verbose: 1
+--- !u!1 &6794927802803518767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1357276292972431067}
+  m_Layer: 0
+  m_Name: AnimalShotWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1357276292972431067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6794927802803518767}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3043177011782934736}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7737513687079717171
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +216,13 @@ GameObject:
   - component: {fileID: 6241718888017813731}
   - component: {fileID: 5762793018153563771}
   - component: {fileID: 5939809681864159054}
+  - component: {fileID: 2516412396024052380}
+  - component: {fileID: 6619327771735267368}
+  - component: {fileID: 1231326218879790561}
+  - component: {fileID: 2770953594994410918}
+  - component: {fileID: 7663896817464529848}
+  - component: {fileID: 2613191876268775580}
+  - component: {fileID: 3095156200714592886}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -209,6 +247,7 @@ Transform:
   - {fileID: 1329533104064966141}
   - {fileID: 5122837146720154986}
   - {fileID: 8797957984835505213}
+  - {fileID: 1357276292972431067}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &408238848797351686
@@ -469,6 +508,7 @@ MonoBehaviour:
   crouchParameter: IsCrouching
   hurtParameter: IsHurt
   deathParameter: IsDead
+  attackTrigger: Attack
   runThreshold: 0.05
 --- !u!114 &7788110000000000021
 MonoBehaviour:
@@ -604,6 +644,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b64bb48d4564846b38593293fe6ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectsLostOnDeath
+--- !u!114 &2516412396024052380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d672fc3129efadf4dbddeb541075ac85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.SpinAttack
+  cooldown: 0.5
+  unlockedFromStart: 0
+  radius: 2.5
+  damage: 2
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxTargets: 16
+--- !u!114 &6619327771735267368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65bc99040a83d8d439dc94ff0f01f3b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlueMount
+  mountedLook: {fileID: 22100000, guid: 5887c06abb066d5458407cda388bba4e, type: 2}
+  colliderRadius: 1.1
+  colliderOffset: {x: 0, y: -0.2}
+  attack: {fileID: 2613191876268775580}
+--- !u!114 &1231326218879790561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e535ef3430bc447ae7d7c9ed92d380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GreenMount
+  mountedLook: {fileID: 22100000, guid: 15d652647d0ed834298647c0b9377c83, type: 2}
+  colliderRadius: 1.1
+  colliderOffset: {x: 0, y: -0.2}
+  attack: {fileID: 2516412396024052380}
+--- !u!114 &2770953594994410918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff5793b0f6833f14e8f4066746cd926a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RedMount
+  mountedLook: {fileID: 22100000, guid: fed3d103c69c9db4eb1b2dd2c7098a52, type: 2}
+  colliderRadius: 1.1
+  colliderOffset: {x: 0, y: -0.2}
+  attack: {fileID: 7663896817464529848}
+--- !u!114 &7663896817464529848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ed36baa78ee1b46a1626f8319bc149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotWeapon
+  cooldown: 0.5
+  unlockedFromStart: 0
+  firePoint: {fileID: 0}
+  shotSprite: {fileID: 21300000, guid: 9447e3d8454c5b04ebe84b783a732fdd, type: 3}
+  shotPool: {fileID: 0}
+--- !u!114 &2613191876268775580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ed36baa78ee1b46a1626f8319bc149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotWeapon
+  cooldown: 0.5
+  unlockedFromStart: 0
+  firePoint: {fileID: 0}
+  shotSprite: {fileID: 21300000, guid: 40f4c621e7f415442a86c114eac66cdb, type: 3}
+  shotPool: {fileID: 0}
+--- !u!114 &3095156200714592886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8faa8fb92aa72e841bc92fc5df1855b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMount
+  graceSeconds: 0.5
+  animator: {fileID: 0}
+  bodyCollider: {fileID: 0}
+  verbose: 1
 --- !u!1 &9004961795210391330
 GameObject:
   m_ObjectHideFlags: 0

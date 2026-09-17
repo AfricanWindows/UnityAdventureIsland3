@@ -17,6 +17,13 @@ public class KillPlayerOnTouch : PlayerContactEffect
 {
     protected override void Affect(GameObject player)
     {
+        // Something on the player may take the hit instead - the animal he is riding
+        // disappears, he walks on untouched, and an obstacle like this campfire is smashed
+        // in the process. Asked here, before the killing, because a hit that was taken never
+        // reaches him at all.
+        if (player.TryAbsorbHit(gameObject))
+            return;
+
         IKillable killable = player.GetComponent<IKillable>();
 
         if (killable != null)

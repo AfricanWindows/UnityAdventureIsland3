@@ -97,8 +97,21 @@ namespace Game.Weapons
                 return false;
             }
 
+            // The one step a thrown weapon may add: dress the projectile before it leaves.
+            // Fire() itself stays sealed, so the ORDER - take from the pool, check it, launch
+            // it - is the same for every weapon in the game and cannot be rearranged by a
+            // subclass; only this one gap is open (Template Method).
+            OnBeforeLaunch(projectile);
+
             projectile.Launch(_firePoint.position, _facing != null ? _facing.FacingDirection : 1f);
             return true;
         }
+
+        /// <summary>
+        /// Last chance to change the projectile that is about to fly. Empty for the axe and
+        /// the boomerang, which look the same whoever throws them; the animals use it to give
+        /// the shot their own sprite, which is what lets two animals share one pool.
+        /// </summary>
+        protected virtual void OnBeforeLaunch(TProjectile projectile) { }
     }
 }

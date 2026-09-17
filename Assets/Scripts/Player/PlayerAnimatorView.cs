@@ -37,6 +37,11 @@ public class PlayerAnimatorView : MonoBehaviour
              "death animation.")]
     [SerializeField] private string deathParameter = "IsDead";
 
+    [Tooltip("Trigger. Fired once each time a shot really leaves - a weapon or the animal " +
+             "he is riding, whichever answered the button. Leave empty if there is no " +
+             "attack animation.")]
+    [SerializeField] private string attackTrigger = "Attack";
+
     [Header("Tuning")]
     [Tooltip("Below this speed he counts as standing. Stops the run cycle from flickering " +
              "on during the last fraction of the braking ramp.")]
@@ -56,12 +61,20 @@ public class PlayerAnimatorView : MonoBehaviour
     private int crouchHash;
     private int hurtHash;
     private int deathHash;
+    private int attackHash;
+
+    // EVERY attacker on the player, not one: the axe, the boomerang and each animal's
+    // attack are separate components, and any of them may be the one that fires. Asked for
+    // as IAttacker, so this view never learns which weapons or animals exist - a new one is
+    // animated by existing (Open/Closed, Dependency Inversion).
+    private IAttacker[] attackers;
 
     private bool hasSpeed;
     private bool hasGrounded;
     private bool hasCrouch;
     private bool hasHurt;
     private bool hasDeath;
+    private bool hasAttack;
 
     private void Awake()
     {
@@ -72,6 +85,10 @@ public class PlayerAnimatorView : MonoBehaviour
         hurt = GetComponent<PlayerHurt>();
         death = GetComponent<PlayerDeath>();
 
+        // InChildren, and including inactive: the weapons live on child objects of the
+        // player and start switched off until he finds them.
+        attackers = GetComponentsInChildren<IAttacker>(true);
+
         // An empty name means "this character has no such state", so an Idle/Run-only
         // controller never gets asked for a parameter it does not declare - which is what
         // Unity warns about, once per frame, forever.
@@ -80,6 +97,7 @@ public class PlayerAnimatorView : MonoBehaviour
         hasCrouch = !string.IsNullOrEmpty(crouchParameter) && crouch != null;
         hasHurt = !string.IsNullOrEmpty(hurtParameter) && hurt != null;
         hasDeath = !string.IsNullOrEmpty(deathParameter) && death != null;
+        hasAttack = !string.IsNullOrEmpty(attackTrigger) && attackers.Length > 0;
 
         if (hasSpeed)
             speedHash = Animator.StringToHash(speedParameter);
@@ -96,8 +114,47 @@ public class PlayerAnimatorView : MonoBehaviour
         if (hasDeath)
             deathHash = Animator.StringToHash(deathParameter);
 
+        if (hasAttack)
+            attackHash = Animator.StringToHash(attackTrigger);
+
         if (movement == null)
             Debug.LogError("PlayerAnimatorView: no PlayerMovement on " + gameObject.name, this);
+    }
+
+    /// <summary>
+    /// Every attacker on the player is listened to at once. Only one of them can be
+    /// equipped at a time, and an unequipped weapon never raises the event, so there is
+    /// nothing to switch between - the animation simply follows whoever really fired.
+    /// </summary>
+    private void OnEnable()
+    {
+        if (!hasAttack)
+            return;
+
+        for (int i = 0; i < attackers.Length; i++)
+            attackers[i].Attacked += OnAttacked;
+
+        // A trigger left pending from before - a shot on the frame the player died - would
+        // otherwise play the attack the moment he comes back.
+        animator.ResetTrigger(attackHash);
+    }
+
+    private void OnDisable()
+    {
+        if (!hasAttack)
+            return;
+
+        for (int i = 0; i < attackers.Length; i++)
+            attackers[i].Attacked -= OnAttacked;
+    }
+
+    /// <summary>
+    /// An attack is a MOMENT, so it arrives as an event and sets a trigger; everything in
+    /// Update below is a STATE, so it is polled. Each is read the way it actually happens.
+    /// </summary>
+    private void OnAttacked()
+    {
+        animator.SetTrigger(attackHash);
     }
 
     private void Update()

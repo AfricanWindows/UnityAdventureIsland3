@@ -28,6 +28,12 @@ public class HurtPlayerOnTouch : PlayerContactEffect
 
     protected override void Affect(GameObject player)
     {
+        // The animal he is riding takes the whole hit: no power lost, no shove, and this
+        // stone is smashed on the way through. Asked before the cost is worked out, because
+        // an absorbed hit has no cost.
+        if (player.TryAbsorbHit(gameObject))
+            return;
+
         IHurtable hurtable = player.GetComponent<IHurtable>();
 
         if (hurtable == null)

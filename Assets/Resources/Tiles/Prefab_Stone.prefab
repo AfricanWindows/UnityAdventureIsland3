@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4411000000000000004}
   - component: {fileID: 4411000000000000005}
   - component: {fileID: 1049162722786561277}
+  - component: {fileID: 2798148862603452548}
   m_Layer: 0
   m_Name: Prefab_Stone
   m_TagString: Untagged
@@ -170,3 +171,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Destructible
   verbose: 1
+--- !u!114 &2798148862603452548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4411000000000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4eece68db98d84695eae8d5d866167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakableByAttacks

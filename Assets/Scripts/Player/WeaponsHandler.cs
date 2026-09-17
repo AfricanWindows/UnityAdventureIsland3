@@ -40,6 +40,11 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     // pickup can happen, so a restart never has to guess (see ResetToStart).
     private IUseableWeapon _startingWeapon;
 
+    // Everything that may hold the trigger shut. Collected once, through the interface, so
+    // this class never learns that animals exist (Dependency Inversion) - the same shape
+    // PlayerMovement already uses for IMovementLock.
+    private IAttackLock[] _attackLocks;
+
     /// <summary>
     /// Start, not Awake: a weapon's own Awake is what turns "Unlocked From Start" into
     /// IsEquipped, and Unity gives no order between the Awakes of two different objects.
@@ -49,6 +54,9 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     private void Start()
     {
         TakeStartingWeapon();
+
+        // true = include inactive, so a lock on a switched-off component still counts.
+        _attackLocks = ResolveRoot().GetComponentsInChildren<IAttackLock>(true);
     }
 
     private void Update()
@@ -57,6 +65,12 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
             return;
 
         if (!InputSource.AttackPressed)
+            return;
+
+        // Somebody else has the trigger - riding an animal is the one case today, and the
+        // same button reaches the animal instead. The weapon is NOT taken away, it simply
+        // waits, so stepping off gives it straight back with nothing to restore.
+        if (IsAttackBlocked())
             return;
 
         if (_current == null)
@@ -149,10 +163,7 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     /// </summary>
     private void TakeStartingWeapon()
     {
-        Transform root = weaponsRoot;
-
-        if (root == null)
-            root = transform.parent != null ? transform.parent : transform;
+        Transform root = ResolveRoot();
 
         // true = include inactive, so a weapon sitting on a switched-off child counts.
         IUseableWeapon[] found = root.GetComponentsInChildren<IUseableWeapon>(true);
@@ -179,6 +190,32 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
 
         if (_startingWeapon != null)
             Equip(_startingWeapon);
+    }
+
+    /// <summary>
+    /// Where the player's weapons and his locks are looked for. This component sits on a
+    /// child object, so the search starts at the player himself unless told otherwise.
+    /// </summary>
+    private Transform ResolveRoot()
+    {
+        if (weaponsRoot != null)
+            return weaponsRoot;
+
+        return transform.parent != null ? transform.parent : transform;
+    }
+
+    private bool IsAttackBlocked()
+    {
+        if (_attackLocks == null)
+            return false;
+
+        for (int i = 0; i < _attackLocks.Length; i++)
+        {
+            if (_attackLocks[i].BlocksAttack)
+                return true;
+        }
+
+        return false;
     }
 
     private static string Name(IUseableWeapon weapon)
