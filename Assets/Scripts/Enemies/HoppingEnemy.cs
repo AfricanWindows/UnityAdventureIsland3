@@ -21,7 +21,7 @@ using UnityEngine.Serialization;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(GroundCheck))]
-public class HoppingEnemy : BaseEnemy, IActivatable
+public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
 {
     [Tooltip("Shortest pause on the ground between hops, in seconds, counted from the moment " +
              "it LANDS - so the pause is the same whether the hop was long or short.")]
@@ -48,6 +48,14 @@ public class HoppingEnemy : BaseEnemy, IActivatable
     // Landing is "was off the ground, is on it now", and that needs the previous answer.
     private bool wasInAir;
 
+    // Which way it looks. Changed only while it STANDS: in the air it keeps the direction it
+    // took off in, so a frog the player ducks under does not turn round in mid-flight.
+    // Left by default, which is how the art is drawn.
+    private float facing = -1f;
+
+    /// <summary>Read by FacingView. The HopAim decides it - see LookWhereAimed.</summary>
+    public float FacingDirection { get { return facing; } }
+
     protected override void OnAwake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -64,6 +72,10 @@ public class HoppingEnemy : BaseEnemy, IActivatable
         if (aim == null)
             Debug.LogError("HoppingEnemy: no HopAim on " + gameObject.name +
                            " - add a Forward Hop Aim or a Player Hop Aim component.", this);
+
+        // Asked once here as well, so a snake that hops to the right is already turned right
+        // on the first frame instead of after its first landing.
+        LookWhereAimed();
     }
 
     /// <summary>
@@ -117,6 +129,10 @@ public class HoppingEnemy : BaseEnemy, IActivatable
 
         StandStill();
 
+        // Before the sleep check: an enemy far from the player still looks the right way, so
+        // a snake set to hop right is never seen standing there facing left.
+        LookWhereAimed();
+
         // Asleep: it still stands properly, it just never starts the next hop.
         if (!active)
             return;
@@ -129,6 +145,18 @@ public class HoppingEnemy : BaseEnemy, IActivatable
     private float NextPause()
     {
         return Random.Range(minPause, Mathf.Max(minPause, maxPause));
+    }
+
+    /// <summary>Turns the way the aim says. 0 means the aim has no opinion - keep looking.</summary>
+    private void LookWhereAimed()
+    {
+        if (aim == null)
+            return;
+
+        float direction = aim.GetFacing();
+
+        if (direction != 0f)
+            facing = direction > 0f ? 1f : -1f;
     }
 
     /// <summary>Kills the speed left over from the last hop, so it really stands.</summary>

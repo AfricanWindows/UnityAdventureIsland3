@@ -21,10 +21,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
 {
-    [Tooltip("Maximum hearts Mario can hold (exercise says 3)")]
+    [Tooltip("Maximum hearts the player can hold (exercise says 3)")]
     [SerializeField] private int maxHealth = 3;
 
-    [Tooltip("Hearts Mario starts the level with")]
+    [Tooltip("Hearts the player starts the level with")]
     [SerializeField] private int startHealth = 3;
 
     [Tooltip("Optional override. Normally left empty: the view arrives through injection.")]
@@ -33,7 +33,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
     private IPlayerHealthModel model;
     private IPlayerHealthView view;
 
-    /// <summary>Raised when Mario runs out of health. Static, so the Game Over screen
+    /// <summary>Raised when the player runs out of health. Static, so the Game Over screen
     /// does not need a reference to a player that does not exist yet.</summary>
     public static event Action OnPlayerHealthEmpty;
 
@@ -65,7 +65,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
 
     private void OnEnable()
     {
-        // PlayerDeath already decides WHEN Mario is hit (it checks the fairy invincibility
+        // PlayerDeath already decides WHEN the player is hit (it checks the fairy invincibility
         // and respawns him). Here we only turn that into "-1 heart".
         PlayerDeath.OnPlayerDied += LoseHealth;
 

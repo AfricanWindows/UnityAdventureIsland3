@@ -31,26 +31,35 @@ public class EnemyAnimatorView : MonoBehaviour
              "GroundCheck. Leave empty if this enemy has no jump animation.")]
     [SerializeField] private string groundedParameter = "";
 
+    [Tooltip("Bool. True while the enemy hides its face, false otherwise. Needs something that " +
+             "implements IHidingState (GhostEnemy). Leave empty if this enemy never hides.")]
+    [SerializeField] private string hidingParameter = "";
+
     private Animator animator;
     private IAttacker attacker;
     private IGroundCheck groundCheck;
+    private IHidingState hidingState;
 
     // Hashed once. Animator.SetBool("IsGrounded", ...) looks the name up by string on every
     // call, every frame; the int overload does not.
     private int attackHash;
     private int groundedHash;
+    private int hidingHash;
 
     private bool hasAttack;
     private bool hasGrounded;
+    private bool hasHiding;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         attacker = GetComponent<IAttacker>();
         groundCheck = GetComponent<IGroundCheck>();
+        hidingState = GetComponent<IHidingState>();
 
         hasAttack = Enable(attackTrigger, attacker != null, "IAttacker", out attackHash);
         hasGrounded = Enable(groundedParameter, groundCheck != null, "GroundCheck", out groundedHash);
+        hasHiding = Enable(hidingParameter, hidingState != null, "IHidingState", out hidingHash);
     }
 
     /// <summary>
@@ -77,13 +86,16 @@ public class EnemyAnimatorView : MonoBehaviour
     }
 
     /// <summary>
-    /// Grounded is a STATE, so it is polled every frame; an attack is a MOMENT, so it arrives as
-    /// an event above. Each is read the way it actually happens.
+    /// Grounded and hiding are STATES, so they are polled every frame; an attack is a MOMENT, so
+    /// it arrives as an event above. Each is read the way it actually happens.
     /// </summary>
     private void Update()
     {
         if (hasGrounded)
             animator.SetBool(groundedHash, groundCheck.IsGrounded);
+
+        if (hasHiding)
+            animator.SetBool(hidingHash, hidingState.IsHiding);
     }
 
     private void OnAttacked()

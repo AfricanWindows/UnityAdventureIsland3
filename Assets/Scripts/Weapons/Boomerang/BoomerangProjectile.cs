@@ -6,8 +6,8 @@ namespace Game.Projectiles
     /// <summary>
     /// CONCRETE PRODUCT - the same slot ProjectileAxe fills for its weapon.
     ///
-    /// It rides one oval loop the way Mario faces and comes back to his hand. The loop
-    /// also tracks Mario's CURRENT position, so it lands on him even if he kept running
+    /// It rides one oval loop the way the player faces and comes back to his hand. The loop
+    /// also tracks the player's CURRENT position, so it lands on him even if he kept running
     /// or jumped.
     ///
     /// It reuses the whole pooled skeleton from BaseProjectile (the Fire() template, the
@@ -22,7 +22,7 @@ namespace Game.Projectiles
     public sealed class BoomerangProjectile : BaseProjectile
     {
         [FormerlySerializedAs("radius")]
-        [Tooltip("Oval WIDTH - how far in front of Mario it reaches, in world units. " +
+        [Tooltip("Oval WIDTH - how far in front of the player it reaches, in world units. " +
                  "Keep this bigger than the height for a horizontal oval.")]
         [SerializeField] private float throwDistance = 6f;
 
@@ -48,7 +48,7 @@ namespace Game.Projectiles
 
         /// <summary>
         /// The weapon's single call. Records the hand that threw it - so the return leg can
-        /// follow Mario as he moves - then hands over to the inherited Fire() template.
+        /// follow the player as he moves - then hands over to the inherited Fire() template.
         /// </summary>
         public void Throw(Vector3 origin, Transform owner, float facing)
         {
@@ -82,7 +82,7 @@ namespace Game.Projectiles
 
             Vector2 local = LoopOffset(t);
 
-            // Slide the whole loop onto where Mario's hand is NOW, fully by t = 1, so the
+            // Slide the whole loop onto where the player's hand is NOW, fully by t = 1, so the
             // catch lands on him wherever he ran or jumped to.
             Vector2 ownerNow = _owner != null ? (Vector2)_owner.position : _start;
             Vector2 next = _start + local + Vector2.Lerp(Vector2.zero, ownerNow - _start, t);
@@ -103,7 +103,7 @@ namespace Game.Projectiles
             // frame - Despawn() is guarded, so calling it twice is harmless.
             if (t >= 1f)
             {
-                Debug.Log("[Boomerang] Back to Mario - returned to pool");
+                Debug.Log("[Boomerang] Back to the player - returned to pool");
                 Despawn();
             }
         }

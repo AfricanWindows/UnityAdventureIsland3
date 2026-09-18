@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShooterEnemy
   health: 1
+  weaponProof: 0
   reviveAtStartPosition: 1
   shotPool: {fileID: 0}
   shootInterval: 3
@@ -267,3 +268,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimatorView
   attackTrigger: Attack
   groundedParameter: 
+  hidingParameter: 

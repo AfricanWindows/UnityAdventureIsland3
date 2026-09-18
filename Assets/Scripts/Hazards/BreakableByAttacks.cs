@@ -55,16 +55,17 @@ public class BreakableByAttacks : MonoBehaviour, IDamageable
                            " can be destroyed - add a Destructible.", this);
     }
 
-    public void TakeDamage(int amount)
+    public bool TakeDamage(int amount)
     {
         if (self == null)
-            return;
+            return false;
 
         // Too light to matter - the axe against a stone. Said nothing about, because from
         // the player's side this is a projectile bouncing off, not an error.
         if (amount < minimumDamage)
-            return;
+            return false;
 
         self.ForceKill();
+        return true;
     }
 }

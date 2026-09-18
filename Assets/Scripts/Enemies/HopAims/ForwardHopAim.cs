@@ -14,6 +14,12 @@ public class ForwardHopAim : HopAim
 
     public override float GetHorizontalSpeed(JumpBehaviour jump)
     {
-        return (direction >= 0f ? 1f : -1f) * hopSpeed;
+        return GetFacing() * hopSpeed;
+    }
+
+    /// <summary>Always the way it hops - so the snake can never hop backwards.</summary>
+    public override float GetFacing()
+    {
+        return direction >= 0f ? 1f : -1f;
     }
 }

@@ -54,4 +54,18 @@ public class PlayerHopAim : HopAim, IInjectable
 
         return airTime > 0f ? distance / airTime : 0f;
     }
+
+    /// <summary>
+    /// At the player, so the frog watches him while it waits - and is already facing the way
+    /// it jumps when it takes off.
+    /// </summary>
+    public override float GetFacing()
+    {
+        Transform player = playerProvider != null ? playerProvider.PlayerTransform : null;
+
+        if (player == null)
+            return 0f;
+
+        return transform.HorizontalDirectionTo(player.position);
+    }
 }

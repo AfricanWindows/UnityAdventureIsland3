@@ -28,7 +28,7 @@ namespace Game.Weapons
         where TProjectile : BaseProjectile
     {
         [Header("What to pool")]
-        // FormerlySerializedAs keeps the values already wired on Prefab_Mario: the field
+        // FormerlySerializedAs keeps the values already wired on the player prefab: the field
         // used to be called laserPrefab on one manager and boomerangPrefab on the other.
         // Renaming a serialized field without this silently clears the reference.
         [FormerlySerializedAs("laserPrefab")]
@@ -145,8 +145,8 @@ namespace Game.Weapons
         /// Parks the pooled objects on their own object at the root of the scene.
         ///
         /// This matters more than it looks. If the container were this object - and this
-        /// component usually sits on Mario - then every sleeping projectile would be a
-        /// child of Mario and would be dragged around by him. The hierarchy stays flat and
+        /// component usually sits on the player - then every sleeping projectile would be a
+        /// child of the player and would be dragged around by him. The hierarchy stays flat and
         /// still, so Unity never recalculates those transforms.
         /// </summary>
         private Transform CreateRootContainer()

@@ -16,7 +16,7 @@ using UnityEngine;
 /// is close. The two classes know nothing about each other - the range calls an interface, and
 /// this decides for itself that "asleep" means "stop shooting and start the countdown over".
 /// </summary>
-public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
+public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker, IFacing
 {
     [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
              "so a level full of snakes needs no wiring at all.")]
@@ -45,6 +45,12 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
     /// nor cares, which is why it never grew an Animator field.
     /// </summary>
     public event Action Attacked;
+
+    /// <summary>
+    /// It looks the way it shoots. Read by FacingView, so Shoot Direction is the only thing to
+    /// set - the sprite can never face one way while the fire goes the other.
+    /// </summary>
+    public float FacingDirection { get { return shootDirection >= 0f ? 1f : -1f; } }
 
     /// <summary>
     /// Called by GameInstaller before Awake. One pool is shared by every shooting

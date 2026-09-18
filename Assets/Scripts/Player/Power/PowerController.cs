@@ -11,7 +11,7 @@ using UnityEngine;
 /// PowerConfigSO asset - and it draws nothing itself.
 ///
 /// Everything it touches is replaceable through an abstraction: IPowerModel, IPowerView,
-/// IKillable and a config asset. Losing a life goes through the project's EXISTING death
+/// IForceKillable and a config asset. Losing a life goes through the project's EXISTING death
 /// path (PlayerDeath), so respawning, the lives counter and the weapon loss keep working
 /// without a single line about them here.
 /// </summary>
@@ -28,7 +28,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     private IPowerModel model;
     private IPowerView view;
     private PowerDrainService drain;
-    private IKillable death;
+    private IForceKillable death;
     private PowerStats stats;
 
     /// <summary>Segments right now. Read by anything that wants to show or test it.</summary>
@@ -64,7 +64,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
 
         model = new PowerModel(stats.MaxPower, stats.StartPower);
         drain = new PowerDrainService(model, stats.DrainIntervalSeconds);
-        death = GetComponent<IKillable>();
+        death = GetComponent<IForceKillable>();
 
         if (viewComponent != null)
             view = viewComponent;
@@ -74,7 +74,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
                              "the bar will not be drawn.", this);
 
         if (death == null)
-            Debug.LogError("PowerController: no IKillable on " + gameObject.name +
+            Debug.LogError("PowerController: no IForceKillable on " + gameObject.name +
                            " - running out of power will do nothing.", this);
     }
 
@@ -175,10 +175,14 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     /// <summary>
     /// The bar ran out. Refill FIRST, then die.
     ///
-    /// The order matters: Kill() respawns the player, and he must come back with a full
-    /// bar. It also means an ignored kill - the fairy makes PlayerDeath refuse - still
-    /// leaves a running bar instead of a player stuck at zero with a clock that can never
-    /// fire Empty again.
+    /// The order matters: the death respawns the player, and he must come back with a full
+    /// bar - and a death that is already under way still leaves a running bar instead of a
+    /// player stuck at zero with a clock that can never fire Empty again.
+    ///
+    /// ForceKill, not Kill - the same door the twenty-fruit rule uses. Running out of power
+    /// is a RULE of the game, not a blow, so no protection may refuse it. With Kill the fairy
+    /// (or the second of grace after losing an animal) made PlayerDeath say no, and the
+    /// refill above then turned an empty bar into a free full one.
     /// </summary>
     private void HandleEmpty()
     {
@@ -187,6 +191,6 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         model.Reset(stats.StartPower);
 
         if (death != null)
-            death.Kill();
+            death.ForceKill();
     }
 }

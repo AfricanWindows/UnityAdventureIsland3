@@ -6,7 +6,7 @@ namespace Game.Core
 {
     /// <summary>
     /// Reuses objects instead of creating and destroying them, which is what keeps the
-    /// frame rate flat while Mario holds the fire button: Instantiate/Destroy allocate,
+    /// frame rate flat while the player holds the fire button: Instantiate/Destroy allocate,
     /// and allocations are what the garbage collector eventually stops the game to clean.
     ///
     /// It is a PLAIN C# class, not a MonoBehaviour: pooling is bookkeeping, not something

@@ -244,6 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoppingEnemy
   health: 1
+  weaponProof: 0
   reviveAtStartPosition: 1
   minPause: 1
   maxPause: 5
@@ -309,3 +310,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimatorView
   attackTrigger: 
   groundedParameter: IsGrounded
+  hidingParameter: 

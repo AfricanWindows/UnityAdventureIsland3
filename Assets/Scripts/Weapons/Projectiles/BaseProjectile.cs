@@ -189,7 +189,12 @@ namespace Game.Projectiles
             if (!other.TryGetComponent(out target))
                 return false;
 
-            target.TakeDamage(Stats.Damage);
+            // Bounced off - the ghost, or an axe against a stone. That ends even a piercing
+            // flight: piercing means passing through what the shot HURT, not through armour.
+            // Despawn is safe to call twice, so the caller's own Despawn is then a no-op.
+            if (!target.TakeDamage(Stats.Damage))
+                Despawn();
+
             return true;
         }
 

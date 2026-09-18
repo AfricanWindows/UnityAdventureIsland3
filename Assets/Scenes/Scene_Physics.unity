@@ -4248,6 +4248,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2659343063416116030, guid: 9f7dc140bd1cb1849944f6c4d9e0069c, type: 3}
+      propertyPath: range
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8240637340748994525, guid: 9f7dc140bd1cb1849944f6c4d9e0069c, type: 3}
       propertyPath: m_Name
       value: Prefab_Frog

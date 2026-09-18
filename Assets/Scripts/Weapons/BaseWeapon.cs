@@ -10,7 +10,7 @@ namespace Game.Weapons
     /// is written HERE. A weapon subclass supplies only the shooting.
     ///
     /// Because the "am I unlocked" gate lives in the base class, no weapon can forget it:
-    /// the rule that Mario must find the power-up first cannot be skipped by a subclass
+    /// the rule that the player must find the power-up first cannot be skipped by a subclass
     /// that simply does not implement the check.
     ///
     /// It implements IUseableWeapon, so the weapon slot and the pick-ups work with any weapon
@@ -35,7 +35,7 @@ namespace Game.Weapons
         [Tooltip("Seconds between two shots")]
         [SerializeField] private float cooldown = 0.25f;
 
-        [Tooltip("Tick only for weapons Mario owns from the start")]
+        [Tooltip("Tick only for weapons the player owns from the start")]
         [SerializeField] private bool unlockedFromStart;
 
         // NegativeInfinity, not 0: at Time.time == 0 a zero would still be "one cooldown

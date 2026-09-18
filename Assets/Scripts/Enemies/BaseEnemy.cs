@@ -19,6 +19,11 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
 {
     [SerializeField] private int health = 1;
 
+    [Tooltip("No weapon can hurt it: the axe, the boomerang and the animals' attacks all " +
+             "bounce off. The fairy still destroys it, because her touch does not come " +
+             "through weapon damage at all. Tick it for the ghost.")]
+    [SerializeField] private bool weaponProof;
+
     [Tooltip("Where it comes back after being beaten. OFF = where it fell, which is what the " +
              "assignment asks for. ON = where the level put it - tick this for anything that " +
              "MOVES, or every respawn leaves it a few steps further from home until it has " +
@@ -56,15 +61,27 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     /// <summary>Subclass setup. Cache references here, never in Update.</summary>
     protected virtual void OnAwake() { }
 
-    public void TakeDamage(int amount)
+    /// <summary>
+    /// A weapon's blow. Health is the protection, and Weapon Proof is protection nothing gets
+    /// through - the ghost. A checkbox rather than a ghost-only override, so any enemy can be
+    /// armoured the same way without a new class.
+    /// </summary>
+    /// <returns>False when the blow bounced off, so a piercing boomerang stops here instead
+    /// of flying on through something it never hurt.</returns>
+    public bool TakeDamage(int amount)
     {
         if (amount <= 0 || defeated)
-            return;
+            return false;
+
+        if (weaponProof)
+            return false;
 
         health -= amount;
 
         if (health <= 0)
             Die();
+
+        return true;
     }
 
     /// <summary>

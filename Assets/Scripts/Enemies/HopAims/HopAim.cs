@@ -18,4 +18,13 @@ public abstract class HopAim : MonoBehaviour
     /// land somewhere precise can ask how long the jump will stay in the air.
     /// </summary>
     public abstract float GetHorizontalSpeed(JumpBehaviour jump);
+
+    /// <summary>
+    /// Which way the enemy looks while it stands waiting for the next hop: +1 right, -1 left,
+    /// 0 = no opinion right now (keep looking where it was).
+    ///
+    /// It belongs to the aim because it is the same question asked early: the snake looks the
+    /// way it will hop, the frog watches the player it is about to jump at.
+    /// </summary>
+    public abstract float GetFacing();
 }
