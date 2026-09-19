@@ -77,42 +77,13 @@ namespace Game.Core.DI
             // Input: the abstraction is IInputSource, today's implementation is a keyboard.
             _container.Register<IInputSource>(new KeyboardInputSource());
 
-            // The health label lives in the UI canvas, so it is a scene object rather than
-            // something we can "new". Resolving it HERE is what lets PlayerHealthController
-            // stop calling FindFirstObjectByType - a Service Locator hidden in a controller.
-            PlayerHealthView view = healthView;
-
-            if (view == null)
-                view = FindAnyObjectByType<PlayerHealthView>(FindObjectsInactive.Include);
-
-            if (view != null)
-                _container.Register<IPlayerHealthView>(view);
-            else
-                Debug.LogWarning("[DI] No PlayerHealthView in the scene - health will not be displayed.", this);
-
-            // Same story for the power bar: it lives in the UI canvas, so it cannot be
-            // dragged onto a player prefab. The composition root resolves it once.
-            PowerBarView bar = powerBar;
-
-            if (bar == null)
-                bar = FindAnyObjectByType<PowerBarView>(FindObjectsInactive.Include);
-
-            if (bar != null)
-                _container.Register<IPowerView>(bar);
-            else
-                Debug.LogWarning("[DI] No PowerBarView in the scene - the power bar will not be drawn.", this);
-
-            // The fruit label, same story as the two above: a UI object the player
-            // prefab cannot hold a reference to.
-            FruitCounterView fruits = fruitCounter;
-
-            if (fruits == null)
-                fruits = FindAnyObjectByType<FruitCounterView>(FindObjectsInactive.Include);
-
-            if (fruits != null)
-                _container.Register<IFruitCounterView>(fruits);
-            else
-                Debug.LogWarning("[DI] No FruitCounterView in the scene - the fruit count will not be shown.", this);
+            // The three HUD views live in the UI canvas: scene objects that no player prefab
+            // can hold a reference to, so the composition root resolves them once. Doing it
+            // HERE is what lets the controllers stop calling FindFirstObjectByType - a Service
+            // Locator hidden in a controller.
+            RegisterSceneService<IPlayerHealthView, PlayerHealthView>(healthView, "the lives will not be shown");
+            RegisterSceneService<IPowerView, PowerBarView>(powerBar, "the power bar will not be drawn");
+            RegisterSceneService<IFruitCounterView, FruitCounterView>(fruitCounter, "the fruit count will not be shown");
 
             // Who the player is. Found ONCE, by tag, instead of by every class that
             // wants him calling FindGameObjectWithTag in its own Update.
@@ -132,15 +103,7 @@ namespace Game.Core.DI
             RegisterPool<AnimalShotPoolManager, AnimalShot>(animalShotPool, "the shooting animals");
 
             // The game's course: which level runs, and what a restart means.
-            LevelFlowController flow = levelFlow;
-
-            if (flow == null)
-                flow = FindAnyObjectByType<LevelFlowController>(FindObjectsInactive.Include);
-
-            if (flow != null)
-                _container.Register<ILevelFlow>(flow);
-            else
-                Debug.LogWarning("[DI] No LevelFlowController in the scene - levels will not switch.", this);
+            RegisterSceneService<ILevelFlow, LevelFlowController>(levelFlow, "levels will not switch");
 
             if (verbose)
                 Debug.Log("[DI] Services registered.", this);
@@ -168,27 +131,49 @@ namespace Game.Core.DI
             where TManager : ProjectilePoolManager<TProjectile>
             where TProjectile : BaseProjectile
         {
-            TManager pool = assigned;
-
-            // Include inactive: a pool parked on a switched-off object still has to be
-            // registered, or the first weapon to fire would find nothing.
-            if (pool == null)
-                pool = FindAnyObjectByType<TManager>(FindObjectsInactive.Include);
-
-            if (pool == null)
-            {
-                Debug.LogWarning("[DI] No " + typeof(TManager).Name + " in the scene - " +
-                                 users + " will not fire.", this);
-                return;
-            }
-
             // Registered as the INTERFACE. A weapon therefore never learns which manager,
             // or which object in the scene, its projectiles came from.
-            _container.Register<IObjectPool<TProjectile>>(pool);
+            TManager pool = RegisterSceneService<IObjectPool<TProjectile>, TManager>(
+                assigned, users + " will not fire");
 
-            if (verbose)
+            if (pool != null && verbose)
                 Debug.Log("[DI] " + typeof(TProjectile).Name + " pool registered from '" +
                           pool.name + "'.", this);
+        }
+
+        /// <summary>
+        /// Publishes one scene object under the interface its users ask for: the one
+        /// dragged into the Inspector, or else the first one found in the scene.
+        ///
+        /// GENERIC over both sides of the registration - what the object IS (TComponent,
+        /// needed for Unity's search) and what it is published AS (TService, the only face
+        /// anyone else sees). The constraint TComponent : TService makes a wrong pairing a
+        /// COMPILE error instead of a runtime one. The HUD views, the level flow and every
+        /// pool go through here, so "find, warn, register" is written once.
+        ///
+        /// Include inactive: an object parked on a switched-off parent still has to be
+        /// registered, or the first class to ask would find nothing.
+        /// </summary>
+        /// <param name="assigned">The Inspector reference, or null to search the scene.</param>
+        /// <param name="whatBreaks">What goes missing without it, for the warning.</param>
+        /// <returns>What was registered, or null when there was nothing to register.</returns>
+        private TComponent RegisterSceneService<TService, TComponent>(TComponent assigned, string whatBreaks)
+            where TService : class
+            where TComponent : Component, TService
+        {
+            TComponent found = assigned != null
+                ? assigned
+                : FindAnyObjectByType<TComponent>(FindObjectsInactive.Include);
+
+            if (found == null)
+            {
+                Debug.LogWarning("[DI] No " + typeof(TComponent).Name + " in the scene - " +
+                                 whatBreaks + ".", this);
+                return null;
+            }
+
+            _container.Register<TService>(found);
+            return found;
         }
 
         /// <summary>
