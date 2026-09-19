@@ -1,41 +1,29 @@
 using Game.Core;
-using Game.Core.DI;
 using Game.Projectiles;
 using UnityEngine;
 
 namespace Game.Weapons
 {
     /// <summary>
-    /// The boomerang launcher - a BaseWeapon subclass that only decides WHEN a boomerang
-    /// may leave the hand and where it starts. It does not build, move or destroy
-    /// boomerangs; it borrows one and the boomerang brings itself back.
+    /// The boomerang launcher. It only decides WHEN a boomerang may leave the hand; it does
+    /// not build, move or destroy boomerangs - it borrows one, and the boomerang brings
+    /// itself back.
     ///
     /// "One round, no re-throw until it is home" is enforced two ways that agree: the pool
     /// holds exactly one instance (empty pool = no throw), and CanFire also refuses while
     /// the borrowed boomerang still reports IsFlying.
     ///
-    /// Like the axe, it does not go looking for its pool. GameInstaller registers the pool
-    /// once as IObjectPool&lt;BoomerangProjectile&gt; and hands it over before Awake, so the
-    /// pool object can live anywhere in the scene and the player prefab needs no reference
-    /// to it - a prefab cannot hold one anyway (Dependency Inversion).
-    ///
-    /// It does not inherit DirectionalWeapon: a boomerang does not fly straight ahead and
-    /// forget about its owner, it comes back to him. Sharing the base class would mean
-    /// weakening it for the one weapon that does not fit.
+    /// The pool, the fire point and the facing are ProjectileWeapon's, shared with the axe.
+    /// What is the boomerang's own is the launch: it is thrown with the fire point as its
+    /// OWNER, because the fire point rides on the player and the return leg must follow him.
+    /// That is why it is not a DirectionalWeapon - a straight shot forgets its owner.
     /// </summary>
-    public sealed class BoomerangWeapon : BaseWeapon, IInjectable
+    public sealed class BoomerangWeapon : ProjectileWeapon<BoomerangProjectile>
     {
         [Tooltip("Optional override. Normally EMPTY: the pool arrives through injection, " +
                  "so the pool object can live anywhere in the scene.")]
         [SerializeField] private BoomerangPoolManager boomerangPool;
 
-        [Tooltip("Where a boomerang appears. Empty = this object's own position.")]
-        [SerializeField] private Transform firePoint;
-
-        private IObjectPool<BoomerangProjectile> _pool;
-        private IObjectPool<BoomerangProjectile> _injectedPool;
-        private Transform _firePoint;
-        private IFacing _facing;
         private BoomerangProjectile _inFlight;
 
         /// <summary>Unlocked, off cooldown, AND the one boomerang is already home.</summary>
@@ -51,45 +39,17 @@ namespace Game.Weapons
             get { return _inFlight != null && _inFlight.IsFlying; }
         }
 
-        /// <summary>Called by GameInstaller before Awake. Resolved once, cached, done.</summary>
-        public void Inject(IServiceContainer container)
-        {
-            if (container != null)
-                container.TryResolve(out _injectedPool);
-        }
-
-        protected override void OnAwake()
+        protected override IObjectPool<BoomerangProjectile> ResolveInspectorPool()
         {
             // Compared while the field still has its concrete Unity type, so a manager
             // deleted from the scene reads as a real null and the injected pool takes over.
-            _pool = boomerangPool != null ? boomerangPool : _injectedPool;
-
-            _firePoint = firePoint != null ? firePoint : transform;
-
-            // Asks the owner which way he looks - never reads his scale directly.
-            _facing = GetComponentInParent<IFacing>();
-
-            if (_pool == null)
-                Debug.LogError("[Boomerang] has no pool. Put a BoomerangProjectile pool " +
-                               "object in the scene, or assign one on this weapon.", this);
+            return boomerangPool != null ? boomerangPool : null;
         }
 
-        protected override bool FireInternal()
+        protected override void Launch(BoomerangProjectile boomerang, Transform from, float facing)
         {
-            if (_pool == null || IsBoomerangOut)
-                return false;
-
-            BoomerangProjectile boomerang = _pool.Get();
-
-            // Empty pool = the one boomerang is still in the air: the rule doing its job.
-            if (boomerang == null)
-                return false;
-
             _inFlight = boomerang;
-            float facing = _facing != null ? _facing.FacingDirection : 1f;
-            // The fire point rides on the player, so the return leg follows him.
-            boomerang.Throw(_firePoint.position, _firePoint, facing);
-            return true;
+            boomerang.Throw(from.position, from, facing);
         }
     }
 }

@@ -1,113 +1,30 @@
-using Game.Core;
-using Game.Core.DI;
 using Game.Projectiles;
 using UnityEngine;
 
 namespace Game.Weapons
 {
     /// <summary>
-    /// Every weapon that throws something the way its owner is facing: the axe today, the
-    /// hammer from the assignment tomorrow.
+    /// Every weapon that throws something straight the way its owner is facing and forgets
+    /// about it: the axe, and the red and blue animals' shots.
     ///
-    /// It exists because two thrown weapons had become identical - the same thirty-five
-    /// lines twice, differing in a type name, an enum value and a log string. That is the
-    /// same duplication already removed from the builders, the factories and the pool
-    /// managers; it had simply grown back one layer higher.
-    ///
-    /// WHERE THE POOL COMES FROM is the interesting part. A pool is a thing that lives in
-    /// the SCENE - one object, shared, parked at the root so it never moves. A weapon
-    /// lives on the PLAYER PREFAB. A prefab cannot hold a reference to a scene object, so
-    /// wiring the two by hand means an override on the player's scene instance, which
-    /// breaks the moment the prefab is re-used.
-    ///
-    /// So the pool ARRIVES instead: GameInstaller registers it once as IObjectPool&lt;T&gt;
-    /// and hands it over before Awake. The weapon never searches for it, never names the
-    /// manager that owns it, and does not care whether the pool sits on its own object, in
-    /// a level, or somewhere else entirely (Dependency Inversion). This is exactly how
-    /// ShooterEnemy has always got its shots - one mechanism for the whole game, rather
-    /// than one for enemies and another for the player.
-    ///
-    /// The Inspector field is kept as an OVERRIDE for the case where a weapon must use one
-    /// specific pool. Empty is the normal state.
+    /// Everything about getting a projectile - the pool, the fire point, the facing - is
+    /// ProjectileWeapon's. This class only fills in how a straight shot leaves, and leaves
+    /// one gap of its own: OnBeforeLaunch, where a weapon may dress the projectile first.
     /// </summary>
     /// <typeparam name="TProjectile">What this weapon throws.</typeparam>
-    public abstract class DirectionalWeapon<TProjectile> : BaseWeapon, IInjectable
+    public abstract class DirectionalWeapon<TProjectile> : ProjectileWeapon<TProjectile>
         where TProjectile : DirectionalProjectile
     {
-        [Tooltip("Where the projectile appears. Empty = this object's own position.")]
-        [SerializeField] private Transform firePoint;
-
-        private IObjectPool<TProjectile> _pool;
-        private IObjectPool<TProjectile> _injectedPool;
-        private Transform _firePoint;
-        private IFacing _facing;
-
-        /// <summary>
-        /// The pool assigned by hand in the Inspector, or null when there is none - which
-        /// is the normal case. Unity cannot draw a slot for a generic type, so only the
-        /// closed subclass can hold that field.
-        /// </summary>
-        protected abstract IObjectPool<TProjectile> ResolveInspectorPool();
-
-        /// <summary>
-        /// Called by GameInstaller before Awake. The weapon asks for the one thing it
-        /// needs and keeps neither the container nor any knowledge of who registered it.
-        /// </summary>
-        public void Inject(IServiceContainer container)
+        protected sealed override void Launch(TProjectile projectile, Transform from, float facing)
         {
-            if (container != null)
-                container.TryResolve(out _injectedPool);
-        }
-
-        // Sealed: the setup below must happen for every thrown weapon, and a subclass that
-        // overrode it and forgot to call base would be a weapon that never fires.
-        protected sealed override void OnAwake()
-        {
-            // The hand-assigned pool wins, so a weapon CAN be pinned to a specific one.
-            IObjectPool<TProjectile> assigned = ResolveInspectorPool();
-            _pool = assigned != null ? assigned : _injectedPool;
-
-            _firePoint = firePoint != null ? firePoint : transform;
-
-            // Asks the owner which way he looks - it never reads his scale itself.
-            _facing = GetComponentInParent<IFacing>();
-
-            if (_pool == null)
-                Debug.LogError(LogPrefix + " has no pool. Put a " + typeof(TProjectile).Name +
-                               " pool object in the scene, or assign one on this weapon.", this);
-
-            OnWeaponReady();
-        }
-
-        /// <summary>Subclass setup, if it needs any. Most do not.</summary>
-        protected virtual void OnWeaponReady() { }
-
-        protected sealed override bool FireInternal()
-        {
-            if (_pool == null)
-                return false;
-
-            TProjectile projectile = _pool.Get();
-
-            // Empty pool = the ammo limit doing its job: nothing is fired until one of the
-            // projectiles in the air comes back.
-            if (projectile == null)
-                return false;
-
-            // The one step a thrown weapon may add: dress the projectile before it leaves.
-            // Fire() itself stays sealed, so the ORDER - take from the pool, check it, launch
-            // it - is the same for every weapon in the game and cannot be rearranged by a
-            // subclass; only this one gap is open (Template Method).
             OnBeforeLaunch(projectile);
-
-            projectile.Launch(_firePoint.position, _facing != null ? _facing.FacingDirection : 1f);
-            return true;
+            projectile.Launch(from.position, facing);
         }
 
         /// <summary>
-        /// Last chance to change the projectile that is about to fly. Empty for the axe and
-        /// the boomerang, which look the same whoever throws them; the animals use it to give
-        /// the shot their own sprite, which is what lets two animals share one pool.
+        /// Last chance to change the projectile that is about to fly. Empty for the axe,
+        /// which looks the same whoever throws it; the animals use it to give the shot their
+        /// own sprite, which is what lets two animals share one pool.
         /// </summary>
         protected virtual void OnBeforeLaunch(TProjectile projectile) { }
     }

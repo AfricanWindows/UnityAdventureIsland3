@@ -15,7 +15,7 @@ namespace Game.Weapons
     /// the player's weapon slot through the shared EquipWeaponPowerUp, and the slot takes
     /// it away when he dies.
     ///
-    /// Everything about throwing lives in DirectionalWeapon. What is left here is an
+    /// Everything about throwing lives in DirectionalWeapon and ProjectileWeapon. What is left here is an
     /// optional Inspector pool - normally empty, because the pool arrives from GameInstaller.
     /// </summary>
     public sealed class AxeWeapon : DirectionalWeapon<ProjectileAxe>
