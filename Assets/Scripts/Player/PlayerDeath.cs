@@ -29,7 +29,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
              "start of the level. Match it to the clip.")]
     [SerializeField] private float deathAnimationSeconds = 1f;
 
-    private Vector3 startPositon;
+    private Vector3 startPosition;
 
     private IInvincible[] invincibilitySources;
     private Rigidbody2D body;
@@ -54,7 +54,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
 
     private void Awake()
     {
-        startPositon = transform.position;
+        startPosition = transform.position;
         body = GetComponent<Rigidbody2D>();
 
         // Includes this component. That is deliberate: it is what makes Kill() refuse a
@@ -87,7 +87,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     /// </summary>
     public void OnLevelStarted(Vector3 spawnPosition)
     {
-        startPositon = spawnPosition;
+        startPosition = spawnPosition;
         Respawn();
     }
 
@@ -100,7 +100,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     /// </summary>
     public void Respawn()
     {
-        transform.position = startPositon;
+        transform.position = startPosition;
 
         if (body != null)
             body.linearVelocity = Vector2.zero;
