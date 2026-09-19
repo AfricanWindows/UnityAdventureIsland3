@@ -19,7 +19,7 @@ using UnityEngine;
 /// handed in by GameInstaller (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife, IPlayerDeathHandler
+public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife, IPlayerDeathHandler, IOutOfLivesNotifier
 {
     [Tooltip("Most lives the player can hold. Keep it ABOVE Start Health: an extra life for " +
              "twenty fruit that does not fit under the ceiling is lost.")]
@@ -34,9 +34,8 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
     private IPlayerHealthModel model;
     private IPlayerHealthView view;
 
-    /// <summary>Raised when the player runs out of health. Static, so the Game Over screen
-    /// does not need a reference to a player that does not exist yet.</summary>
-    public static event Action OnPlayerHealthEmpty;
+    /// <summary>Raised when the last life is gone. The Game Over screen listens.</summary>
+    public event Action OutOfLives;
 
     /// <summary>
     /// Called by GameInstaller before Awake. An explicit field on this object still wins:
@@ -120,7 +119,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
 
     private void HandleHealthEmpty()
     {
-        if (OnPlayerHealthEmpty != null)
-            OnPlayerHealthEmpty();
+        if (OutOfLives != null)
+            OutOfLives();
     }
 }
