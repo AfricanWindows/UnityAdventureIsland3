@@ -1,31 +1,8 @@
-using TMPro;
-using UnityEngine;
-
 /// <summary>
-/// VIEW of the health feature (exercise item 2).
-///
-/// It only draws. It holds no reference to the model, contains no health rule, and
-/// never decides when the value changes - it is told what to show.
+/// VIEW of the lives counter. Everything it does is TextCounterView's; this class only
+/// gives it the lives label's default text and its own type for the DI container.
 /// </summary>
-public class PlayerHealthView : MonoBehaviour, IPlayerHealthView
+public class PlayerHealthView : TextCounterView, IPlayerHealthView
 {
-    [Tooltip("{0} is the lives left, {1} is the most the player can hold. Leave {1} out to " +
-             "show only the lives.")]
-    [SerializeField] private string format = "Lives: {0}";
-
-    private TextMeshProUGUI label;
-
-    private void Awake()
-    {
-        label = GetComponent<TextMeshProUGUI>();
-
-        if (label == null)
-            Debug.LogError("PlayerHealthView: no TextMeshProUGUI on " + gameObject.name, this);
-    }
-
-    public void Render(int current, int max)
-    {
-        if (label != null)
-            label.text = string.Format(format, current, max);
-    }
+    protected override string DefaultFormat { get { return "Lives: {0}"; } }
 }
