@@ -151,6 +151,26 @@ namespace Game.Core
         }
 
         /// <summary>
+        /// Takes back every item that is still out. A new game must not inherit a fireball
+        /// that was in the air when the old one ended.
+        ///
+        /// Copied first because Release removes from _active, and a collection cannot be
+        /// changed while it is being walked. Only a restart calls this, so the one small
+        /// array is not worth avoiding.
+        /// </summary>
+        public void ReleaseAll()
+        {
+            if (_active.Count == 0)
+                return;
+
+            T[] stillOut = new T[_active.Count];
+            _active.CopyTo(stillOut);
+
+            for (int i = 0; i < stillOut.Length; i++)
+                Release(stillOut[i]);
+        }
+
+        /// <summary>
         /// Next living item from the queue, skipping any that Unity destroyed behind our
         /// back (a scene change wipes the objects but not this list).
         /// </summary>

@@ -24,7 +24,7 @@ namespace Game.Weapons
     /// see: Get and Release, no prewarm counts, no growth policy (Interface Segregation).
     /// </summary>
     /// <typeparam name="TProjectile">What this pool hands out.</typeparam>
-    public abstract class ProjectilePoolManager<TProjectile> : MonoBehaviour, IObjectPool<TProjectile>
+    public abstract class ProjectilePoolManager<TProjectile> : MonoBehaviour, IObjectPool<TProjectile>, IResettable
         where TProjectile : BaseProjectile
     {
         [Header("What to pool")]
@@ -179,6 +179,17 @@ namespace Game.Weapons
         {
             if (_pool != null)
                 _pool.Release(item);
+        }
+
+        /// <summary>
+        /// A new game: every projectile still in the air goes back to the pool, so no shot
+        /// fired in the old game can hit the player in the new one. The restart finds this
+        /// through IResettable like everything else - no special case in the level flow.
+        /// </summary>
+        public void ResetToStart()
+        {
+            if (_pool != null)
+                _pool.ReleaseAll();
         }
 
         /// <summary>Overridable so a weapon-specific message can replace the generic one.</summary>
