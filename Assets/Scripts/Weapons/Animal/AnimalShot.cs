@@ -25,8 +25,6 @@ namespace Game.Projectiles
         // search happens once per projectile in the pool, not once per shot.
         private SpriteRenderer _view;
 
-        protected override string LogPrefix { get { return "[AnimalShot]"; } }
-
         /// <summary>
         /// Whose shot this is, decided by the weapon that fired it. A null sprite leaves the
         /// prefab's own image alone, so a weapon that does not care simply says nothing.

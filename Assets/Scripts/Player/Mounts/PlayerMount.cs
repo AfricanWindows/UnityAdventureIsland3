@@ -34,9 +34,6 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
              "on this object.")]
     [SerializeField] private CircleCollider2D bodyCollider;
 
-    [Tooltip("Log every mount and every loss.")]
-    [SerializeField] private bool verbose = true;
-
     private AnimalMount current;
 
     // What the player looks like and how big he is on foot. Captured once, so dismounting
@@ -123,12 +120,7 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
             return;
 
         if (ReferenceEquals(animal, current))
-        {
-            if (verbose)
-                Debug.Log("[Mount] Already riding " + animal.GetType().Name);
-
             return;
-        }
 
         // The old one is let go first, so its attack can never stay armed under the new one.
         if (current != null)
@@ -140,18 +132,12 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
         if (current.Weapon != null)
             current.Weapon.Equip();
-
-        if (verbose)
-            Debug.Log("[Mount] Riding " + animal.GetType().Name);
     }
 
     public void Dismount()
     {
         if (current == null)
             return;
-
-        if (verbose)
-            Debug.Log("[Mount] Lost " + current.GetType().Name);
 
         ReleaseCurrent();
 

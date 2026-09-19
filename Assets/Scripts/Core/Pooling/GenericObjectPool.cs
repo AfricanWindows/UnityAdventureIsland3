@@ -37,13 +37,6 @@ namespace Game.Core
 
         private int _totalCreated;
 
-        /// <summary>Raised after an item was handed out. Lets a manager log or count
-        /// without the pool itself knowing what an "axe" is.</summary>
-        public event Action<T> ItemTaken;
-
-        /// <summary>Raised after an item really went back (a double release raises nothing).</summary>
-        public event Action<T> ItemReleased;
-
         public int CountInactive { get { return _inactive.Count; } }
 
         /// <param name="factory">Where new items come from. The only dependency.</param>
@@ -118,9 +111,6 @@ namespace Game.Core
             item.gameObject.SetActive(true);
             item.OnSpawned();
 
-            if (ItemTaken != null)
-                ItemTaken(item);
-
             return item;
         }
 
@@ -145,9 +135,6 @@ namespace Game.Core
             item.OnDespawned();
             item.gameObject.SetActive(false);
             _inactive.Enqueue(item);
-
-            if (ItemReleased != null)
-                ItemReleased(item);
         }
 
         /// <summary>

@@ -30,8 +30,6 @@ public sealed class ProjectileAxe : DirectionalProjectile
              "described in one place instead of two.")]
     [SerializeField] private float fallGravity = 1.5f;
 
-    protected override string LogPrefix { get { return "[Axe]"; } }
-
     /// <summary>
     /// Set once, at launch, and physics draws the parabola from there - deliberately no
     /// Update. Constant forward speed plus constant downward acceleration IS y = -k * x^2;

@@ -23,16 +23,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Destructible : MonoBehaviour, IForceKillable, IResettable
 {
-    [Tooltip("Log when it is broken. Handy while testing the fairy, noisy afterwards.")]
-    [SerializeField] private bool verbose;
-
     public void ForceKill()
     {
         if (!gameObject.activeSelf)
             return;
-
-        if (verbose)
-            Debug.Log("[Destructible] " + name + " was destroyed.", this);
 
         gameObject.SetActive(false);
     }

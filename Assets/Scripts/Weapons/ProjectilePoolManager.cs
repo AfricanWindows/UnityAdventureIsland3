@@ -13,7 +13,7 @@ namespace Game.Weapons
     ///
     /// This one class replaced a hand-written pool manager per weapon, which were the
     /// same 110 lines twice over. Everything that used to be duplicated - the null checks,
-    /// the container creation, the event hook-up, the forwarding - is written here once.
+    /// the container creation, the forwarding - is written here once.
     ///
     /// Note what is NOT here: no queue, no reuse logic, no Instantiate. All of that lives
     /// in GenericObjectPool, a plain C# class that knows nothing about projectiles. A
@@ -54,10 +54,6 @@ namespace Game.Weapons
         [Tooltip("May the pool create more than it prewarmed, up to Max Size?")]
         [SerializeField] private bool allowGrowth;
 
-        [Header("Diagnostics")]
-        [Tooltip("Log every take and every return. Handy while balancing, noisy otherwise.")]
-        [SerializeField] private bool logTraffic = true;
-
         private GenericObjectPool<TProjectile> _pool;
         private string _logPrefix;
 
@@ -95,13 +91,6 @@ namespace Game.Weapons
             ConfiguredProjectileFactory<TProjectile> factory = new ConfiguredProjectileFactory<TProjectile>(director, config);
 
             _pool = new GenericObjectPool<TProjectile>(factory, prewarmCount, maxSize, allowGrowth);
-
-            // Logged from here, not from inside the generic pool: the pool must stay
-            // projectile-agnostic, but the console messages the exercise asks for are not.
-            _pool.ItemTaken += OnItemTaken;
-            _pool.ItemReleased += OnItemReleased;
-
-            Debug.Log(LogPrefix + " pool prewarmed with " + _pool.CountInactive + " item(s)", this);
 
             OnPoolReady();
         }
@@ -156,15 +145,6 @@ namespace Game.Weapons
             return holder.transform;
         }
 
-        private void OnDestroy()
-        {
-            if (_pool == null)
-                return;
-
-            _pool.ItemTaken -= OnItemTaken;
-            _pool.ItemReleased -= OnItemReleased;
-        }
-
         /// <summary>An active item, or null when the pool is empty and may not grow.</summary>
         public TProjectile Get()
         {
@@ -190,19 +170,6 @@ namespace Game.Weapons
         {
             if (_pool != null)
                 _pool.ReleaseAll();
-        }
-
-        /// <summary>Overridable so a weapon-specific message can replace the generic one.</summary>
-        protected virtual void OnItemTaken(TProjectile item)
-        {
-            if (logTraffic)
-                Debug.Log(LogPrefix + " taken from pool (inactive left: " + CountInactive + ")");
-        }
-
-        protected virtual void OnItemReleased(TProjectile item)
-        {
-            if (logTraffic)
-                Debug.Log(LogPrefix + " returned to pool (inactive now: " + CountInactive + ")");
         }
     }
 }

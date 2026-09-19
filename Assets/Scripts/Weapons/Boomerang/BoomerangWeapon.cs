@@ -81,12 +81,9 @@ namespace Game.Weapons
 
             BoomerangProjectile boomerang = _pool.Get();
 
+            // Empty pool = the one boomerang is still in the air: the rule doing its job.
             if (boomerang == null)
-            {
-                // Not a warning: with a pool of one this is the rule doing its job.
-                Debug.Log("[Boomerang] Still in the air - wait for it to come back");
                 return false;
-            }
 
             _inFlight = boomerang;
             float facing = _facing != null ? _facing.FacingDirection : 1f;

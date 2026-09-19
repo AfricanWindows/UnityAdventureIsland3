@@ -33,8 +33,6 @@ namespace Game.Projectiles
         [Tooltip("Sprite spin while flying, degrees per second")]
         [SerializeField] private float spinDegreesPerSecond = 720f;
 
-        protected override string LogPrefix { get { return "[Boomerang]"; } }
-
         private Transform _owner;
         private float _facing = 1f;
         private Vector2 _start;
@@ -102,10 +100,7 @@ namespace Game.Projectiles
             // Back home. Despawn here too, in case the base lifetime timer drifts by a
             // frame - Despawn() is guarded, so calling it twice is harmless.
             if (t >= 1f)
-            {
-                Debug.Log("[Boomerang] Back to the player - returned to pool");
                 Despawn();
-            }
         }
 
         /// <summary>

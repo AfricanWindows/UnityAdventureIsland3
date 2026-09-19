@@ -27,9 +27,6 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     [Tooltip("Where to look for weapons. Empty = this object's parent (the player).")]
     [SerializeField] private Transform weaponsRoot;
 
-    [Tooltip("Log every swap. Handy while building levels, noise in a finished game.")]
-    [SerializeField] private bool verbose = true;
-
     // The weapon in hand, or null for empty hands. Held as the interface, and compared
     // with a plain null check: these components live on the player and are never
     // destroyed while he exists, so Unity's "destroyed object pretends to be null" trick
@@ -73,13 +70,9 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
         if (IsAttackBlocked())
             return;
 
+        // No weapon and no animal: the attack button does nothing, as the assignment says.
         if (_current == null)
-        {
-            if (verbose)
-                Debug.Log("[Weapons] Nothing to throw - no weapon picked up yet");
-
             return;
-        }
 
         // Whether the shot is allowed - cooldown, a boomerang still in the air - is the
         // weapon's own business, answered behind Attack() (see BaseWeapon).
@@ -101,26 +94,13 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
         // restart that hands back the weapon already held, must not un-equip and re-equip
         // the same object - a weapon is entitled to treat UnEquip as "you lost me".
         if (ReferenceEquals(weapon, _current))
-        {
-            if (verbose)
-                Debug.Log("[Weapons] Already carrying " + Name(weapon));
-
             return;
-        }
 
         if (_current != null)
-        {
             _current.UnEquip();
-
-            if (verbose)
-                Debug.Log("[Weapons] Dropped " + Name(_current));
-        }
 
         _current = weapon;
         _current.Equip();
-
-        if (verbose)
-            Debug.Log("[Weapons] Now carrying " + Name(_current));
     }
 
     /// <summary>Empty hands - what dying costs him.</summary>
@@ -130,10 +110,6 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
             return;
 
         _current.UnEquip();
-
-        if (verbose)
-            Debug.Log("[Weapons] Lost " + Name(_current));
-
         _current = null;
     }
 

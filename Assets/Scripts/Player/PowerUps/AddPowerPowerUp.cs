@@ -32,10 +32,7 @@ public class AddPowerPowerUp : IPowerUp
             return;
         }
 
-        int added = power.AddPower(amount);
-
-        // Says how much actually fitted, which is not always what was asked: a carrot at
-        // 14 of 15 segments adds one.
-        Debug.Log("[Fruit] +" + added + " power");
+        // The bar clamps it: a carrot at 14 of 15 segments adds one.
+        power.AddPower(amount);
     }
 }

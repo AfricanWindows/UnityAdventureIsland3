@@ -31,9 +31,6 @@ public class TouchDestroyer : MonoBehaviour
              "the player ever carries more than one timed effect.")]
     [SerializeField] private TimedPlayerEffect effect;
 
-    [Tooltip("Log every destruction. Handy while testing, noisy afterwards.")]
-    [SerializeField] private bool verbose;
-
     private void Awake()
     {
         if (effect == null)
@@ -88,9 +85,6 @@ public class TouchDestroyer : MonoBehaviour
 
         if (victim == null)
             return;
-
-        if (verbose)
-            Debug.Log("[Fairy] destroyed " + other.name, other);
 
         victim.ForceKill();
     }

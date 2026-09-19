@@ -51,6 +51,5 @@ public class WeaponsLostOnDeath : MonoBehaviour
             return;
 
         _slot.Clear();
-        Debug.Log("[Death] Weapon lost - pick one up again");
     }
 }

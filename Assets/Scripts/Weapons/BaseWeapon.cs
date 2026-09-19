@@ -71,12 +71,6 @@ namespace Game.Weapons
             }
         }
 
-        /// <summary>What the console says when the player fires a weapon he has not found yet.</summary>
-        protected virtual string LockedMessage
-        {
-            get { return LogPrefix + " Locked - pick it up first"; }
-        }
-
         // Private on purpose: a subclass that declared its own Awake would silently replace
         // this one and never get equipped. Subclasses use OnAwake() instead.
         private void Awake()
@@ -96,10 +90,7 @@ namespace Game.Weapons
         public void Attack()
         {
             if (!_isEquipped)
-            {
-                Debug.Log(LockedMessage);
                 return;
-            }
 
             if (!CanFire)
                 return;

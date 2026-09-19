@@ -55,7 +55,6 @@ public class EffectsLostOnDeath : MonoBehaviour
                 continue;
 
             effects[i].Deactivate();
-            Debug.Log("[Death] " + effects[i].GetType().Name + " lost");
         }
     }
 }

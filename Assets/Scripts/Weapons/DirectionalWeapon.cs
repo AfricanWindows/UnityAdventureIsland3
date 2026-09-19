@@ -89,13 +89,10 @@ namespace Game.Weapons
 
             TProjectile projectile = _pool.Get();
 
+            // Empty pool = the ammo limit doing its job: nothing is fired until one of the
+            // projectiles in the air comes back.
             if (projectile == null)
-            {
-                // Not a warning: with a fixed-size pool this is the ammo limit doing its
-                // job. Nothing is fired until one of the projectiles in the air comes back.
-                Debug.Log(LogPrefix + " all projectiles are still in the air");
                 return false;
-            }
 
             // The one step a thrown weapon may add: dress the projectile before it leaves.
             // Fire() itself stays sealed, so the ORDER - take from the pool, check it, launch

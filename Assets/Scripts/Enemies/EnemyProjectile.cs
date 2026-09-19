@@ -12,8 +12,6 @@ using UnityEngine;
 /// </summary>
 public sealed class EnemyProjectile : DirectionalProjectile
 {
-    protected override string LogPrefix { get { return "[EnemyShot]"; } }
-
     /// <summary>
     /// The one inherited step it replaces: enemy fire does not damage IDamageable - that
     /// would let one snake kill another - it kills the player outright, exactly like

@@ -44,9 +44,6 @@ namespace Game.Projectiles
 
         protected Rigidbody2D Body { get { return _body; } }
 
-        /// <summary>Prefix for this projectile's console messages, e.g. "[Axe]".</summary>
-        protected virtual string LogPrefix { get { return "[Projectile]"; } }
-
         /// <summary>Filled in by the builder while the object is being assembled.</summary>
         public void Configure(ProjectileStats stats)
         {
@@ -79,8 +76,6 @@ namespace Game.Projectiles
             OnBeforeFire();                     // hook
             ApplyMovement(GetDirection());      // step
             OnAfterFire();                      // hook
-
-            Debug.Log(LogPrefix + " Fired from " + origin);
         }
         // ==================================================
 
@@ -154,8 +149,6 @@ namespace Game.Projectiles
 
             if (TryHit(other))
             {
-                Debug.Log(LogPrefix + " Hit " + other.name);
-
                 if (!_stats.PiercesEnemies)
                     Despawn();
 
@@ -163,10 +156,7 @@ namespace Game.Projectiles
             }
 
             if (IsBlockedBy(other))
-            {
-                Debug.Log(LogPrefix + " Hit " + other.name);
                 Despawn();
-            }
         }
 
         /// <summary>
@@ -249,7 +239,6 @@ namespace Game.Projectiles
 
         private void ExpireByLifetime()
         {
-            Debug.Log(LogPrefix + " Lifetime expired");
             Despawn();
         }
     }

@@ -57,8 +57,6 @@ public class GameOverController : MonoBehaviour, IResettable
 
         if (freezeWhileShown)
             Time.timeScale = 0f;
-
-        Debug.Log("[GameOver] No lives left");
     }
 
     /// <summary>A new game: no popup, and time running again.</summary>
