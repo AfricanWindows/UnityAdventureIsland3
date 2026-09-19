@@ -7,10 +7,13 @@ using UnityEngine.Serialization;
 /// It owns the CYCLE and nothing else. The three other questions are answered by components
 /// sitting next to it:
 ///   HOW the jump behaves (height, gravity) - JumpBehaviour, the same one the player carries
-///   WHERE the hop goes                     - HopAim: always forward (snake), at the player (frog)
+///   WHERE the hop goes                     - HopAim: a fixed hop left (snake), at the player (frog)
 ///   WHETHER it moves at all                - IActivatable, switched by ActivateNearPlayer
 /// So the snake and the frog are this same class with a different HopAim and different
 /// numbers; neither needs a line of code of its own (Strategy, Open/Closed).
+///
+/// It never turns round. As in the original game every enemy looks and hops LEFT - the way
+/// the art is drawn - so there is no facing to track and nothing to flip.
 ///
 /// It does not walk: the sideways speed is given once, at the push-off, and taken away on
 /// landing, so it really stands still between hops.
@@ -21,7 +24,7 @@ using UnityEngine.Serialization;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(GroundCheck))]
-public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
+public class HoppingEnemy : BaseEnemy, IActivatable
 {
     [Tooltip("Shortest pause on the ground between hops, in seconds, counted from the moment " +
              "it LANDS - so the pause is the same whether the hop was long or short.")]
@@ -48,14 +51,6 @@ public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
     // Landing is "was off the ground, is on it now", and that needs the previous answer.
     private bool wasInAir;
 
-    // Which way it looks. Changed only while it STANDS: in the air it keeps the direction it
-    // took off in, so a frog the player ducks under does not turn round in mid-flight.
-    // Left by default, which is how the art is drawn.
-    private float facing = -1f;
-
-    /// <summary>Read by FacingView. The HopAim decides it - see LookWhereAimed.</summary>
-    public float FacingDirection { get { return facing; } }
-
     protected override void OnAwake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -72,10 +67,6 @@ public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
         if (aim == null)
             Debug.LogError("HoppingEnemy: no HopAim on " + gameObject.name +
                            " - add a Forward Hop Aim or a Player Hop Aim component.", this);
-
-        // Asked once here as well, so a snake that hops to the right is already turned right
-        // on the first frame instead of after its first landing.
-        LookWhereAimed();
     }
 
     /// <summary>
@@ -129,10 +120,6 @@ public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
 
         StandStill();
 
-        // Before the sleep check: an enemy far from the player still looks the right way, so
-        // a snake set to hop right is never seen standing there facing left.
-        LookWhereAimed();
-
         // Asleep: it still stands properly, it just never starts the next hop.
         if (!active)
             return;
@@ -145,18 +132,6 @@ public class HoppingEnemy : BaseEnemy, IActivatable, IFacing
     private float NextPause()
     {
         return Random.Range(minPause, Mathf.Max(minPause, maxPause));
-    }
-
-    /// <summary>Turns the way the aim says. 0 means the aim has no opinion - keep looking.</summary>
-    private void LookWhereAimed()
-    {
-        if (aim == null)
-            return;
-
-        float direction = aim.GetFacing();
-
-        if (direction != 0f)
-            facing = direction > 0f ? 1f : -1f;
     }
 
     /// <summary>Kills the speed left over from the last hop, so it really stands.</summary>

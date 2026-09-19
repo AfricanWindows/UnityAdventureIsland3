@@ -1,18 +1,18 @@
 using UnityEngine;
 
 /// <summary>
-/// VIEW. Mirrors the object so it looks the way its IFacing says - the ghost, the frog and
-/// both snakes turning towards what they act on.
+/// VIEW. Mirrors the object so it looks the way its IFacing says - today the ghost, the one
+/// enemy that turns: it chases the player both ways. The snakes and the frog always face left,
+/// as in the original game, so they carry no IFacing and no FacingView.
 ///
-/// It decides nothing. Which way to look is the enemy's own rule - the ghost looks at the
-/// player, the snake looks where it hops or shoots - and each enemy answers it through
-/// IFacing, the same interface the player's weapons already read. This only draws the
-/// answer, so the four enemies share one view and none of them holds a SpriteRenderer or a
-/// Transform flip of its own (Single Responsibility, Dependency Inversion).
+/// It decides nothing. Which way to look is the enemy's own rule, answered through IFacing,
+/// the same interface the player's weapons already read. This only draws the answer, so an
+/// enemy never holds a SpriteRenderer or a Transform flip of its own (Single Responsibility,
+/// Dependency Inversion).
 ///
 /// It flips the SCALE, not SpriteRenderer.flipX, exactly like PlayerMovement does for the
-/// player. flipX mirrors only the picture; the scale mirrors the children too, so a snake's
-/// fire point in front of its mouth stays in front of its mouth when it turns round.
+/// player. flipX mirrors only the picture; the scale mirrors the children too, so a child
+/// in front of the face - a fire point, say - stays in front when it turns round.
 /// </summary>
 [DisallowMultipleComponent]
 public class FacingView : MonoBehaviour

@@ -14,12 +14,16 @@ using UnityEngine;
 /// sideways so the frog comes down on the spot: distance / time in the air. A steady sideways
 /// speed plus gravity is exactly what draws the parabola.
 ///
+/// LEFT ONLY, like every enemy in the original. A player who has already got past the frog
+/// stands to its right; the aim then answers 0 and the frog hops straight up on the spot.
+/// That is one clamp, not a second behaviour - no "idle" state, no turning round.
+///
 /// It does not search for the player: IPlayerProvider arrives from GameInstaller.
 /// </summary>
 public class PlayerHopAim : HopAim, IInjectable
 {
-    [Tooltip("The farthest one hop may carry, in units. Without it a far-away player would " +
-             "send the frog across half the level in a single jump.")]
+    [Tooltip("The farthest one hop may carry to the left, in units. Without it a far-away " +
+             "player would send the frog across half the level in a single jump.")]
     [Min(0f)]
     [SerializeField] private float maxDistance = 6f;
 
@@ -49,23 +53,11 @@ public class PlayerHopAim : HopAim, IInjectable
         // The snapshot. Read once, here, at the push-off - never again during the flight.
         Vector2 toPlayer = player.position - transform.position;
 
-        float distance = Mathf.Clamp(toPlayer.x, -maxDistance, maxDistance);
+        // Left only: a player to the RIGHT (already past the frog) clamps to 0 - a hop on
+        // the spot.
+        float distance = Mathf.Clamp(toPlayer.x, -maxDistance, 0f);
         float airTime = jump.GetAirTime(toPlayer.y);
 
         return airTime > 0f ? distance / airTime : 0f;
-    }
-
-    /// <summary>
-    /// At the player, so the frog watches him while it waits - and is already facing the way
-    /// it jumps when it takes off.
-    /// </summary>
-    public override float GetFacing()
-    {
-        Transform player = playerProvider != null ? playerProvider.PlayerTransform : null;
-
-        if (player == null)
-            return 0f;
-
-        return transform.HorizontalDirectionTo(player.position);
     }
 }

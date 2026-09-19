@@ -3,9 +3,8 @@ using UnityEngine;
 /// <summary>
 /// "Which way is that from here - left or right?"
 ///
-/// Written once because three unrelated places ask it: the ghost turning to the player, the
-/// ghost checking whether the player looks at IT, and the frog watching the player before a
-/// hop. The dead zone is the part worth sharing - without it a ghost hovering straight above
+/// Written once because two places ask it: the ghost turning to the player, and the ghost
+/// checking whether the player looks at IT. The dead zone is the part worth sharing - without it a ghost hovering straight above
 /// the player would flip left and right every step as the two x values crossed (Don't Repeat
 /// Yourself).
 /// </summary>

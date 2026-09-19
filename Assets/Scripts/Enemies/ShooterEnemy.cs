@@ -15,22 +15,24 @@ using UnityEngine;
 /// It is IActivatable, so an ActivateNearPlayer next to it can hold its fire until the player
 /// is close. The two classes know nothing about each other - the range calls an interface, and
 /// this decides for itself that "asleep" means "stop shooting and start the countdown over".
+///
+/// It always shoots LEFT, as every enemy in the original game faces left - the way the art is
+/// drawn - so there is no direction to set and nothing to flip.
 /// </summary>
-public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker, IFacing
+public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
 {
     [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
              "so a level full of snakes needs no wiring at all.")]
     [SerializeField] private EnemyProjectilePoolManager shotPool;
 
-
     [Tooltip("Seconds between shots")]
     [SerializeField] private float shootInterval = 2f;
 
-    [Tooltip("-1 shoots left, 1 shoots right")]
-    [SerializeField] private float shootDirection = -1f;
-
     [Tooltip("Optional: where the shot appears. Empty = the enemy itself.")]
     [SerializeField] private Transform firePoint;
+
+    // Left, the way every enemy faces. A named constant rather than a bare -1 in Shoot().
+    private const float ShootDirection = -1f;
 
     private IObjectPool<EnemyProjectile> pool;
     private Transform muzzle;
@@ -45,12 +47,6 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker, IFa
     /// nor cares, which is why it never grew an Animator field.
     /// </summary>
     public event Action Attacked;
-
-    /// <summary>
-    /// It looks the way it shoots. Read by FacingView, so Shoot Direction is the only thing to
-    /// set - the sprite can never face one way while the fire goes the other.
-    /// </summary>
-    public float FacingDirection { get { return shootDirection >= 0f ? 1f : -1f; } }
 
     /// <summary>
     /// Called by GameInstaller before Awake. One pool is shared by every shooting
@@ -122,7 +118,7 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker, IFa
         if (shot == null)
             return;
 
-        shot.Launch(muzzle.position, shootDirection);
+        shot.Launch(muzzle.position, ShootDirection);
 
         if (Attacked != null)
             Attacked();
