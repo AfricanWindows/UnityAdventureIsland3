@@ -61,16 +61,6 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
             container.TryResolve(out _players);
     }
 
-    private void OnEnable()
-    {
-        LevelExitDoor.OnLevelCompleted += GoToNextLevel;
-    }
-
-    private void OnDisable()
-    {
-        LevelExitDoor.OnLevelCompleted -= GoToNextLevel;
-    }
-
     private void Start()
     {
         if (levels == null || levels.Length == 0)
