@@ -21,11 +21,11 @@ public class CountFruitPowerUp : IPowerUp
         if (player == null)
             return;
 
-        FruitCounterController counter = player.GetComponentInChildren<FruitCounterController>(true);
+        IFruitCollector counter = player.GetComponentInChildren<IFruitCollector>(true);
 
         if (counter == null)
         {
-            Debug.LogWarning("[Fruit] No FruitCounterController under " + player.name);
+            Debug.LogWarning("[Fruit] No IFruitCollector (FruitCounterController) under " + player.name);
             return;
         }
 

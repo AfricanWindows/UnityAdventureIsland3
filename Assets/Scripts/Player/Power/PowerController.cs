@@ -16,7 +16,7 @@ using UnityEngine;
 /// without a single line about them here.
 /// </summary>
 [DisallowMultipleComponent]
-public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IPlayerDeathHandler
+public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IPlayerDeathHandler, IPowerWallet
 {
     [Tooltip("The asset holding Start Power, Max Power and the drain interval. Swap the " +
              "asset to change the difficulty - no code, no prefab surgery.")]

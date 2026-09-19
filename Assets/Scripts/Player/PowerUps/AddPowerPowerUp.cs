@@ -24,11 +24,11 @@ public class AddPowerPowerUp : IPowerUp
         if (player == null)
             return;
 
-        PowerController power = player.GetComponentInChildren<PowerController>(true);
+        IPowerWallet power = player.GetComponentInChildren<IPowerWallet>(true);
 
         if (power == null)
         {
-            Debug.LogWarning("[Fruit] No PowerController under " + player.name);
+            Debug.LogWarning("[Fruit] No IPowerWallet (PowerController) under " + player.name);
             return;
         }
 

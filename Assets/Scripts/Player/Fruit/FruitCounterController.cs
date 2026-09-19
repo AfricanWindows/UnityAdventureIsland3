@@ -19,7 +19,7 @@ using UnityEngine;
 /// LevelFlowController (Open/Closed).
 /// </summary>
 [DisallowMultipleComponent]
-public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler
+public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IFruitCollector
 {
     [Tooltip("How many fruit earn one extra life. The assignment says 20.")]
     [SerializeField] private int fruitsPerLife = 20;

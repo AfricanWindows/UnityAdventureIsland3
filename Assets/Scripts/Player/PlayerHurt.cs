@@ -29,7 +29,7 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
     [SerializeField] private float knockbackSeconds = 0.25f;
 
     private Rigidbody2D body;
-    private PowerController power;
+    private IPowerWallet power;
     private IInvincible[] invincibilitySources;
     private HitInvincibility recovery;
 
@@ -46,7 +46,7 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        power = GetComponentInChildren<PowerController>(true);
+        power = GetComponentInChildren<IPowerWallet>(true);
 
         // The fairy, the death animation, and the recovery window after a hit.
         invincibilitySources = GetComponents<IInvincible>();
