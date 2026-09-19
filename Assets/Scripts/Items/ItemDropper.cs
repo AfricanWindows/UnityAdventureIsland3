@@ -81,11 +81,36 @@ public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable where TIte
             return null;
         }
 
+        ForgetTakenItems();
+
         Vector3 position = transform.position + (Vector3)spawnOffset;
         TItem item = Instantiate(prefab, position, Quaternion.identity, transform.parent);
 
         dropped.Add(item);
         return item;
+    }
+
+    /// <summary>
+    /// Destroys what the player already picked up from earlier drops.
+    ///
+    /// A pickable that is taken only switches itself off - right for the ones placed in the
+    /// level, which a new game switches back on, but a DROPPED one never comes back. Now
+    /// that eggs and enemies respawn and drop again and again, those sleeping copies would
+    /// pile up until the next restart; this keeps the list as short as what is still lying
+    /// in the world.
+    /// </summary>
+    private void ForgetTakenItems()
+    {
+        for (int i = dropped.Count - 1; i >= 0; i--)
+        {
+            if (dropped[i] != null && dropped[i].gameObject.activeSelf)
+                continue;
+
+            if (dropped[i] != null)
+                Destroy(dropped[i].gameObject);
+
+            dropped.RemoveAt(i);
+        }
     }
 
     /// <summary>

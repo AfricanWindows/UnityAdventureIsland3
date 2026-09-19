@@ -1,3 +1,4 @@
+using System;
 using Game.Core;
 using UnityEngine;
 
@@ -23,10 +24,13 @@ using UnityEngine;
 /// A broken egg is HIDDEN, not switched off. That is deliberate: this object is still
 /// running the throw its contents are riding on, and it is where the broken-egg sprite will
 /// go - swapping a sprite needs a renderer that still exists.
+///
+/// It is IRespawnable, so a RespawnTimer on the egg makes it whole again some seconds after
+/// it was opened - the same component the enemies and the fruit use.
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PickableDropper))]
-public class EggContainer : PlayerContactEffect, IResettable
+public class EggContainer : PlayerContactEffect, IResettable, IRespawnable
 {
     [Tooltip("What is inside. Optional - taken from this object if left empty.")]
     [SerializeField] private PickableDropper dropper;
@@ -42,6 +46,12 @@ public class EggContainer : PlayerContactEffect, IResettable
     [SerializeField] private SpriteRenderer eggRenderer;
 
     private bool opened;
+
+    /// <summary>Raised the moment the egg breaks open. RespawnTimer listens.</summary>
+    public event Action Defeated;
+
+    /// <summary>True from the moment it is opened until it is whole again.</summary>
+    public bool IsDefeated { get { return opened; } }
 
     private void Awake()
     {
@@ -89,6 +99,9 @@ public class EggContainer : PlayerContactEffect, IResettable
             toss.Toss(item.transform, DirectionAwayFrom(player));
 
         Hide();
+
+        if (Defeated != null)
+            Defeated();
     }
 
     /// <summary>
@@ -121,6 +134,20 @@ public class EggContainer : PlayerContactEffect, IResettable
     /// removes it in its own ResetToStart.
     /// </summary>
     public void ResetToStart()
+    {
+        Close();
+    }
+
+    /// <summary>
+    /// A RespawnTimer's countdown ran out: the egg is whole again and can be opened once
+    /// more. Whatever it dropped last time stays where it landed.
+    /// </summary>
+    public void Revive()
+    {
+        Close();
+    }
+
+    private void Close()
     {
         opened = false;
 

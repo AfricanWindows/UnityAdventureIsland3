@@ -1,3 +1,4 @@
+using System;
 using Game.Core;
 using UnityEngine;
 
@@ -5,12 +6,22 @@ using UnityEngine;
 /// Base class for everything the player can pick up (fruit, weapons, the fairy...).
 /// The "touch the player and disappear" logic is written here ONCE.
 /// A child class only decides WHAT effect it gives, by creating an IPowerUp.
+///
+/// It is also IRespawnable, so a RespawnTimer next to it brings it back some seconds after
+/// it was taken - the same component the enemies use. Nothing here counts time: a pickable
+/// only says "I was taken" and "put me back" (Single Responsibility).
 /// </summary>
-public abstract class BasePickable : MonoBehaviour, IResettable
+public abstract class BasePickable : MonoBehaviour, IResettable, IRespawnable
 {
     [SerializeField] private string playerTag = "Player";
 
     private bool collected = false;
+
+    /// <summary>Raised the moment the player takes it. RespawnTimer listens.</summary>
+    public event Action Defeated;
+
+    /// <summary>True from the moment it is taken until it is put back.</summary>
+    public bool IsDefeated { get { return collected; } }
 
     private void OnEnable()
     {
@@ -39,6 +50,10 @@ public abstract class BasePickable : MonoBehaviour, IResettable
         collected = true;
         playerPowerUp.CollectPowerUp(powerUp);
         gameObject.SetActive(false);
+
+        // Raised last, like BaseEnemy does: a listener that asks IsDefeated gets the truth.
+        if (Defeated != null)
+            Defeated();
     }
 
     /// <summary>
@@ -48,6 +63,12 @@ public abstract class BasePickable : MonoBehaviour, IResettable
     /// the entire reset.
     /// </summary>
     public void ResetToStart()
+    {
+        gameObject.SetActive(true);
+    }
+
+    /// <summary>A RespawnTimer's countdown ran out: back on the spot it was taken from.</summary>
+    public void Revive()
     {
         gameObject.SetActive(true);
     }
