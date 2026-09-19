@@ -4,7 +4,7 @@ using UnityEngine;
 /// COMPOSITE. One pickup, several effects - and every effect stays a small class that does
 /// exactly one thing.
 ///
-/// A fruit both refills the power bar AND counts towards the twenty that cost a life. The
+/// A fruit both refills the power bar AND counts towards the twenty that earn a life. The
 /// alternative was to teach AddPowerPowerUp to also count fruit, which would have given it
 /// two reasons to change and made it useless for anything that grants power without being
 /// a fruit (Single Responsibility).

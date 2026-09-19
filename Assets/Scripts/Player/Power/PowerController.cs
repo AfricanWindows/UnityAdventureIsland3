@@ -179,7 +179,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     /// bar - and a death that is already under way still leaves a running bar instead of a
     /// player stuck at zero with a clock that can never fire Empty again.
     ///
-    /// ForceKill, not Kill - the same door the twenty-fruit rule uses. Running out of power
+    /// ForceKill, not Kill - the same door the abyss uses. Running out of power
     /// is a RULE of the game, not a blow, so no protection may refuse it. With Kill the fairy
     /// (or the second of grace after losing an animal) made PlayerDeath say no, and the
     /// refill above then turned an empty bar into a free full one.

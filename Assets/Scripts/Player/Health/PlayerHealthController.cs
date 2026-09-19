@@ -8,7 +8,7 @@ using UnityEngine;
 ///
 /// It is the only piece that talks to Unity: it listens to what happens in the game
 /// (the player dying), tells the MODEL what to do, and pushes the result into the VIEW.
-/// It holds no health rule of its own - "maximum 3" lives in PlayerHealthModel - and
+/// It holds no health rule of its own - the ceiling lives in PlayerHealthModel - and
 /// it draws nothing itself.
 ///
 /// It depends on the IPlayerHealthModel and IPlayerHealthView interfaces, not on the
@@ -19,12 +19,13 @@ using UnityEngine;
 /// handed in by GameInstaller (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
+public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife
 {
-    [Tooltip("Maximum hearts the player can hold (exercise says 3)")]
-    [SerializeField] private int maxHealth = 3;
+    [Tooltip("Most lives the player can hold. Keep it ABOVE Start Health: an extra life for " +
+             "twenty fruit that does not fit under the ceiling is lost.")]
+    [SerializeField] private int maxHealth = 9;
 
-    [Tooltip("Hearts the player starts the level with")]
+    [Tooltip("Lives at the start of the game. The assignment says 3.")]
     [SerializeField] private int startHealth = 3;
 
     [Tooltip("Optional override. Normally left empty: the view arrives through injection.")]
@@ -61,6 +62,11 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
         if (view == null)
             Debug.LogWarning("PlayerHealthController: no health view was injected or assigned - " +
                              "health will not be shown.", this);
+
+        if (maxHealth <= startHealth)
+            Debug.LogWarning("PlayerHealthController: Max Health (" + maxHealth + ") is not above " +
+                             "Start Health (" + startHealth + ") - a full player gains nothing " +
+                             "from twenty fruit. Raise Max Health.", this);
     }
 
     private void OnEnable()
@@ -94,6 +100,13 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable
             return;
 
         model.Reset(startHealth);
+    }
+
+    /// <summary>Twenty fruit eaten: one life more, never past Max Health.</summary>
+    public void GainLife()
+    {
+        if (model != null)
+            model.Add(1);
     }
 
     private void LoseHealth()

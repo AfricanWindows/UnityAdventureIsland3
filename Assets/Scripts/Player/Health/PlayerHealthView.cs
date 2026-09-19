@@ -9,8 +9,9 @@ using UnityEngine;
 /// </summary>
 public class PlayerHealthView : MonoBehaviour, IPlayerHealthView
 {
-    [Tooltip("{0} is the current health, {1} is the maximum")]
-    [SerializeField] private string format = "Health: {0}/{1}";
+    [Tooltip("{0} is the lives left, {1} is the most the player can hold. Leave {1} out to " +
+             "show only the lives.")]
+    [SerializeField] private string format = "Lives: {0}";
 
     private TextMeshProUGUI label;
 

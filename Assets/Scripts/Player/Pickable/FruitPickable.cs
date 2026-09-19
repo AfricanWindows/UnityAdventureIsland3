@@ -18,7 +18,7 @@ public class FruitPickable : BasePickable
     [SerializeField] private int powerAmount = 1;
 
     [Tooltip("How many fruit this counts as. Normally 1 - a carrot is worth more power, " +
-             "but it is still one fruit out of the twenty that cost a life.")]
+             "but it is still one fruit out of the twenty that earn a life.")]
     [SerializeField] private int fruitCount = 1;
 
     protected override IPowerUp CreatePowerUp()
