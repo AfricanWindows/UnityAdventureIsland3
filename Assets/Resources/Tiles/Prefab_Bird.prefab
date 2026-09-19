@@ -36,7 +36,7 @@ Transform:
   m_GameObject: {fileID: 6802702584780200687}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -63.59, y: 0.52, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VerticalPatrolEnemy
   health: 1
+  weaponProof: 0
   reviveAtStartPosition: 1
 --- !u!114 &6781966833769499013
 MonoBehaviour:
@@ -270,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableDropper
   contentMode: 1
-  specificItem: {fileID: 4641016453816332969, guid: 601d43eb2d776e4429f19f92fa051484, type: 3}
+  specificItem: {fileID: 8523655383074392065, guid: c410ac921d691204498c7ea4fba881c5, type: 3}
   randomPool: []
   spawnOffset: {x: 0, y: 0.1}
 --- !u!114 &-8463348355618067281

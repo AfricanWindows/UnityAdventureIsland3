@@ -190,7 +190,6 @@ MonoBehaviour:
   reviveAtStartPosition: 1
   shotPool: {fileID: 0}
   shootInterval: 3
-  shootDirection: -1
   firePoint: {fileID: 0}
 --- !u!114 &7788110000000000102
 MonoBehaviour:
@@ -218,7 +217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRespawnTimer
   respawnDelaySeconds: 10
-  verbose: 0
 --- !u!114 &5383022662770368618
 MonoBehaviour:
   m_ObjectHideFlags: 0

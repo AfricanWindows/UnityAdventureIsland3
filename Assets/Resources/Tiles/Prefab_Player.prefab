@@ -108,6 +108,68 @@ MonoBehaviour:
   speed: 2
   height: 0.12
   speedVariation: 0.2
+--- !u!1 &4175109237081962193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5443437825779546239}
+  m_Layer: 0
+  m_Name: FirePointRed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5443437825779546239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175109237081962193}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.8, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3043177011782934736}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4370100541548325032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 886867358893461584}
+  m_Layer: 0
+  m_Name: FirePointBlue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &886867358893461584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370100541548325032}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.8, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3043177011782934736}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4729304969442903462
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,38 +215,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponsHandler
   weaponsRoot: {fileID: 0}
-  verbose: 1
---- !u!1 &6794927802803518767
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1357276292972431067}
-  m_Layer: 0
-  m_Name: AnimalShotWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1357276292972431067
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6794927802803518767}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3043177011782934736}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7737513687079717171
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,6 +253,8 @@ GameObject:
   - component: {fileID: 7663896817464529848}
   - component: {fileID: 2613191876268775580}
   - component: {fileID: 3095156200714592886}
+  - component: {fileID: 1158498386137541783}
+  - component: {fileID: 4035252726741945448}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -247,7 +279,8 @@ Transform:
   - {fileID: 1329533104064966141}
   - {fileID: 5122837146720154986}
   - {fileID: 8797957984835505213}
-  - {fileID: 1357276292972431067}
+  - {fileID: 886867358893461584}
+  - {fileID: 5443437825779546239}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &408238848797351686
@@ -440,7 +473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TimedEffectView
   effect: {fileID: 0}
   targetRenderer: {fileID: 408238848797351686}
-  activeColor: {r: 1, g: 0, b: 0, a: 1}
+  activeColor: {r: 1, g: 0.5882353, b: 0.5882353, a: 1}
 --- !u!114 &8572535940942234845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,7 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8401fad0bfe50b43b93bfdff81715d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthController
-  maxHealth: 3
+  maxHealth: 9
   startHealth: 3
   viewComponent: {fileID: 0}
 --- !u!95 &8444476018975068162
@@ -631,7 +664,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TouchDestroyer
   effect: {fileID: 0}
-  verbose: 1
 --- !u!114 &5939809681864159054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,7 +690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.SpinAttack
   cooldown: 0.5
   unlockedFromStart: 0
-  radius: 2.5
+  radius: 2
   damage: 2
   hitLayers:
     serializedVersion: 2
@@ -726,7 +758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotWeapon
   cooldown: 0.5
   unlockedFromStart: 0
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 5443437825779546239}
   shotSprite: {fileID: 21300000, guid: 9447e3d8454c5b04ebe84b783a732fdd, type: 3}
   shotPool: {fileID: 0}
 --- !u!114 &2613191876268775580
@@ -743,7 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotWeapon
   cooldown: 0.5
   unlockedFromStart: 0
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 886867358893461584}
   shotSprite: {fileID: 21300000, guid: 40f4c621e7f415442a86c114eac66cdb, type: 3}
   shotPool: {fileID: 0}
 --- !u!114 &3095156200714592886
@@ -758,10 +790,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8faa8fb92aa72e841bc92fc5df1855b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMount
-  graceSeconds: 0.5
   animator: {fileID: 0}
   bodyCollider: {fileID: 0}
-  verbose: 1
+--- !u!114 &1158498386137541783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a93c6cd4f4dac4e6194be83abd29bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitInvincibility
+  seconds: 0.5
+--- !u!114 &4035252726741945448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a509a3e6b9f9fd52ef787bd95b19a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitInvincibilityView
+  targetRenderer: {fileID: 0}
+  fadedAlpha: 0.5
+  blinkInterval: 0.1
 --- !u!1 &9004961795210391330
 GameObject:
   m_ObjectHideFlags: 0

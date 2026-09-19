@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 365055006981214169}
   - component: {fileID: 4641016453816332969}
   - component: {fileID: 2592747191501545803}
+  - component: {fileID: 1829235238555899419}
   m_Layer: 0
   m_Name: Prefab_Banana
   m_TagString: Untagged
@@ -183,3 +184,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HoverEffect
   speed: 2
   height: 0.12
+  speedVariation: 0.2
+--- !u!114 &1829235238555899419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948113487010781166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7035f122c5cdd5f56e6f6da67ef5797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnTimer
+  respawnDelaySeconds: 5

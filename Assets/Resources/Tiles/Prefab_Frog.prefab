@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: -4114737123648051989}
   - component: {fileID: 2030717837504458021}
   - component: {fileID: 248447855382955097}
+  - component: {fileID: 4258679399338534378}
+  - component: {fileID: 3235624645323418472}
   m_Layer: 0
   m_Name: Prefab_Frog
   m_TagString: Untagged
@@ -202,7 +204,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRespawnTimer
   respawnDelaySeconds: 10
-  verbose: 0
 --- !u!114 &8917580277928637479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,3 +312,37 @@ MonoBehaviour:
   attackTrigger: 
   groundedParameter: IsGrounded
   hidingParameter: 
+--- !u!114 &4258679399338534378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065fae7abf43b314dbdfc523d809e446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickableDropper
+  contentMode: 0
+  specificItem: {fileID: 0}
+  randomPool:
+  - {fileID: 5401201322026426313, guid: be6369c5a73edba42bb27dbc175296d9, type: 3}
+  - {fileID: 6117723371371584396, guid: 52737c0d03c8d2843bb75a3070ecffe3, type: 3}
+  - {fileID: 5758134003370348457, guid: edbe5a91d50caf6499eb40f9c14f7f63, type: 3}
+  spawnOffset: {x: 0, y: 0.1}
+--- !u!114 &3235624645323418472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240637340748994525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98bd10aab6a711149b6a4b2381a82436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropOnDefeat
+  dropChance: 1
+  dropper: {fileID: 0}
+  toss: {fileID: 0}
