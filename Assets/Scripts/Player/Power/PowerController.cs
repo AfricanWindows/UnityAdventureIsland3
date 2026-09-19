@@ -16,7 +16,7 @@ using UnityEngine;
 /// without a single line about them here.
 /// </summary>
 [DisallowMultipleComponent]
-public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler
+public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IPlayerDeathHandler
 {
     [Tooltip("The asset holding Start Power, Max Power and the drain interval. Swap the " +
              "asset to change the difficulty - no code, no prefab surgery.")]
@@ -90,22 +90,12 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         model.Changed += UpdateView;
         model.Empty -= HandleEmpty;
         model.Empty += HandleEmpty;
-
-        // Any death refills the bar - walking into an enemy, spikes, or the timer itself.
-        // The controller listens instead of the flow pushing, so the bar keeps working
-        // even in a scene that has no level flow at all.
-        PlayerDeath.OnPlayerDied -= ResetToStart;
-        PlayerDeath.OnPlayerDied += ResetToStart;
     }
 
     private void OnDisable()
     {
         if (model == null)
             return;
-
-        // The important half: a static event holds on to whoever subscribed, so a
-        // listener that never leaves would be called even after this object is gone.
-        PlayerDeath.OnPlayerDied -= ResetToStart;
 
         model.Changed -= UpdateView;
         model.Empty -= HandleEmpty;
@@ -144,6 +134,15 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
 
     /// <summary>A level began: full bar, fresh clock. The spawn point is not our business.</summary>
     public void OnLevelStarted(Vector3 spawnPosition)
+    {
+        ResetToStart();
+    }
+
+    /// <summary>
+    /// Any death refills the bar - an enemy, spikes, or the timer itself. Called by
+    /// PlayerDeath once he is back at the start.
+    /// </summary>
+    public void OnPlayerDied()
     {
         ResetToStart();
     }

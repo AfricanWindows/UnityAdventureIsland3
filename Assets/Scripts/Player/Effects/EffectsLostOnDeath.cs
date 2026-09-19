@@ -13,7 +13,7 @@ using UnityEngine;
 /// announces its own ending, and the tint and the sprite disappear by themselves - this
 /// class never touches a renderer.
 ///
-/// A SEPARATE component on purpose. The alternative - the effect subscribing to PlayerDeath
+/// A SEPARATE component on purpose. The alternative - the effect being a death handler
 /// itself - would make "how a timed effect works" depend on "how dying works", which is not
 /// its business; TimedPlayerEffect stays usable on anything, player or not. The restart case
 /// is different and is NOT here: putting yourself back to your starting state is something
@@ -21,7 +21,7 @@ using UnityEngine;
 /// Responsibility).
 /// </summary>
 [DisallowMultipleComponent]
-public class EffectsLostOnDeath : MonoBehaviour
+public class EffectsLostOnDeath : MonoBehaviour, IPlayerDeathHandler
 {
     // Found once, in Awake. A death is the worst possible moment for a component search,
     // and the player's effects never move.
@@ -37,17 +37,8 @@ public class EffectsLostOnDeath : MonoBehaviour
                              " - there is nothing for this component to take away.", this);
     }
 
-    private void OnEnable()
-    {
-        PlayerDeath.OnPlayerDied += LoseEffects;
-    }
-
-    private void OnDisable()
-    {
-        PlayerDeath.OnPlayerDied -= LoseEffects;
-    }
-
-    private void LoseEffects()
+    /// <summary>Called by PlayerDeath once he is back at the start: the fairy is gone.</summary>
+    public void OnPlayerDied()
     {
         for (int i = 0; i < effects.Length; i++)
         {

@@ -19,7 +19,7 @@ using UnityEngine;
 /// handed in by GameInstaller (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife
+public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife, IPlayerDeathHandler
 {
     [Tooltip("Most lives the player can hold. Keep it ABOVE Start Health: an extra life for " +
              "twenty fruit that does not fit under the ceiling is lost.")]
@@ -71,18 +71,12 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
 
     private void OnEnable()
     {
-        // PlayerDeath already decides WHEN the player is hit (it checks the fairy invincibility
-        // and respawns him). Here we only turn that into "-1 heart".
-        PlayerDeath.OnPlayerDied += LoseHealth;
-
         model.Changed += UpdateView;
         model.Empty += HandleHealthEmpty;
     }
 
     private void OnDisable()
     {
-        PlayerDeath.OnPlayerDied -= LoseHealth;
-
         model.Changed -= UpdateView;
         model.Empty -= HandleHealthEmpty;
     }
@@ -109,7 +103,11 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
             model.Add(1);
     }
 
-    private void LoseHealth()
+    /// <summary>
+    /// Called by PlayerDeath once he is back at the start. PlayerDeath already decided WHEN
+    /// he dies (the fairy, the recovery window); here that only becomes "one life less".
+    /// </summary>
+    public void OnPlayerDied()
     {
         model.Remove(1);
     }

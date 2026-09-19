@@ -25,7 +25,7 @@ using UnityEngine;
 /// "the animal I am riding". WeaponsHandler is built the same way: slot, trigger and reset.
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAbsorber, IResettable
+public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAbsorber, IResettable, IPlayerDeathHandler
 {
     [Tooltip("The player's Animator. Empty = the one on this object.")]
     [SerializeField] private Animator animator;
@@ -83,19 +83,15 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
                              "a Hit Invincibility View.", this);
     }
 
-    // Subscribed in Start and dropped only in OnDestroy, NOT in the usual OnEnable/OnDisable
-    // pair. This component is an InputDrivenBehaviour, so PlayerDeath switches it off for the
-    // length of the death animation - and an OnDisable unsubscribe would let go of the very
-    // event it is waiting for. Same reasoning as RespawnTimer.
-    private void Start()
+    /// <summary>
+    /// Dying costs the animal. Called by PlayerDeath directly, so it arrives even though
+    /// this component is switched off for the length of the death animation - the old
+    /// static-event version had to subscribe in Start and unsubscribe in OnDestroy to
+    /// survive that.
+    /// </summary>
+    public void OnPlayerDied()
     {
-        PlayerDeath.OnPlayerDied -= Dismount;
-        PlayerDeath.OnPlayerDied += Dismount;
-    }
-
-    private void OnDestroy()
-    {
-        PlayerDeath.OnPlayerDied -= Dismount;
+        Dismount();
     }
 
     private void Update()

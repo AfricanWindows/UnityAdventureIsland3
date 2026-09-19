@@ -10,11 +10,11 @@ using UnityEngine;
 /// flags while leaving the slot pointing at a weapon the player no longer owns.
 ///
 /// It is a SEPARATE component on purpose. The alternative - the slot, or each weapon,
-/// subscribing to PlayerDeath itself - would make "how firing works" depend on "how dying
+/// being a death handler itself - would make "how firing works" depend on "how dying
 /// works", which is not its business (Single Responsibility).
 /// </summary>
 [DisallowMultipleComponent]
-public class WeaponsLostOnDeath : MonoBehaviour
+public class WeaponsLostOnDeath : MonoBehaviour, IPlayerDeathHandler
 {
     [Tooltip("Where to look for the weapon slot. Empty = this object and its children.")]
     [SerializeField] private Transform weaponsRoot;
@@ -35,17 +35,8 @@ public class WeaponsLostOnDeath : MonoBehaviour
                              " - weapons will survive death.", this);
     }
 
-    private void OnEnable()
-    {
-        PlayerDeath.OnPlayerDied += LoseWeapons;
-    }
-
-    private void OnDisable()
-    {
-        PlayerDeath.OnPlayerDied -= LoseWeapons;
-    }
-
-    private void LoseWeapons()
+    /// <summary>Called by PlayerDeath once he is back at the start: empty hands.</summary>
+    public void OnPlayerDied()
     {
         if (_slot == null)
             return;

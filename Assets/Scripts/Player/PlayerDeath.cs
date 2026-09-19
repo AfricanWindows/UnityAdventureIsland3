@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
 using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
 /// Dying: play the death animation where he fell, THEN put him back at the start of the
-/// level and tell the rest of the game - the lives counter, the power bar and the weapons
-/// all listen.
+/// level and tell every IPlayerDeathHandler on the player - the lives counter, the power bar,
+/// the weapon, the fairy and the animal each do their own part.
 ///
 /// The pause is the whole reason this class grew. Before it, Kill() teleported the player
 /// on the same frame, so a death animation would have played at the spawn point instead of
@@ -30,8 +29,6 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
              "start of the level. Match it to the clip.")]
     [SerializeField] private float deathAnimationSeconds = 1f;
 
-    public static event Action OnPlayerDied;
-
     private Vector3 startPositon;
 
     private IInvincible[] invincibilitySources;
@@ -42,6 +39,9 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     // through their shared base class, so dying switches off "being controlled" without
     // naming a single one of them - a new controllable component is covered for free.
     private InputDrivenBehaviour[] inputComponents;
+
+    // Everyone who has a part in "what dying costs". Found once, in Awake.
+    private IPlayerDeathHandler[] deathHandlers;
 
     /// <summary>True while the death animation plays. The animator draws from this.</summary>
     public bool IsDying { get { return isDying; } }
@@ -61,6 +61,9 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
         // second death while the first one is still playing.
         invincibilitySources = GetComponents<IInvincible>();
         inputComponents = GetComponents<InputDrivenBehaviour>();
+
+        // true = include inactive, so a handler on a switched-off child is still told.
+        deathHandlers = GetComponentsInChildren<IPlayerDeathHandler>(true);
     }
 
     private void OnDisable()
@@ -175,8 +178,8 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
 
         SetControlEnabled(true);
 
-        if (OnPlayerDied != null)
-            OnPlayerDied();
+        for (int i = 0; i < deathHandlers.Length; i++)
+            deathHandlers[i].OnPlayerDied();
     }
 
     /// <summary>
