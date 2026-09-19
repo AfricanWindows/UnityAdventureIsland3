@@ -22,7 +22,7 @@ public class HitInvincibility : MonoBehaviour, IInvincible, IResettable
 {
     [Tooltip("Seconds the player cannot be hurt after a hit. The sprite blinks meanwhile.")]
     [Min(0f)]
-    [SerializeField] private float seconds = 1.5f;
+    [SerializeField] private float seconds = 0.5f;
 
     private float until;
 
