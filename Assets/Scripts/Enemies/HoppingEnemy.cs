@@ -16,7 +16,7 @@ using UnityEngine.Serialization;
 /// landing, so it really stands still between hops.
 ///
 /// Like every enemy here it owns only its behaviour: hurting the player on contact is
-/// KillPlayerOnTouch, coming back after being beaten is EnemyRespawnTimer, and health is
+/// KillPlayerOnTouch, coming back after being beaten is RespawnTimer, and health is
 /// BaseEnemy.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]

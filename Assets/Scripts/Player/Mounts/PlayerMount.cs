@@ -100,7 +100,7 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
     // Subscribed in Start and dropped only in OnDestroy, NOT in the usual OnEnable/OnDisable
     // pair. This component is an InputDrivenBehaviour, so PlayerDeath switches it off for the
     // length of the death animation - and an OnDisable unsubscribe would let go of the very
-    // event it is waiting for. Same reasoning as EnemyRespawnTimer.
+    // event it is waiting for. Same reasoning as RespawnTimer.
     private void Start()
     {
         PlayerDeath.OnPlayerDied -= Dismount;

@@ -15,7 +15,7 @@ using UnityEngine;
 /// Subscribed in Start and dropped only in OnDestroy - deliberately NOT the usual
 /// OnEnable/OnDisable pair. The event we are waiting for is the one that DISABLES this
 /// object, so an OnDisable unsubscribe would let go of it at the exact moment it fires.
-/// Same reasoning as EnemyRespawnTimer, which listens to the same event.
+/// Same reasoning as RespawnTimer, which listens to the same event.
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PickableDropper))]

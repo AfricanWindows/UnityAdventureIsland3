@@ -14,7 +14,7 @@
 /// through the player's own body.
 ///
 /// What goes on the prefab next to it: a Collider2D, KillPlayerOnTouch, and - only if it
-/// should return after being beaten - an EnemyRespawnTimer. ActivateNearPlayer is pointless
+/// should return after being beaten - a RespawnTimer. ActivateNearPlayer is pointless
 /// here: it exists to put BEHAVIOUR to sleep, and there is none.
 /// </summary>
 public class StaticEnemy : BaseEnemy

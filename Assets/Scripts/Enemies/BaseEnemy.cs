@@ -7,7 +7,7 @@ using UnityEngine;
 /// decided by the child class.
 ///
 /// It does not kill the player on contact - that is KillPlayerOnTouch - and it does not
-/// decide whether it comes back - that is EnemyRespawnTimer. All this class owns is health
+/// decide whether it comes back - that is RespawnTimer. All this class owns is health
 /// and the two states around it (Single Responsibility). An enemy that should stay dead
 /// simply carries no timer; a harmless one carries no touch effect.
 ///
@@ -41,7 +41,7 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
 
     private bool defeated;
 
-    /// <summary>Raised the moment this enemy is beaten. EnemyRespawnTimer listens.</summary>
+    /// <summary>Raised the moment this enemy is beaten. RespawnTimer listens.</summary>
     public event Action Defeated;
 
     public bool IsDefeated { get { return defeated; } }

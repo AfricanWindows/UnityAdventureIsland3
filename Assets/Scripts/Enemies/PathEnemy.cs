@@ -10,7 +10,7 @@ using UnityEngine;
 /// different route component, and a new route never touches this file (Open/Closed).
 ///
 /// Hurting the player on contact is KillPlayerOnTouch, coming back after being beaten is
-/// EnemyRespawnTimer, and health is BaseEnemy - the same components every other enemy carries
+/// RespawnTimer, and health is BaseEnemy - the same components every other enemy carries
 /// (Single Responsibility).
 ///
 /// The Rigidbody2D is meant to be KINEMATIC. Gravity would pull a dynamic enemy off its route,

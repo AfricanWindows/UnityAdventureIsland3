@@ -15,7 +15,7 @@ using UnityEngine;
 ///
 /// Like every enemy here it owns only its movement. Waking up near the player is
 /// ActivateNearPlayer, killing on contact is KillPlayerOnTouch, coming back after the fairy is
-/// EnemyRespawnTimer, health is BaseEnemy (Single Responsibility).
+/// RespawnTimer, health is BaseEnemy (Single Responsibility).
 ///
 /// THE BODY MUST BE KINEMATIC, AND THE COLLIDER A TRIGGER. Kinematic, so nothing pushes it off
 /// course and gravity does not pull it down; a trigger, because a kinematic body with a solid
