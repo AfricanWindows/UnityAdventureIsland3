@@ -110,7 +110,9 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     /// </summary>
     public void Kill()
     {
-        if (IsAnySourceInvincible())
+        // ANY protection refuses a blow - the fairy, the recovery window after a hit, and
+        // this death itself. ForceKill below is the one door that never asks.
+        if (invincibilitySources.AnyActive())
             return;
 
         BeginDeath();
@@ -137,7 +139,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     /// <summary>
     /// The one road into dying, so the two entry points above cannot drift apart.
     ///
-    /// The isDying guard used to come for free: Kill() asked IsAnySourceInvincible, and this
+    /// The isDying guard used to come for free: Kill() asks every IInvincible, and this
     /// component reports itself invincible while the animation plays. ForceKill does not ask,
     /// so the guard has to be stated here - otherwise falling into a pit during the death
     /// animation would start a second death on top of the first.
@@ -186,23 +188,5 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
     {
         for (int i = 0; i < inputComponents.Length; i++)
             inputComponents[i].enabled = value;
-    }
-
-    /// <summary>
-    /// True while ANY invincibility source is active - the fairy, and this death
-    /// itself. Adding a third one needs no change here: they all answer IInvincible.
-    ///
-    /// Note who does NOT consult this: ForceKill. The abyss is the one thing in the game
-    /// that never asks.
-    /// </summary>
-    private bool IsAnySourceInvincible()
-    {
-        for (int i = 0; i < invincibilitySources.Length; i++)
-        {
-            if (invincibilitySources[i].IsInvincible)
-                return true;
-        }
-
-        return false;
     }
 }

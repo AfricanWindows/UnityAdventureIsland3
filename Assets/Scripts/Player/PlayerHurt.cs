@@ -4,12 +4,14 @@ using UnityEngine;
 /// What happens to the player when a hazard hurts him without killing him: he loses power
 /// and he is shoved in the direction he was already going.
 ///
-/// There is NO recovery window here, and that is deliberate. The first version had one -
-/// an invincibility timer - and it created two problems for one it solved: the number had
-/// to be tuned by feel, and a stone that emptied the bar refilled it and then silently
-/// skipped the life it should have cost, because PlayerDeath refuses to kill while any
-/// invincibility is active. "One hit per touch" lives in PlayerContactEffect instead, where
-/// it is a fact about the contact rather than a timer about the player.
+/// After the hit it opens the recovery window (HitInvincibility): a moment in which nothing
+/// can hurt him, shown by a blinking sprite. This class only says WHEN it starts; how long it
+/// lasts and how it looks are not its business.
+///
+/// An earlier version had to do without such a window: a stone that emptied the bar used to
+/// lose its life to it, because the empty bar killed through Kill and PlayerDeath refuses Kill
+/// while any invincibility is active. The empty bar now uses ForceKill, which nothing can
+/// refuse, so the window is safe. "One hit per touch" still lives in PlayerContactEffect.
 ///
 /// WHY THE EXECUTION ORDER. PlayerMovement REWRITES the horizontal velocity every
 /// FixedUpdate - it owns walking, and it does not know a shove happened. Setting the
@@ -29,14 +31,11 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
     private Rigidbody2D body;
     private PowerController power;
     private IInvincible[] invincibilitySources;
+    private HitInvincibility recovery;
 
     private Vector2 knockbackVelocity;
     private float knockbackUntil;
 
-    /// <summary>
-    /// True for the shove only. It stops the player from steering out of it, and stops
-    /// walking speed from building up meanwhile.
-    /// </summary>
     /// <summary>True while the shove is still driving him. The animator draws the
     /// hurt pose from this.</summary>
     public bool IsHurt { get { return Time.time < knockbackUntil; } }
@@ -49,14 +48,19 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
         body = GetComponent<Rigidbody2D>();
         power = GetComponentInChildren<PowerController>(true);
 
-        // The fairy, and the death animation.
+        // The fairy, the death animation, and the recovery window after a hit.
         invincibilitySources = GetComponents<IInvincible>();
+        recovery = GetComponent<HitInvincibility>();
+
+        if (recovery == null)
+            Debug.LogWarning("PlayerHurt: no HitInvincibility on " + gameObject.name + " - a hit " +
+                             "opens no recovery window. Add a Hit Invincibility View.", this);
     }
 
     public bool TryHurt(int powerCost, Vector2 knockback)
     {
-        // Genuinely invincible - the fairy: the hit is ignored entirely.
-        if (IsProtected())
+        // Protected - the fairy, or still recovering from the last hit: ignored entirely.
+        if (invincibilitySources.AnyActive())
             return false;
 
         if (powerCost > 0 && power != null)
@@ -72,6 +76,9 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
             body.linearVelocity = knockback;
         }
 
+        if (recovery != null)
+            recovery.Begin();
+
         return true;
     }
 
@@ -85,16 +92,5 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
             return;
 
         body.linearVelocity = new Vector2(knockbackVelocity.x, body.linearVelocity.y);
-    }
-
-    private bool IsProtected()
-    {
-        for (int i = 0; i < invincibilitySources.Length; i++)
-        {
-            if (invincibilitySources[i].IsInvincible)
-                return true;
-        }
-
-        return false;
     }
 }

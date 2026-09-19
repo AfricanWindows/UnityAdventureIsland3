@@ -25,13 +25,8 @@ using UnityEngine;
 /// "the animal I am riding". WeaponsHandler is built the same way: slot, trigger and reset.
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAbsorber, IInvincible, IResettable
+public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAbsorber, IResettable
 {
-    [Tooltip("Seconds the player cannot be touched after his animal was knocked out from " +
-             "under him. Without it he is dropped INSIDE whatever hit him and dies on the " +
-             "very next physics step.")]
-    [SerializeField] private float graceSeconds = 1f;
-
     [Tooltip("The player's Animator. Empty = the one on this object.")]
     [SerializeField] private Animator animator;
 
@@ -50,26 +45,14 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
     private float footRadius;
     private Vector2 footOffset;
 
-    // The fairy, and dying. Asked before the animal is spent - see TryAbsorbHit.
+    // The fairy, dying, and the recovery window. Asked before the animal is spent - see
+    // TryAbsorbHit.
     private IInvincible[] invincibilitySources;
 
-    // When the grace window after losing an animal runs out.
-    private float invincibleUntil;
+    // Opened when the animal is knocked out from under him - see TryAbsorbHit.
+    private HitInvincibility recovery;
 
     public bool IsMounted { get { return current != null; } }
-
-    /// <summary>
-    /// True for a moment after the animal was lost.
-    ///
-    /// The player is dropped on the exact spot where the thing that killed his animal still
-    /// stands, so without this the next physics step would kill HIM - one touch of an enemy
-    /// would cost the animal and a life together. A short window lets him step away, which is
-    /// what the original game does.
-    ///
-    /// It is the same IInvincible the fairy and the death animation answer, so PlayerDeath
-    /// and PlayerHurt honour it without a line of new code in either (Open/Closed).
-    /// </summary>
-    public bool IsInvincible { get { return Time.time < invincibleUntil; } }
 
     /// <summary>While he rides, the weapon in his hand waits.</summary>
     public bool BlocksAttack { get { return IsMounted; } }
@@ -91,10 +74,16 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
             footOffset = bodyCollider.offset;
         }
 
-        // Includes THIS component, and deliberately so: it is what stops a second animal,
-        // picked up during the grace window, from being spent by the same enemy the player
-        // is still standing in.
+        // Includes the recovery window, and deliberately so: it is what stops a second
+        // animal, picked up during that window, from being spent by the same enemy the
+        // player is still standing in.
         invincibilitySources = GetComponents<IInvincible>();
+        recovery = GetComponent<HitInvincibility>();
+
+        if (recovery == null)
+            Debug.LogWarning("PlayerMount: no HitInvincibility on " + gameObject.name + " - after " +
+                             "losing an animal the player can die on the very next step. Add " +
+                             "a Hit Invincibility View.", this);
     }
 
     // Subscribed in Start and dropped only in OnDestroy, NOT in the usual OnEnable/OnDisable
@@ -186,15 +175,19 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
         if (current == null)
             return false;
 
-        if (IsProtected())
+        if (invincibilitySources.AnyActive())
             return false;
 
         Dismount();
         Smash(source);
 
-        // Set only here, and not inside Dismount: stepping off because the game restarted or
-        // because the player died is not a hit, and owes him no grace.
-        invincibleUntil = Time.time + graceSeconds;
+        // The player is dropped on the exact spot where the thing that took his animal still
+        // stands. Without a recovery window the next physics step would kill HIM too - one
+        // touch of an enemy would cost the animal and a life together.
+        // Opened only here, not inside Dismount: stepping off because the game restarted or
+        // because the player died is not a hit, and owes him no window.
+        if (recovery != null)
+            recovery.Begin();
 
         return true;
     }
@@ -223,11 +216,10 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
     // ===================== IResettable =====================
 
-    /// <summary>A new game starts him on his own two feet, and not half-immortal.</summary>
+    /// <summary>A new game starts him on his own two feet. The recovery window resets itself.</summary>
     public void ResetToStart()
     {
         Dismount();
-        invincibleUntil = 0f;
     }
 
     // =======================================================
@@ -253,16 +245,5 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
         bodyCollider.radius = radius;
         bodyCollider.offset = offset;
-    }
-
-    private bool IsProtected()
-    {
-        for (int i = 0; i < invincibilitySources.Length; i++)
-        {
-            if (invincibilitySources[i].IsInvincible)
-                return true;
-        }
-
-        return false;
     }
 }
