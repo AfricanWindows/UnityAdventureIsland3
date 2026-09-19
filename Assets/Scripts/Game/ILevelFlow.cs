@@ -10,7 +10,6 @@ using UnityEngine;
 /// </summary>
 public interface ILevelFlow
 {
-
     /// <summary>The door was opened: switch to the next level, or finish the game.</summary>
     void GoToNextLevel();
 
@@ -19,4 +18,11 @@ public interface ILevelFlow
 
     /// <summary>Raised when the last level has been finished.</summary>
     event Action GameCompleted;
+
+    /// <summary>
+    /// Raised every time a level is entered - the first one, the next one, and level one
+    /// again after a restart. The projectile pools listen: nothing fired in the old level
+    /// may still be flying in the new one.
+    /// </summary>
+    event Action LevelEntered;
 }

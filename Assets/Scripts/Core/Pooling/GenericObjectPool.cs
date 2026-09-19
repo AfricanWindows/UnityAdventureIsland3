@@ -138,7 +138,7 @@ namespace Game.Core
         }
 
         /// <summary>
-        /// Takes back every item that is still out. A new game must not inherit a fireball
+        /// Takes back every item that is still out. A new level must not inherit a fireball
         /// that was in the air when the old one ended.
         ///
         /// Copied first because Release removes from _active, and a collection cannot be

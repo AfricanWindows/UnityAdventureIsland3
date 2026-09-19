@@ -35,6 +35,9 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
     /// <summary>Raised when the last level is finished.</summary>
     public event Action GameCompleted;
 
+    /// <summary>Raised every time a level is entered. The projectile pools listen.</summary>
+    public event Action LevelEntered;
+
     private Level CurrentLevel
     {
         get
@@ -130,6 +133,9 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
         }
 
         StartLevelForPlayer();
+
+        if (LevelEntered != null)
+            LevelEntered();
 
         if (verbose)
             Debug.Log("[Flow] Entered " + SafeName(CurrentLevel));

@@ -1,4 +1,5 @@
 using Game.Core;
+using Game.Core.DI;
 using Game.Projectiles;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,7 +25,7 @@ namespace Game.Weapons
     /// see: Get and Release, no prewarm counts, no growth policy (Interface Segregation).
     /// </summary>
     /// <typeparam name="TProjectile">What this pool hands out.</typeparam>
-    public abstract class ProjectilePoolManager<TProjectile> : MonoBehaviour, IObjectPool<TProjectile>, IResettable
+    public abstract class ProjectilePoolManager<TProjectile> : MonoBehaviour, IObjectPool<TProjectile>, IInjectable
         where TProjectile : BaseProjectile
     {
         [Header("What to pool")]
@@ -55,6 +56,7 @@ namespace Game.Weapons
         [SerializeField] private bool allowGrowth;
 
         private GenericObjectPool<TProjectile> _pool;
+        private ILevelFlow _flow;
         private string _logPrefix;
 
         /// <summary>Prefix for this pool's console messages, e.g. "[ProjectileAxe]".</summary>
@@ -162,11 +164,24 @@ namespace Game.Weapons
         }
 
         /// <summary>
-        /// A new game: every projectile still in the air goes back to the pool, so no shot
-        /// fired in the old game can hit the player in the new one. The restart finds this
-        /// through IResettable like everything else - no special case in the level flow.
+        /// Called by GameInstaller. The pool listens to the level flow so that entering a
+        /// level - the next one, or level one after a restart - takes back every projectile
+        /// still in the air: no shot fired in the old level can hit the player in the new
+        /// one. The flow names no pool; it only announces the level (Dependency Inversion).
         /// </summary>
-        public void ResetToStart()
+        public void Inject(IServiceContainer container)
+        {
+            if (container != null && container.TryResolve(out _flow))
+                _flow.LevelEntered += ReleaseAllInFlight;
+        }
+
+        private void OnDestroy()
+        {
+            if (_flow != null)
+                _flow.LevelEntered -= ReleaseAllInFlight;
+        }
+
+        private void ReleaseAllInFlight()
         {
             if (_pool != null)
                 _pool.ReleaseAll();
