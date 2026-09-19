@@ -5,8 +5,8 @@ using UnityEngine;
 /// <summary>
 /// CONTROLLER of the power bar - Adventure Island's central mechanic.
 ///
-/// It is the only piece that talks to Unity: it owns the model, starts and stops the drain
-/// clock, pushes values into the view, and turns "the bar ran out" into a death. It holds
+/// It is the only piece that talks to Unity: it owns the model, ticks the drain clock once
+/// per frame, pushes values into the view, and turns "the bar ran out" into a death. It holds
 /// no rule of its own - the clamping lives in ClampedCounterModel, the numbers live in a
 /// PowerConfigSO asset - and it draws nothing itself.
 ///
@@ -96,8 +96,6 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         // even in a scene that has no level flow at all.
         PlayerDeath.OnPlayerDied -= ResetToStart;
         PlayerDeath.OnPlayerDied += ResetToStart;
-
-        drain.Start();
     }
 
     private void OnDisable()
@@ -105,12 +103,20 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         if (model == null)
             return;
 
-        // The important half. Without this the Task.Delay loop outlives Play Mode.
+        // The important half: a static event holds on to whoever subscribed, so a
+        // listener that never leaves would be called even after this object is gone.
         PlayerDeath.OnPlayerDied -= ResetToStart;
-        drain.Stop();
 
         model.Changed -= UpdateView;
         model.Empty -= HandleEmpty;
+    }
+
+    // Only runs while this component is enabled, and Time.deltaTime is 0 while the game is
+    // paused - so the bar stops draining exactly when the game stops, with no pause logic.
+    private void Update()
+    {
+        if (drain != null)
+            drain.Tick(Time.deltaTime);
     }
 
     private void Start()
@@ -131,16 +137,10 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
             return;
 
         model.Reset(stats.StartPower);
-
-        // Restarted, not merely left running: otherwise the first segment after a
-        // respawn could vanish a fraction of a second later, because the previous
-        // level's tick was already half elapsed.
-        if (isActiveAndEnabled)
-            drain.Start();
+        drain.Restart();
 
         UpdateView();
     }
-
 
     /// <summary>A level began: full bar, fresh clock. The spawn point is not our business.</summary>
     public void OnLevelStarted(Vector3 spawnPosition)
@@ -186,8 +186,6 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     /// </summary>
     private void HandleEmpty()
     {
-        Debug.Log("[Power] Bar empty - lost a life");
-
         model.Reset(stats.StartPower);
 
         if (death != null)
