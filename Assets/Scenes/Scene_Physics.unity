@@ -11817,7 +11817,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 104d5c03eed5b487834493d301939c71, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.EnemyProjectilePoolManager
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePoolManager
   prefab: {fileID: 4906771737730382529, guid: b102a7af557f67d448c38affbfbfc3ef, type: 3}
   config: {fileID: 11400000, guid: e222a30dcdd1162e14a824f7953a619c, type: 2}
   container: {fileID: 1037063894}

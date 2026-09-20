@@ -8,10 +8,11 @@
 /// on a prefab, because BaseEnemy is abstract. This is the one line that gives it a
 /// concrete, nameable form, exactly as PickableDropper does for ItemDropper.
 ///
-/// Note it needs NO Rigidbody2D of its own. PathEnemy requires one because it MOVES its
-/// body every physics step; a static enemy moves nothing. Give it a Static Rigidbody2D like
-/// the shooting snake has and a solid collider, and KillPlayerOnTouch hears the contact
-/// through the player's own body.
+/// It needs no Rigidbody2D of its own: PathEnemy requires one because it MOVES its body
+/// every physics step, and this one moves nothing. A collider alone is enough - Unity
+/// reports the contact between it and the player's own body, and KillPlayerOnTouch hears it.
+/// A Rigidbody2D does no harm if one is there already; keep it Static or Kinematic, never
+/// Dynamic, or the enemy would fall out of the level.
 ///
 /// What goes on the prefab next to it: a Collider2D, KillPlayerOnTouch, and - only if it
 /// should return after being beaten - a RespawnTimer. ActivateNearPlayer is pointless
