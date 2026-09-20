@@ -25,11 +25,12 @@ public class InvincibilityPowerUp : IPowerUp
         if (player == null)
             return;
 
-        PlayerInvincible invincible = player.GetComponent<PlayerInvincible>();
+        IInvincibilityEffect invincible = player.GetComponentInChildren<IInvincibilityEffect>(true);
 
         if (invincible == null)
         {
-            Debug.LogWarning("InvincibilityPowerUp: no PlayerInvincible on " + player.name, player);
+            Debug.LogWarning("InvincibilityPowerUp: no IInvincibilityEffect (PlayerInvincible) on " +
+                             player.name, player);
             return;
         }
 

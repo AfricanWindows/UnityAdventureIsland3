@@ -16,8 +16,5 @@ namespace Game.Core
 
         /// <summary>Puts the item back to sleep. Releasing twice is safely ignored.</summary>
         void Release(T item);
-
-        /// <summary>How many items are waiting to be reused.</summary>
-        int CountInactive { get; }
     }
 }

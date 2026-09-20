@@ -71,8 +71,6 @@ namespace Game.Weapons
             }
         }
 
-        public int CountInactive { get { return _pool != null ? _pool.CountInactive : 0; } }
-
         // Private on purpose: a subclass that declared its own Awake would silently replace
         // this one and the pool would never be built. Subclasses override OnPoolReady().
         private void Awake()

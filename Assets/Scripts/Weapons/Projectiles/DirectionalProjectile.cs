@@ -18,9 +18,6 @@ namespace Game.Projectiles
     {
         private float _facing = 1f;
 
-        /// <summary>+1 thrown right, -1 thrown left. Set once, at launch.</summary>
-        protected float Facing { get { return _facing; } }
-
         /// <summary>
         /// The weapon's single call: record the direction, then hand over to the inherited
         /// Fire() template, which keeps the step order for every projectile in the game.

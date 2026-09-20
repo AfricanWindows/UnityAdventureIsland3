@@ -7,7 +7,7 @@ using UnityEngine;
 /// can never be forgotten in the scene.
 /// </summary>
 [RequireComponent(typeof(TimedEffectView))]
-public class PlayerInvincible : TimedPlayerEffect, IInvincible
+public class PlayerInvincible : TimedPlayerEffect, IInvincible, IInvincibilityEffect
 {
     public bool IsInvincible
     {

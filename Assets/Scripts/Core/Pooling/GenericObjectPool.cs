@@ -37,8 +37,6 @@ namespace Game.Core
 
         private int _totalCreated;
 
-        public int CountInactive { get { return _inactive.Count; } }
-
         /// <param name="factory">Where new items come from. The only dependency.</param>
         /// <param name="prewarmCount">How many to create up front, before the first shot.</param>
         /// <param name="maxSize">Hard ceiling on how many items may ever exist.</param>

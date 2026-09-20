@@ -54,7 +54,7 @@ public abstract class AnimalMount : MonoBehaviour
     public Vector2 ColliderOffset { get { return colliderOffset; } }
 
     /// <summary>What the attack button fires while riding this one.</summary>
-    public BaseWeapon Weapon { get { return attack; } }
+    public IUseableWeapon Weapon { get { return attack; } }
 
     private void Awake()
     {
