@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 3095156200714592886}
   - component: {fileID: 1158498386137541783}
   - component: {fileID: 4035252726741945448}
+  - component: {fileID: 8471920365172834519}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -916,3 +917,16 @@ MonoBehaviour:
   unlockedFromStart: 0
   boomerangPool: {fileID: 0}
   firePoint: {fileID: 0}
+--- !u!114 &8471920365172834519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1797660fbd18c542b28ebb1024b2990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FacingView
+  artFacesRight: 1

@@ -93,13 +93,12 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing
         // why friction can never drag him a second time.
         rigid.linearVelocity = new Vector2(ownSpeedX, rigid.linearVelocity.y);
 
-        // Turning the sprite stays instant. The ramp is about how fast he MOVES; making
-        // him look the wrong way for a tenth of a second just reads as broken.
+        // Which way he FACES changes instantly, even though his speed ramps: the ramp is about
+        // how fast he moves, and looking the wrong way for a tenth of a second reads as broken.
+        // Only the answer is decided here - turning the picture round is FacingView's job, the
+        // same component the ghost uses.
         if (direction != 0f)
-        {
             facingDirection = direction > 0f ? 1f : -1f;
-            transform.localScale = new Vector3(facingDirection, 1, 1);
-        }
     }
 
     /// <summary>

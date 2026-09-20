@@ -1,14 +1,16 @@
 using UnityEngine;
 
 /// <summary>
-/// VIEW. Mirrors the object so it looks the way its IFacing says - today the ghost, the one
-/// enemy that turns: it chases the player both ways. The snakes and the frog always face left,
-/// as in the original game, so they carry no IFacing and no FacingView.
+/// VIEW. Mirrors the object so it looks the way its IFacing says. Two things in the game turn:
+/// the player, who walks both ways, and the ghost, which chases him both ways. The snakes and
+/// the frog always face left, as in the original game, so they carry no IFacing and no
+/// FacingView.
 ///
-/// It decides nothing. Which way to look is the enemy's own rule, answered through IFacing,
-/// the same interface the player's weapons already read. This only draws the answer, so an
-/// enemy never holds a SpriteRenderer or a Transform flip of its own (Single Responsibility,
-/// Dependency Inversion).
+/// It decides nothing. Which way to look is the owner's own rule, answered through IFacing -
+/// the same interface the weapons already read to know which way to throw. This only draws the
+/// answer, so neither PlayerMovement nor an enemy holds a Transform flip of its own (Single
+/// Responsibility, Dependency Inversion), and there is ONE flipping mechanism in the project
+/// instead of one per character.
 ///
 /// It flips the SCALE, not SpriteRenderer.flipX, exactly like PlayerMovement does for the
 /// player. flipX mirrors only the picture; the scale mirrors the children too, so a child
@@ -18,7 +20,7 @@ using UnityEngine;
 public class FacingView : MonoBehaviour
 {
     [Tooltip("Which way the drawing itself looks, before any flipping. Off = it looks LEFT, " +
-             "which is how the ghost, the snakes and the frog are drawn.")]
+             "which is how the enemies are drawn. ON for the player, who is drawn facing RIGHT.")]
     [SerializeField] private bool artFacesRight;
 
     private IFacing facing;
