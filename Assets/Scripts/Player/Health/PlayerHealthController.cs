@@ -70,7 +70,11 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
 
     private void OnEnable()
     {
+        // -= before += : the same defensive pair the power bar uses, so switching the player
+        // object off and on again can never leave two subscriptions drawing the label twice.
+        model.Changed -= UpdateView;
         model.Changed += UpdateView;
+        model.Empty -= HandleHealthEmpty;
         model.Empty += HandleHealthEmpty;
     }
 

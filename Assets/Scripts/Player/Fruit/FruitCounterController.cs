@@ -31,9 +31,6 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
     private IFruitCounterView view;
     private IExtraLife lives;
 
-    /// <summary>Fruit eaten in this level since the last lap.</summary>
-    public int Current { get { return model != null ? model.Current : 0; } }
-
     public void Inject(IServiceContainer container)
     {
         if (viewComponent != null)

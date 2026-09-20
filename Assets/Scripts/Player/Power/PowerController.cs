@@ -31,12 +31,6 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     private IForceKillable death;
     private PowerStats stats;
 
-    /// <summary>Segments right now. Read by anything that wants to show or test it.</summary>
-    public int Current { get { return model != null ? model.Current : 0; } }
-
-    /// <summary>The ceiling in force, straight from the config asset.</summary>
-    public int Max { get { return model != null ? model.Max : 0; } }
-
     /// <summary>Called by GameInstaller before Awake. A hand-wired view still wins.</summary>
     public void Inject(IServiceContainer container)
     {
