@@ -24,7 +24,7 @@ using UnityEngine.Serialization;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(GroundCheck))]
-public class HoppingEnemy : BaseEnemy, IActivatable
+public class HoppingEnemy : ActivatableEnemy
 {
     [Tooltip("Shortest pause on the ground between hops, in seconds, counted from the moment " +
              "it LANDS - so the pause is the same whether the hop was long or short.")]
@@ -39,10 +39,6 @@ public class HoppingEnemy : BaseEnemy, IActivatable
     private IGroundCheck groundCheck;
     private JumpBehaviour jump;
     private HopAim aim;
-
-    // Awake by default, so an enemy with no range simply hops. Only ActivateNearPlayer ever
-    // turns this off.
-    private bool active = true;
 
     // Set when it lands, so the pause is a pause on the GROUND and the time spent flying
     // does not eat into it.
@@ -79,20 +75,16 @@ public class HoppingEnemy : BaseEnemy, IActivatable
         wasInAir = false;
     }
 
-    /// <summary>The player came into range. Stand for one pause, then carry on hopping.</summary>
-    public void Activate()
-    {
-        active = true;
-        nextHopTime = Time.time + NextPause();
-    }
-
     /// <summary>
-    /// The player left. It stops starting NEW hops; the one it is in finishes normally,
-    /// because freezing an enemy in mid-air looks like a bug.
+    /// Woken by ActivateNearPlayer: stand for one pause before hopping again, instead of
+    /// leaping the instant the player walks into range.
+    ///
+    /// Falling asleep needs no hook: it simply stops starting NEW hops, and the one it is in
+    /// finishes normally, because freezing an enemy in mid-air looks like a bug.
     /// </summary>
-    public void Deactivate()
+    protected override void OnActivated()
     {
-        active = false;
+        nextHopTime = Time.time + NextPause();
     }
 
     private void FixedUpdate()
@@ -121,7 +113,7 @@ public class HoppingEnemy : BaseEnemy, IActivatable
         StandStill();
 
         // Asleep: it still stands properly, it just never starts the next hop.
-        if (!active)
+        if (!IsActive)
             return;
 
         if (Time.time >= nextHopTime)

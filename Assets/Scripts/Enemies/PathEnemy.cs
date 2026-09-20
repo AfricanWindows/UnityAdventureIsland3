@@ -21,7 +21,7 @@ using UnityEngine;
 /// drift off its route however long the level runs.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class PathEnemy : BaseEnemy, IActivatable
+public class PathEnemy : ActivatableEnemy
 {
     // How much of the route the Scene view previews while the enemy is selected.
     private const float GizmoPreviewSeconds = 4f;
@@ -36,11 +36,6 @@ public class PathEnemy : BaseEnemy, IActivatable
     // Its OWN clock, not Time.time - so a revived or restarted enemy starts its route from the
     // beginning instead of appearing at a random point of it.
     private float travelTime;
-
-    // Awake by default, so an enemy with no range simply moves. Only ActivateNearPlayer ever
-    // turns this off - which matters for the bird: without it, it would fly off across the
-    // level long before the player got there.
-    private bool active = true;
 
     protected override void OnAwake()
     {
@@ -71,21 +66,10 @@ public class PathEnemy : BaseEnemy, IActivatable
         travelTime = 0f;
     }
 
-    /// <summary>The player came close. Carry on along the route.</summary>
-    public void Activate()
-    {
-        active = true;
-    }
-
-    /// <summary>The player left. Freeze where it is; the clock stops with it.</summary>
-    public void Deactivate()
-    {
-        active = false;
-    }
-
+    // Asleep (the player is far away) it freezes where it is, and its clock stops with it.
     private void FixedUpdate()
     {
-        if (!active || body == null || path == null)
+        if (!IsActive || body == null || path == null)
             return;
 
         travelTime += Time.fixedDeltaTime;

@@ -28,19 +28,12 @@ public class DropOnDefeat : MonoBehaviour
     [Tooltip("What drops. Optional - taken from this object.")]
     [SerializeField] private PickableDropper dropper;
 
-    [Tooltip("Optional arc. See the note below: a beaten enemy is switched off, so the item " +
-             "lands immediately instead of flying. Leave it off unless you know why you want it.")]
-    [SerializeField] private ItemToss toss;
-
     private IRespawnable target;
 
     private void Awake()
     {
         if (dropper == null)
             dropper = GetComponent<PickableDropper>();
-
-        if (toss == null)
-            toss = GetComponent<ItemToss>();
 
         target = GetComponent<IRespawnable>();
 
@@ -76,15 +69,8 @@ public class DropOnDefeat : MonoBehaviour
         if (dropChance < 1f && Random.value > dropChance)
             return;
 
-        BasePickable item = dropper.Drop();
-
-        if (item == null)
-            return;
-
-        // Thrown to a random side, because unlike the egg there is no player standing here
-        // to throw it away from. With no ItemToss it simply appears where the enemy fell,
-        // which is what the original game does.
-        if (toss != null)
-            toss.Toss(item.transform, Random.value < 0.5f ? -1f : 1f);
+        // It appears where the enemy fell - no arc. A beaten enemy is switched off, and a
+        // switched-off object cannot run the flight, so there is nothing to configure here.
+        dropper.Drop();
     }
 }

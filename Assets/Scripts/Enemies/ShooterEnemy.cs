@@ -19,7 +19,7 @@ using UnityEngine;
 /// It always shoots LEFT, as every enemy in the original game faces left - the way the art is
 /// drawn - so there is no direction to set and nothing to flip.
 /// </summary>
-public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
+public class ShooterEnemy : ActivatableEnemy, IInjectable, IAttacker
 {
     [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
              "so a level full of snakes needs no wiring at all.")]
@@ -37,10 +37,6 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
     private IObjectPool<EnemyProjectile> pool;
     private Transform muzzle;
     private float timer;
-
-    // Awake by default, so a snake with no range simply shoots. Only ActivateNearPlayer ever
-    // turns this off.
-    private bool active = true;
 
     /// <summary>
     /// Raised the moment a shot leaves. EnemyAnimatorView listens; the snake neither knows it
@@ -82,22 +78,18 @@ public class ShooterEnemy : BaseEnemy, IInjectable, IActivatable, IAttacker
         timer = 0f;
     }
 
-    /// <summary>The player came into range. Wait a full interval, then open fire.</summary>
-    public void Activate()
+    /// <summary>
+    /// Woken by ActivateNearPlayer: wait a full interval before the first shot, so the player
+    /// is never hit by a shot fired the instant he came into range.
+    /// </summary>
+    protected override void OnActivated()
     {
-        active = true;
         timer = 0f;
-    }
-
-    /// <summary>The player left. Stop shooting.</summary>
-    public void Deactivate()
-    {
-        active = false;
     }
 
     private void Update()
     {
-        if (!active || pool == null || shootInterval <= 0f)
+        if (!IsActive || pool == null || shootInterval <= 0f)
             return;
 
         timer += Time.deltaTime;

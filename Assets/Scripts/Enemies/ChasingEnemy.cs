@@ -23,7 +23,7 @@ using UnityEngine;
 /// their hops. A trigger passes through walls and enemies and still reports every touch.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class ChasingEnemy : BaseEnemy, IActivatable, IInjectable, IFacing
+public class ChasingEnemy : ActivatableEnemy, IInjectable, IFacing
 {
     [Tooltip("Units per second. Keep it below the player's walking speed (5) so he can get " +
              "away - once he is further than the Activate Near Player range, it stops.")]
@@ -32,10 +32,6 @@ public class ChasingEnemy : BaseEnemy, IActivatable, IInjectable, IFacing
 
     private IPlayerProvider playerProvider;
     private Rigidbody2D body;
-
-    // Awake by default, so a chaser with no range simply chases. Only ActivateNearPlayer ever
-    // turns this off - and "off" means it stays exactly where it is.
-    private bool active = true;
 
     // Left by default, which is how the art is drawn.
     private float facing = -1f;
@@ -48,9 +44,6 @@ public class ChasingEnemy : BaseEnemy, IActivatable, IInjectable, IFacing
     {
         get { return playerProvider != null ? playerProvider.PlayerTransform : null; }
     }
-
-    /// <summary>For subclasses: true while the player is in range.</summary>
-    protected bool IsActive { get { return active; } }
 
     /// <summary>Called by GameInstaller before Awake.</summary>
     public void Inject(IServiceContainer container)
@@ -67,23 +60,12 @@ public class ChasingEnemy : BaseEnemy, IActivatable, IInjectable, IFacing
             Debug.LogError("[DI] ChasingEnemy was never injected - add a GameInstaller to the scene.", this);
     }
 
-    /// <summary>The player came close. Go after him.</summary>
-    public void Activate()
-    {
-        active = true;
-    }
-
-    /// <summary>The player got away. Stay exactly where it is.</summary>
-    public void Deactivate()
-    {
-        active = false;
-    }
-
+    // Asleep (the player got away) it stays exactly where it is.
     private void FixedUpdate()
     {
         Transform player = Player;
 
-        if (!active || player == null || body == null)
+        if (!IsActive || player == null || body == null)
             return;
 
         // Turned towards him even when it is not allowed to move - a frozen ghost still looks
