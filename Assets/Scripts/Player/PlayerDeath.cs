@@ -23,7 +23,7 @@ using UnityEngine;
 /// It is the single implementation of IKillable, which is how enemies, their shots, hazards
 /// and the two timers kill the player without any of them knowing what respawning is.
 /// </summary>
-public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStartHandler, IInvincible, IMovementLock
+public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStartHandler, IInvincible, IMovementLock, IDyingState
 {
     [Tooltip("How long the death animation is given before the player reappears at the " +
              "start of the level. Match it to the clip.")]

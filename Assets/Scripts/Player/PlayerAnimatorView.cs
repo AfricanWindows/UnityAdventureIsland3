@@ -9,6 +9,11 @@ using UnityEngine;
 /// touches only this file (Single Responsibility). A character with no Animator simply
 /// does not carry this component.
 ///
+/// It reads STATES through small interfaces - IGroundCheck, ICrouchState, IHurtState,
+/// IDyingState, IAttacker - so it never names the class that owns them, exactly like
+/// EnemyAnimatorView. The one exception is PlayerMovement: walking speed is a number this
+/// view needs from the movement itself, not a state anything else could answer.
+///
 /// It reads PlayerMovement.OwnSpeedX rather than the Rigidbody, so the run cycle follows the
 /// steps he takes and not anything else that moves his body.
 /// </summary>
@@ -51,8 +56,8 @@ public class PlayerAnimatorView : MonoBehaviour
     private PlayerMovement movement;
     private IGroundCheck groundCheck;
     private ICrouchState crouch;
-    private PlayerHurt hurt;
-    private PlayerDeath death;
+    private IHurtState hurt;
+    private IDyingState death;
 
     // Hashed once. Animator.SetFloat("Speed", ...) looks the name up by string on every
     // call, every frame; the int overload does not.
@@ -82,8 +87,8 @@ public class PlayerAnimatorView : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         groundCheck = GetComponent<IGroundCheck>();
         crouch = GetComponent<ICrouchState>();
-        hurt = GetComponent<PlayerHurt>();
-        death = GetComponent<PlayerDeath>();
+        hurt = GetComponent<IHurtState>();
+        death = GetComponent<IDyingState>();
 
         // InChildren, and including inactive: the weapons live on child objects of the
         // player and start switched off until he finds them.

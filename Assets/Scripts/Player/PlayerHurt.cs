@@ -22,7 +22,7 @@ using UnityEngine;
 /// </summary>
 [DefaultExecutionOrder(100)]
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock
+public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock, IHurtState
 {
     [Tooltip("How long the shove keeps driving the player. Short - this is a stagger, not " +
              "a stun. Steering comes back when it ends.")]
