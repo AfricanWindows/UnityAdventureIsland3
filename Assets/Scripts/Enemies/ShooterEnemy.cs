@@ -48,7 +48,7 @@ public class ShooterEnemy : ActivatableEnemy, IInjectable, IAttacker
     /// Called by GameInstaller before Awake. One pool is shared by every shooting
     /// enemy in the game, so adding a snake costs nothing but the snake.
     /// </summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (shotPool != null)
             return;

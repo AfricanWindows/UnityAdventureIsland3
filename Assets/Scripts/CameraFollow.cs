@@ -21,7 +21,7 @@ public class CameraFollow : MonoBehaviour, IInjectable
 
     private IPlayerProvider players;
 
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container != null)
             container.TryResolve(out players);

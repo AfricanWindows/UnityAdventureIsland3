@@ -14,9 +14,12 @@ namespace Game.Core.DI
     {
         /// <summary>
         /// Called once by <see cref="GameInstaller"/>. Resolve here, cache here, and never
-        /// keep the container itself - holding on to it would turn injection back into a
+        /// keep the resolver itself - holding on to it would turn injection back into a
         /// Service Locator.
+        ///
+        /// It receives the READING half of the container: a component asks for what it needs
+        /// and cannot register anything.
         /// </summary>
-        void Inject(IServiceContainer container);
+        void Inject(IServiceResolver services);
     }
 }

@@ -167,7 +167,7 @@ namespace Game.Weapons
         /// still in the air: no shot fired in the old level can hit the player in the new
         /// one. The flow names no pool; it only announces the level (Dependency Inversion).
         /// </summary>
-        public void Inject(IServiceContainer container)
+        public void Inject(IServiceResolver container)
         {
             if (container != null && container.TryResolve(out _flow))
                 _flow.LevelEntered += ReleaseAllInFlight;

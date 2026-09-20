@@ -49,7 +49,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
         }
     }
 
-    public Vector3 CurrentSpawnPosition
+    private Vector3 CurrentSpawnPosition
     {
         get
         {
@@ -58,7 +58,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
         }
     }
 
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container != null)
             container.TryResolve(out _players);

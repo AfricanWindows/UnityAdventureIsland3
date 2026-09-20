@@ -24,7 +24,7 @@ public class LevelCompleteController : MonoBehaviour, IInjectable, IResettable
 
     private ILevelFlow flow;
 
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container == null)
             return;

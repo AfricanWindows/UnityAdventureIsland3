@@ -34,7 +34,7 @@ public class GameOverController : MonoBehaviour, IInjectable, IResettable
     private bool isGameOver;
 
     /// <summary>Called by GameInstaller before Awake.</summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         IPlayerProvider players;
         if (container == null || !container.TryResolve(out players) || players.Player == null)

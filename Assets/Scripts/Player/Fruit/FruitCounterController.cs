@@ -31,7 +31,7 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
     private IFruitCounterView view;
     private IExtraLife lives;
 
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (viewComponent != null)
             return;

@@ -20,7 +20,7 @@ public class RestartGameButton : MonoBehaviour, IInjectable
     private ILevelFlow flow;
     private Button button;
 
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container != null)
             container.TryResolve(out flow);

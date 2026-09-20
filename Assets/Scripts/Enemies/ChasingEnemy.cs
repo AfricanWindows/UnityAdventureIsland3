@@ -46,7 +46,7 @@ public class ChasingEnemy : ActivatableEnemy, IInjectable, IFacing
     }
 
     /// <summary>Called by GameInstaller before Awake.</summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container != null)
             container.TryResolve(out playerProvider);

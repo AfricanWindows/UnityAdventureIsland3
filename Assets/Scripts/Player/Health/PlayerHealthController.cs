@@ -41,7 +41,7 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
     /// Called by GameInstaller before Awake. An explicit field on this object still wins:
     /// a hand-wired reference is a deliberate decision, and injection should not overrule it.
     /// </summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (viewComponent != null)
             return;

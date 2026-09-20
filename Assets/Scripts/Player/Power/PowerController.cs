@@ -32,7 +32,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     private PowerStats stats;
 
     /// <summary>Called by GameInstaller before Awake. A hand-wired view still wins.</summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (viewComponent != null)
             return;

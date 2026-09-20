@@ -27,7 +27,7 @@ public class LevelExitDoor : MonoBehaviour, IInjectable
     private bool completed;
 
     /// <summary>Called by GameInstaller, also for the doors of levels that start switched off.</summary>
-    public void Inject(IServiceContainer container)
+    public void Inject(IServiceResolver container)
     {
         if (container != null)
             container.TryResolve(out flow);

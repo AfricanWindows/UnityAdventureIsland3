@@ -48,7 +48,7 @@ namespace Game.Core.Controls
         /// Called by GameInstaller before Awake. Resolved once and cached; the container
         /// itself is NOT kept, so this stays injection and never becomes a Service Locator.
         /// </summary>
-        public virtual void Inject(IServiceContainer container)
+        public virtual void Inject(IServiceResolver container)
         {
             if (container != null)
                 container.TryResolve(out _inputSource);

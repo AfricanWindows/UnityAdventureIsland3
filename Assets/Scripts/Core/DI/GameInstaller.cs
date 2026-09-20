@@ -32,29 +32,29 @@ namespace Game.Core.DI
                  "once, here, which is the one place in the project allowed to search the scene.")]
         [SerializeField] private PlayerHealthView healthView;
 
-    [Tooltip("The power bar. Optional - same rule as the health label above.")]
-    [SerializeField] private PowerBarView powerBar;
+        [Tooltip("The power bar. Optional - same rule as the health label above.")]
+        [SerializeField] private PowerBarView powerBar;
 
-    [Tooltip("The \"Fruits: 0/20\" label. Optional - found automatically.")]
-    [SerializeField] private FruitCounterView fruitCounter;
+        [Tooltip("The \"Fruits: 0/20\" label. Optional - found automatically.")]
+        [SerializeField] private FruitCounterView fruitCounter;
 
-    [Tooltip("The pool every shooting enemy borrows its shots from. Optional - found automatically.")]
-    [SerializeField] private EnemyProjectilePoolManager enemyShotPool;
+        [Tooltip("The pool every shooting enemy borrows its shots from. Optional - found automatically.")]
+        [SerializeField] private EnemyProjectilePoolManager enemyShotPool;
 
-    [Tooltip("The axe pool. Optional - found automatically, wherever it sits in the scene.")]
-    [SerializeField] private AxePoolManager axePool;
+        [Tooltip("The axe pool. Optional - found automatically, wherever it sits in the scene.")]
+        [SerializeField] private AxePoolManager axePool;
 
-    [Tooltip("The boomerang pool. Optional - found automatically.")]
-    [SerializeField] private BoomerangPoolManager boomerangPool;
+        [Tooltip("The boomerang pool. Optional - found automatically.")]
+        [SerializeField] private BoomerangPoolManager boomerangPool;
 
-    [Tooltip("The pool both shooting animals borrow from. Optional - found automatically.")]
-    [SerializeField] private AnimalShotPoolManager animalShotPool;
+        [Tooltip("The pool both shooting animals borrow from. Optional - found automatically.")]
+        [SerializeField] private AnimalShotPoolManager animalShotPool;
 
-    [Tooltip("The object that switches the levels. Optional - found automatically.")]
-    [SerializeField] private LevelFlowController levelFlow;
+        [Tooltip("The object that switches the levels. Optional - found automatically.")]
+        [SerializeField] private LevelFlowController levelFlow;
 
-    [Tooltip("Tag the player object carries. The camera and the level flow find him by it.")]
-    [SerializeField] private string playerTag = "Player";
+        [Tooltip("Tag the player object carries. The camera and the level flow find him by it.")]
+        [SerializeField] private string playerTag = "Player";
 
         [Header("Diagnostics")]
         [Tooltip("Log every registration and every injected component on start-up.")]
