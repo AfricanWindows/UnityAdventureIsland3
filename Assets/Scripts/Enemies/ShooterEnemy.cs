@@ -1,7 +1,6 @@
 using System;
 using Game.Core;
 using Game.Core.DI;
-using Game.Weapons;
 using UnityEngine;
 
 /// <summary>

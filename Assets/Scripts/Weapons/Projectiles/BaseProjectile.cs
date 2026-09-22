@@ -71,7 +71,9 @@ namespace Game.Projectiles
         /// </summary>
         public void Fire(Vector3 origin)
         {
-            transform.SetPositionAndRotation(origin, GetRotation());
+            // Always unrotated: which way it faces is the scale (DirectionalProjectile), and
+            // the boomerang's spin is its own flight. No projectile needs a start rotation.
+            transform.SetPositionAndRotation(origin, Quaternion.identity);
 
             OnBeforeFire();                     // hook
             ApplyMovement(GetDirection());      // step
@@ -81,12 +83,6 @@ namespace Game.Projectiles
 
         /// <summary>The only step a projectile MUST answer: which way do I fly?</summary>
         protected abstract Vector2 GetDirection();
-
-        /// <summary>How the projectile is turned when it appears. Default: not at all.</summary>
-        protected virtual Quaternion GetRotation()
-        {
-            return Quaternion.identity;
-        }
 
         /// <summary>
         /// Speed is set ONCE, here, and physics carries the object from then on. There is

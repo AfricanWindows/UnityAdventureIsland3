@@ -1,4 +1,3 @@
-using Game.Core;
 using Game.Core.DI;
 using UnityEngine;
 
@@ -7,64 +6,32 @@ using UnityEngine;
 ///
 /// It used to listen to the door directly, which meant it fired at the end of every level
 /// and froze the game instead of letting the next one start. Now it listens to
-/// ILevelFlow.GameCompleted, so the flow controller decides what "finished" means and this
-/// class only draws (Single Responsibility).
+/// ILevelEvents.GameCompleted, so the flow controller decides what "finished" means and this
+/// class only answers "when" (Single Responsibility). Everything else a screen does - the
+/// panel, the freeze, closing itself on a restart - is EndScreenController's.
 ///
-/// Its RESTART button is the shared RestartGameButton component, exactly like the Game
-/// Over popup - there is no button code here. Closing the panel is IResettable, so it
-/// happens as part of the same restart that puts everything else back.
+/// It gets ILevelEvents and not ILevelFlow: a screen may hear that the game ended, but it
+/// has no business switching levels (Interface Segregation).
 /// </summary>
-public class LevelCompleteController : MonoBehaviour, IInjectable, IResettable
+public class LevelCompleteController : EndScreenController
 {
-    [Tooltip("Panel with the LEVEL COMPLETE text and the RESTART button. Hidden while playing.")]
-    [SerializeField] private GameObject levelCompletePanel;
+    private ILevelEvents levelEvents;
 
-    [Tooltip("Freeze the game while the panel is up.")]
-    [SerializeField] private bool freezeWhileShown = true;
-
-    private ILevelFlow flow;
-
-    public void Inject(IServiceResolver container)
+    protected override void Subscribe(IServiceResolver container)
     {
-        if (container == null)
+        if (!container.TryResolve(out levelEvents))
+        {
+            Debug.LogError("LevelCompleteController: no ILevelEvents - is there a " +
+                           "LevelFlowController in the scene? Level Complete will never show.", this);
             return;
+        }
 
-        container.TryResolve(out flow);
-
-        // Subscribed here rather than in OnEnable because injection happens before Awake,
-        // and the flow could in principle finish the game on the very first frame.
-        if (flow != null)
-            flow.GameCompleted += OnGameCompleted;
+        levelEvents.GameCompleted += Show;
     }
 
-    private void OnDestroy()
+    protected override void Unsubscribe()
     {
-        if (flow != null)
-            flow.GameCompleted -= OnGameCompleted;
-
-        Time.timeScale = 1f;
-    }
-
-    private void Start()
-    {
-        ResetToStart();
-    }
-
-    private void OnGameCompleted()
-    {
-        if (levelCompletePanel != null)
-            levelCompletePanel.SetActive(true);
-
-        if (freezeWhileShown)
-            Time.timeScale = 0f;
-    }
-
-    /// <summary>A new game: no panel, and time running again.</summary>
-    public void ResetToStart()
-    {
-        Time.timeScale = 1f;
-
-        if (levelCompletePanel != null)
-            levelCompletePanel.SetActive(false);
+        if (levelEvents != null)
+            levelEvents.GameCompleted -= Show;
     }
 }

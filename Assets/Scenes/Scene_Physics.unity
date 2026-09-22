@@ -11441,7 +11441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10bbeb2042f91cb40884d4285641349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverController
-  gameOverPanel: {fileID: 139526365}
+  panel: {fileID: 139526365}
   freezeWhileShown: 1
 --- !u!4 &1015341590
 Transform:
@@ -11470,7 +11470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143d5ed4ca8d04544aeb9174834cfeb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelCompleteController
-  levelCompletePanel: {fileID: 1727669017}
+  panel: {fileID: 1727669017}
   freezeWhileShown: 1
 --- !u!114 &1015341592
 MonoBehaviour:
@@ -11788,8 +11788,8 @@ MonoBehaviour:
   prefab: {fileID: -2751458972493023182, guid: 3116b9b63743dbb498c72600f4e82794, type: 3}
   config: {fileID: 11400000, guid: 1c0662647ccaceae8d8c721a959f29be, type: 2}
   container: {fileID: 1037063894}
-  prewarmCount: 3
-  maxSize: 3
+  prewarmCount: 2
+  maxSize: 2
   allowGrowth: 0
 --- !u!4 &1037063894
 Transform:

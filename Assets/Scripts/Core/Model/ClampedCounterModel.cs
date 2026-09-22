@@ -40,7 +40,8 @@ namespace Game.Core
 
         public int Max { get { return max; } }
 
-        public bool IsFull { get { return current >= max; } }
+        // Private: only Add needs to know. No client ever asked, so it is not in the interface.
+        private bool IsFull { get { return current >= max; } }
 
         public event Action Changed;
 

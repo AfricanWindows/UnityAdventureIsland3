@@ -4,11 +4,11 @@ using UnityEngine;
 /// Shows an object for as long as a TimedPlayerEffect is running - the little fairy flying
 /// beside the player, and any companion, aura or shield sprite that comes later.
 ///
-/// It is the second view for the same effect, next to TimedEffectView which tints a sprite.
-/// Neither of them decides anything: they listen to OnActiveChanged and draw. That is why
-/// the fairy needed no change at all in PlayerInvincible, in the power-up, or in the
-/// pickable - the effect already announced itself, and this simply started listening
-/// (Open/Closed, Single Responsibility).
+/// It is the one view of the fairy's invincibility: the player himself is not recoloured,
+/// the fairy beside him IS the sign. It decides nothing - it listens to OnActiveChanged and
+/// draws. That is why the fairy needed no change at all in PlayerInvincible, in the power-up,
+/// or in the pickable - the effect already announced itself, and this simply started
+/// listening (Open/Closed, Single Responsibility).
 ///
 /// The shown object is a plain GameObject, not a sprite, so it may be a single image or a
 /// whole animated child with its own Animator and hover - this class neither knows nor cares.

@@ -19,6 +19,11 @@ using UnityEngine;
 ///
 /// Both message pairs are handled, because the same effect must work on a solid obstacle
 /// (collision) and on a trigger volume (fire, water) without the author choosing.
+///
+/// It is not only for hazards. Everything the player "touches to trigger" goes through
+/// here - the stone, the campfire, the abyss, the egg, every pickup and the level door - so
+/// "is this really the player, and is it a new touch" is answered in ONE place for the
+/// whole game (Don't Repeat Yourself).
 /// </summary>
 public abstract class PlayerContactEffect : MonoBehaviour
 {
@@ -88,6 +93,6 @@ public abstract class PlayerContactEffect : MonoBehaviour
         playerInside = false;
     }
 
-    /// <summary>The one step each hazard defines for itself.</summary>
+    /// <summary>The one step each subclass defines for itself: what the touch does.</summary>
     protected abstract void Affect(GameObject player);
 }

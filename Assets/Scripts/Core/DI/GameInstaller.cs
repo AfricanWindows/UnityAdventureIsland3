@@ -106,8 +106,15 @@ namespace Game.Core.DI
             RegisterPool<BoomerangPoolManager, BoomerangProjectile>(boomerangPool, "the boomerang");
             RegisterPool<AnimalShotPoolManager, AnimalShot>(animalShotPool, "the shooting animals");
 
-            // The game's course: which level runs, and what a restart means.
-            RegisterSceneService<ILevelFlow, LevelFlowController>(levelFlow, "levels will not switch");
+            // The game's course: which level runs, and what a restart means. ONE object,
+            // published under two names - the commands (ILevelFlow) for the door and the
+            // restart button, the news (ILevelEvents) for the panels and the pools - so
+            // each client sees only the half it uses (Interface Segregation).
+            LevelFlowController flow = RegisterSceneService<ILevelFlow, LevelFlowController>(
+                levelFlow, "levels will not switch");
+
+            if (flow != null)
+                _container.Register<ILevelEvents>(flow);
 
             if (verbose)
                 Debug.Log("[DI] Services registered.", this);

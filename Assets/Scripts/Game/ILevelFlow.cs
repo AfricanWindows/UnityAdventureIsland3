@@ -1,12 +1,10 @@
-using System;
-using UnityEngine;
-
 /// <summary>
-/// The game's course: which level is running, what happens when it is finished, and what
-/// "start over" means.
+/// The game's course, as COMMANDS: finish this level, or start everything over.
 ///
-/// Doors, the Game Over popup and the player all talk to THIS, never to the concrete
-/// controller, so any of them can be tested or replaced on its own (Dependency Inversion).
+/// Doors and the restart button talk to THIS, never to the concrete controller, so any of
+/// them can be tested or replaced on its own (Dependency Inversion). What the flow ANNOUNCES
+/// is a separate interface, ILevelEvents - a door has no use for the events and a pool has
+/// no business finishing a level (Interface Segregation).
 /// </summary>
 public interface ILevelFlow
 {
@@ -15,14 +13,4 @@ public interface ILevelFlow
 
     /// <summary>Everything from scratch: full lives, every level untouched, level one.</summary>
     void RestartGame();
-
-    /// <summary>Raised when the last level has been finished.</summary>
-    event Action GameCompleted;
-
-    /// <summary>
-    /// Raised every time a level is entered - the first one, the next one, and level one
-    /// again after a restart. The projectile pools listen: nothing fired in the old level
-    /// may still be flying in the new one.
-    /// </summary>
-    event Action LevelEntered;
 }

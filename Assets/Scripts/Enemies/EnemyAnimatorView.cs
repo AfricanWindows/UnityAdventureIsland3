@@ -58,7 +58,7 @@ public class EnemyAnimatorView : MonoBehaviour
         hidingState = GetComponent<IHidingState>();
 
         hasAttack = Enable(attackTrigger, attacker != null, "IAttacker", out attackHash);
-        hasGrounded = Enable(groundedParameter, groundCheck != null, "GroundCheck", out groundedHash);
+        hasGrounded = Enable(groundedParameter, groundCheck != null, "IGroundCheck", out groundedHash);
         hasHiding = Enable(hidingParameter, hidingState != null, "IHidingState", out hidingHash);
     }
 

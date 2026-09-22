@@ -15,17 +15,13 @@ using UnityEngine;
 /// instead; the moment the animal is lost the axe answers the button again, with no state to
 /// restore and nothing to remember.
 ///
-/// It is also the player's IHitAbsorber. Anything that would hurt him - a stone, a campfire,
-/// an enemy, a shot - asks first whether something can take the hit; the animal takes it,
-/// disappears, and the player walks on with a full power bar. The obstacle that hit him is
-/// smashed in the same breath, because the absorber is the only place that knows BOTH what
-/// hit him and that an animal was spent.
-///
-/// Three jobs in one class - hold, fire, absorb - and they are three halves of one idea,
-/// "the animal I am riding". WeaponsHandler is built the same way: slot, trigger and reset.
+/// Two jobs - hold and fire - the two halves of "the animal I am riding", exactly like
+/// WeaponsHandler's slot and trigger. The animal TAKING A HIT for the player is a rule of its
+/// own and lives in MountHitAbsorber, which only asks this class through IMountSlot
+/// (Single Responsibility).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAbsorber, IResettable, IPlayerDeathHandler
+public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IResettable, IPlayerDeathHandler
 {
     [Tooltip("The player's Animator. Empty = the one on this object.")]
     [SerializeField] private Animator animator;
@@ -41,13 +37,6 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
     private RuntimeAnimatorController footLook;
     private float footRadius;
     private Vector2 footOffset;
-
-    // The fairy, dying, and the recovery window. Asked before the animal is spent - see
-    // TryAbsorbHit.
-    private IInvincible[] invincibilitySources;
-
-    // Opened when the animal is knocked out from under him - see TryAbsorbHit.
-    private IHitRecovery recovery;
 
     public bool IsMounted { get { return current != null; } }
 
@@ -70,17 +59,6 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
             footRadius = bodyCollider.radius;
             footOffset = bodyCollider.offset;
         }
-
-        // Includes the recovery window, and deliberately so: it is what stops a second
-        // animal, picked up during that window, from being spent by the same enemy the
-        // player is still standing in.
-        invincibilitySources = GetComponents<IInvincible>();
-        recovery = GetComponent<IHitRecovery>();
-
-        if (recovery == null)
-            Debug.LogWarning("PlayerMount: no IHitRecovery on " + gameObject.name + " - after " +
-                             "losing an animal the player can die on the very next step. Add " +
-                             "a Hit Invincibility.", this);
     }
 
     /// <summary>
@@ -139,61 +117,6 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
         ApplyLook(footLook);
         ApplyCollider(footRadius, footOffset);
-    }
-
-    // ===================== IHitAbsorber =====================
-
-    /// <summary>
-    /// The animal takes the hit and is gone; the player is not touched at all - no power
-    /// lost, no life lost, no knockback.
-    ///
-    /// The invincibility check is what stops a fairy and an animal from both being spent on
-    /// one hit: if something is already protecting him the hit will be refused further down
-    /// the line anyway, so the animal stays. It is asked here rather than by the hazard
-    /// because only the absorber knows whether it is worth spending itself.
-    /// </summary>
-    public bool TryAbsorbHit(GameObject source)
-    {
-        if (current == null)
-            return false;
-
-        if (invincibilitySources.AnyActive())
-            return false;
-
-        Dismount();
-        Smash(source);
-
-        // The player is dropped on the exact spot where the thing that took his animal still
-        // stands. Without a recovery window the next physics step would kill HIM too - one
-        // touch of an enemy would cost the animal and a life together.
-        // Opened only here, not inside Dismount: stepping off because the game restarted or
-        // because the player died is not a hit, and owes him no window.
-        if (recovery != null)
-            recovery.Begin();
-
-        return true;
-    }
-
-    /// <summary>
-    /// Riding into an obstacle destroys it as well - the stone and the campfire from the
-    /// assignment, both of which already carry a Destructible (an IObstacle) for the fairy.
-    ///
-    /// It asks for IObstacle and NOT for IForceKillable, and that is the rule rather than
-    /// an oversight: enemies answer IForceKillable too, and riding into an enemy must cost
-    /// the animal WITHOUT killing the enemy. IObstacle means "an obstacle in the way",
-    /// which is exactly the set that gets smashed.
-    /// </summary>
-    private void Smash(GameObject source)
-    {
-        if (source == null)
-            return;
-
-        // InParent: the collider that hit us is often a child of the object that owns the
-        // behaviour.
-        IObstacle obstacle = source.GetComponentInParent<IObstacle>();
-
-        if (obstacle != null)
-            obstacle.ForceKill();
     }
 
     // ===================== IResettable =====================

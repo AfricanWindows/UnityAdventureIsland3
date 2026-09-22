@@ -6,8 +6,9 @@ using UnityEngine;
 /// Deliberately separate from AddPowerPowerUp: how much power a fruit restores and whether
 /// it counts towards the twenty are two different rules, and the assignment sets them
 /// independently - a banana gives 1 power, a carrot gives 2, but both count as ONE fruit.
+/// Finding the counter on the player is PlayerComponentPowerUp's job; this class only counts.
 /// </summary>
-public class CountFruitPowerUp : IPowerUp
+public class CountFruitPowerUp : PlayerComponentPowerUp<IFruitCollector>
 {
     private readonly int amount;
 
@@ -16,19 +17,8 @@ public class CountFruitPowerUp : IPowerUp
         this.amount = amount;
     }
 
-    public void ApplyPowerUp(GameObject player)
+    protected override void Apply(IFruitCollector counter, GameObject player)
     {
-        if (player == null)
-            return;
-
-        IFruitCollector counter = player.GetComponentInChildren<IFruitCollector>(true);
-
-        if (counter == null)
-        {
-            Debug.LogWarning("[Fruit] No IFruitCollector (FruitCounterController) under " + player.name);
-            return;
-        }
-
         counter.Collect(amount);
     }
 }

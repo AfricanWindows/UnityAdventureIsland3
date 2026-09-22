@@ -17,23 +17,13 @@ using UnityEngine;
 /// abyss kills the player through a different route entirely - see AbyssKillOnTouch - so
 /// "invincible" here honestly means "nothing that hurts him can hurt him", and the one
 /// exception never has to be remembered by this class or by the effect it starts.
+///
+/// Finding the effect on the player is PlayerComponentPowerUp's job; this class only starts it.
 /// </summary>
-public class InvincibilityPowerUp : IPowerUp
+public class InvincibilityPowerUp : PlayerComponentPowerUp<IInvincibilityEffect>
 {
-    public void ApplyPowerUp(GameObject player)
+    protected override void Apply(IInvincibilityEffect invincible, GameObject player)
     {
-        if (player == null)
-            return;
-
-        IInvincibilityEffect invincible = player.GetComponentInChildren<IInvincibilityEffect>(true);
-
-        if (invincible == null)
-        {
-            Debug.LogWarning("InvincibilityPowerUp: no IInvincibilityEffect (PlayerInvincible) on " +
-                             player.name, player);
-            return;
-        }
-
         invincible.ActivateInvincibility();
     }
 }

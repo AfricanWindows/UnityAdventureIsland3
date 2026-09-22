@@ -21,7 +21,7 @@ using UnityEngine;
 /// </summary>
 [DefaultExecutionOrder(-500)]
 [DisallowMultipleComponent]
-public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
+public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInjectable
 {
     [Tooltip("Every level, in play order. Level 1 first. All of them may stay switched on " +
              "in the editor - this controller turns off the ones that are not current.")]
@@ -149,7 +149,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
     }
 
     /// <summary>
-    /// Announces the start of a level to whoever on the player cares: PlayerDeath moves
+    /// Announces the start of a level to whoever on the player cares: PlayerSpawn moves
     /// him and remembers the new respawn point, PowerController refills the bar.
     ///
     /// This class names NEITHER of them. It asks for ILevelStartHandler and calls

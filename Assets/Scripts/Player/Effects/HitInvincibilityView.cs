@@ -6,8 +6,8 @@ using UnityEngine;
 ///
 /// It only reads a bool and changes one number - the sprite's alpha. It never decides when
 /// the window starts or ends, and it never names the class that owns it (Dependency
-/// Inversion). Only the alpha is touched, never the colour, so it does not fight
-/// TimedEffectView, which tints the same sprite red while the fairy is active.
+/// Inversion). Only the alpha is touched, never the colour, so the sprite always comes back
+/// exactly as it was drawn.
 ///
 /// Update and not a coroutine: the blink is a picture of a state that can start, restart or
 /// end at any moment, and polling that state every frame is simpler and safer than keeping

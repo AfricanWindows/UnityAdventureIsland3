@@ -56,7 +56,7 @@ namespace Game.Weapons
         [SerializeField] private bool allowGrowth;
 
         private GenericObjectPool<TProjectile> _pool;
-        private ILevelFlow _flow;
+        private ILevelEvents _levelEvents;
         private string _logPrefix;
 
         /// <summary>Prefix for this pool's console messages, e.g. "[ProjectileAxe]".</summary>
@@ -72,7 +72,7 @@ namespace Game.Weapons
         }
 
         // Private on purpose: a subclass that declared its own Awake would silently replace
-        // this one and the pool would never be built. Subclasses override OnPoolReady().
+        // this one and the pool would never be built.
         private void Awake()
         {
             if (prefab == null || config == null)
@@ -91,12 +91,7 @@ namespace Game.Weapons
             ConfiguredProjectileFactory<TProjectile> factory = new ConfiguredProjectileFactory<TProjectile>(director, config);
 
             _pool = new GenericObjectPool<TProjectile>(factory, prewarmCount, maxSize, allowGrowth);
-
-            OnPoolReady();
         }
-
-        /// <summary>Subclass hook, run once the pool exists. Nothing needs it today.</summary>
-        protected virtual void OnPoolReady() { }
 
         /// <summary>
         /// The container assigned in the Inspector, or a fresh one at the root of the scene.
@@ -162,21 +157,22 @@ namespace Game.Weapons
         }
 
         /// <summary>
-        /// Called by GameInstaller. The pool listens to the level flow so that entering a
+        /// Called by GameInstaller. The pool listens to ILevelEvents so that entering a
         /// level - the next one, or level one after a restart - takes back every projectile
         /// still in the air: no shot fired in the old level can hit the player in the new
         /// one. The flow names no pool; it only announces the level (Dependency Inversion).
+        /// The pool gets the EVENTS only - it cannot switch levels (Interface Segregation).
         /// </summary>
         public void Inject(IServiceResolver container)
         {
-            if (container != null && container.TryResolve(out _flow))
-                _flow.LevelEntered += ReleaseAllInFlight;
+            if (container != null && container.TryResolve(out _levelEvents))
+                _levelEvents.LevelEntered += ReleaseAllInFlight;
         }
 
         private void OnDestroy()
         {
-            if (_flow != null)
-                _flow.LevelEntered -= ReleaseAllInFlight;
+            if (_levelEvents != null)
+                _levelEvents.LevelEntered -= ReleaseAllInFlight;
         }
 
         private void ReleaseAllInFlight()

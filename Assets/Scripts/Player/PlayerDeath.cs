@@ -22,14 +22,18 @@ using UnityEngine;
 ///
 /// It is the single implementation of IKillable, which is how enemies, their shots, hazards
 /// and the two timers kill the player without any of them knowing what respawning is.
+///
+/// WHERE he comes back is not decided here either: that is IPlayerSpawn (PlayerSpawn), which
+/// also answers the start of a new level. Every interface left on this class is a facet of
+/// one thing - dying (Single Responsibility).
 /// </summary>
-public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStartHandler, IInvincible, IMovementLock, IDyingState
+public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, IInvincible, IMovementLock, IDyingState
 {
     [Tooltip("How long the death animation is given before the player reappears at the " +
              "start of the level. Match it to the clip.")]
     [SerializeField] private float deathAnimationSeconds = 1f;
 
-    private Vector3 startPosition;
+    private IPlayerSpawn spawn;
 
     private IInvincible[] invincibilitySources;
     private Rigidbody2D body;
@@ -54,8 +58,12 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
 
     private void Awake()
     {
-        startPosition = transform.position;
+        spawn = GetComponent<IPlayerSpawn>();
         body = GetComponent<Rigidbody2D>();
+
+        if (spawn == null)
+            Debug.LogError("PlayerDeath: no IPlayerSpawn on " + gameObject.name + " - after " +
+                           "dying he would stay where he fell. Add a Player Spawn component.", this);
 
         // Includes this component. That is deliberate: it is what makes Kill() refuse a
         // second death while the first one is still playing.
@@ -79,31 +87,6 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
 
         if (body != null)
             body.simulated = true;
-    }
-
-    /// <summary>
-    /// A level began: this is where the player now stands, and where dying will bring
-    /// him back - level two sends him to level two, not to where the game started.
-    /// </summary>
-    public void OnLevelStarted(Vector3 spawnPosition)
-    {
-        startPosition = spawnPosition;
-        Respawn();
-    }
-
-    /// <summary>
-    /// Back to the start of the current level.
-    ///
-    /// The velocity is wiped too. Without it a player who died while falling arrives at the
-    /// spawn point still falling at the speed that killed him, and drops straight through
-    /// the floor on the frame he reappears.
-    /// </summary>
-    public void Respawn()
-    {
-        transform.position = startPosition;
-
-        if (body != null)
-            body.linearVelocity = Vector2.zero;
     }
 
     /// <summary>
@@ -174,7 +157,8 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, ILevelStart
 
         isDying = false;
 
-        Respawn();
+        if (spawn != null)
+            spawn.ReturnToSpawn();
 
         SetControlEnabled(true);
 

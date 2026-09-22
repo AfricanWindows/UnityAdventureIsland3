@@ -5,12 +5,12 @@ using UnityEngine;
 /// The short recovery window after the player takes a hit: for a moment nothing can hurt him.
 ///
 /// Two things start it - a stone hurting him (PlayerHurt) and his animal being knocked out
-/// from under him (PlayerMount). Both call Begin(); neither knows how long it lasts or how
+/// from under him (MountHitAbsorber). Both call Begin(); neither knows how long it lasts or how
 /// it is shown. How it is shown is HitInvincibilityView's job (Single Responsibility).
 /// All three know it only as IHitRecovery, never as this class (Dependency Inversion).
 ///
 /// It answers the same IInvincible as the fairy and the death animation, so PlayerDeath,
-/// PlayerHurt and PlayerMount honour it without a line of new code (Open/Closed). It stops
+/// PlayerHurt and MountHitAbsorber honour it without a line of new code (Open/Closed). It stops
 /// only what goes through Kill and TryHurt - blows. The abyss and the empty power bar use
 /// ForceKill, which no protection can refuse, so a recovery window can never swallow a life.
 ///
@@ -19,7 +19,7 @@ using UnityEngine;
 /// itself while the game is paused because Time.time stops too.
 /// </summary>
 [DisallowMultipleComponent]
-public class HitInvincibility : MonoBehaviour, IInvincible, IHitRecovery, IResettable
+public class HitInvincibility : MonoBehaviour, IHitRecovery, IResettable
 {
     [Tooltip("Seconds the player cannot be hurt after a hit. The sprite blinks meanwhile.")]
     [Min(0f)]

@@ -21,8 +21,6 @@ namespace Game.Core
 
         int Max { get; }
 
-        bool IsFull { get; }
-
         /// <summary>Raised on every change of Current.</summary>
         event Action Changed;
 

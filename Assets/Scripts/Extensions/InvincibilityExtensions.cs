@@ -1,7 +1,7 @@
 /// <summary>
 /// "Is ANY of these protecting the player right now?"
 ///
-/// PlayerDeath, PlayerHurt and PlayerMount each ask exactly this about the same list - the
+/// PlayerDeath, PlayerHurt and MountHitAbsorber each ask exactly this about the same list - the
 /// fairy, the death animation, the recovery window after a hit - and each used to carry its
 /// own copy of the loop. One copy now, so a fourth caller costs one line.
 /// </summary>

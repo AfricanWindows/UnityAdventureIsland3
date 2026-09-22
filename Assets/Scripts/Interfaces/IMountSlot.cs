@@ -6,12 +6,16 @@
 /// on purpose: finding an animal must not cost the player his axe, and stepping off it must
 /// give the axe straight back - two independent truths, two slots (Single Responsibility).
 ///
-/// Two methods, because there are exactly two things the rest of the game does to the
-/// saddle: a pickup puts an animal in it, and being hit or dying empties it. Neither caller
-/// learns which animals exist (Interface Segregation, Dependency Inversion).
+/// Three members, because there are exactly three things the rest of the game does with the
+/// saddle: a pickup puts an animal in it, the hit absorber asks whether one is there, and
+/// being hit or dying empties it. No caller learns which animals exist (Interface
+/// Segregation, Dependency Inversion).
 /// </summary>
 public interface IMountSlot
 {
+    /// <summary>True while the player rides an animal.</summary>
+    bool IsMounted { get; }
+
     /// <summary>Climb onto this animal, leaving whatever was carried before.</summary>
     void Mount(AnimalMount animal);
 

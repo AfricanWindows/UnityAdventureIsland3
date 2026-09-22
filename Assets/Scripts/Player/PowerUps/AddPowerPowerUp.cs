@@ -8,9 +8,10 @@ using UnityEngine;
 ///
 /// It is a plain C# class, like every other IPowerUp here - the thing lying in the level
 /// is a separate class (FruitPickable). Splitting them is what lets the same effect be
-/// granted by a chest, an egg or an end-of-level reward without duplicating it.
+/// granted by a chest, an egg or an end-of-level reward without duplicating it. Finding the
+/// power bar on the player is PlayerComponentPowerUp's job; this class only adds.
 /// </summary>
-public class AddPowerPowerUp : IPowerUp
+public class AddPowerPowerUp : PlayerComponentPowerUp<IPowerWallet>
 {
     private readonly int amount;
 
@@ -19,19 +20,8 @@ public class AddPowerPowerUp : IPowerUp
         this.amount = amount;
     }
 
-    public void ApplyPowerUp(GameObject player)
+    protected override void Apply(IPowerWallet power, GameObject player)
     {
-        if (player == null)
-            return;
-
-        IPowerWallet power = player.GetComponentInChildren<IPowerWallet>(true);
-
-        if (power == null)
-        {
-            Debug.LogWarning("[Fruit] No IPowerWallet (PowerController) under " + player.name);
-            return;
-        }
-
         // The bar clamps it: a carrot at 14 of 15 segments adds one.
         power.AddPower(amount);
     }

@@ -231,7 +231,6 @@ GameObject:
   - component: {fileID: 4317648927718729442}
   - component: {fileID: 4421290927304627351}
   - component: {fileID: 277688120179838768}
-  - component: {fileID: 4512935578239681708}
   - component: {fileID: 8572535940942234845}
   - component: {fileID: 6296240038217909520}
   - component: {fileID: 8444476018975068162}
@@ -256,6 +255,8 @@ GameObject:
   - component: {fileID: 1158498386137541783}
   - component: {fileID: 4035252726741945448}
   - component: {fileID: 8471920365172834519}
+  - component: {fileID: 7788110000000000501}
+  - component: {fileID: 7788110000000000502}
   m_Layer: 0
   m_Name: Prefab_Player
   m_TagString: Player
@@ -460,21 +461,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656c57edeb17c2d41a94dd78a9e02cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPowerUp
---- !u!114 &4512935578239681708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d44372c2ffbce854c852238f04abbe73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TimedEffectView
-  effect: {fileID: 0}
-  targetRenderer: {fileID: 408238848797351686}
-  activeColor: {r: 1, g: 0.5882353, b: 0.5882353, a: 1}
 --- !u!114 &8572535940942234845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,3 +916,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FacingView
   artFacesRight: 1
+--- !u!114 &7788110000000000501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8592fbbf2c4f33a3f713f8aa855ced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawn
+--- !u!114 &7788110000000000502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b194fe0c9b59461c9a705759e8acfa19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MountHitAbsorber
