@@ -114,11 +114,11 @@ namespace Game.Weapons
             // A LEVEL is, every time the player moves on, and an inactive parent takes its
             // sleeping projectiles down with it: the weapon would fire, the pool would
             // report a hand-out, and nothing would appear on screen.
-            Level owningLevel = container.GetComponentInParent<Level>(true);
+            ILevel owningLevel = container.GetComponentInParent<ILevel>(true);
 
             if (owningLevel != null)
                 Debug.LogWarning(LogPrefix + " pool container '" + container.name +
-                                 "' sits inside level '" + owningLevel.name + "'. Move it out: " +
+                                 "' sits inside level '" + owningLevel.DisplayName + "'. Move it out: " +
                                  "that container is switched off when the level changes, and " +
                                  "every pooled object inside it goes dark with it.", this);
 

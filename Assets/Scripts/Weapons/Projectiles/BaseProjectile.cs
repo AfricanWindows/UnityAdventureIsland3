@@ -5,10 +5,14 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
-    /// TEMPLATE METHOD. Every projectile is fired the same way - place it, push it, let it
-    /// live for a while, hurt what it touches - and that skeleton is written HERE, once.
-    /// A subclass only fills in the steps it actually cares about; it can never reorder
+    /// TEMPLATE METHOD. Every projectile is fired the same way - place it, start it moving,
+    /// let it live for a while, hurt what it touches - and that skeleton is written HERE,
+    /// once. A subclass only fills in the steps it actually cares about; it can never reorder
     /// them, forget the lifetime timer, or skip the damage call.
+    ///
+    /// HOW it moves is not assumed here. A straight shot (DirectionalProjectile) and a
+    /// hand-driven out-and-back loop (the boomerang) both answer the one step StartMotion,
+    /// so no subclass has to switch off behaviour it inherited (Liskov Substitution).
     ///
     /// It is also the pool's Product: it implements IPoolable, so it can reset itself and
     /// send itself home - without ever naming the pool that owns it.
@@ -75,29 +79,21 @@ namespace Game.Projectiles
             // the boomerang's spin is its own flight. No projectile needs a start rotation.
             transform.SetPositionAndRotation(origin, Quaternion.identity);
 
-            OnBeforeFire();                     // hook
-            ApplyMovement(GetDirection());      // step
-            OnAfterFire();                      // hook
+            OnBeforeFire();     // hook
+            StartMotion();      // step
         }
         // ==================================================
 
-        /// <summary>The only step a projectile MUST answer: which way do I fly?</summary>
-        protected abstract Vector2 GetDirection();
-
         /// <summary>
-        /// Speed is set ONCE, here, and physics carries the object from then on. There is
-        /// deliberately no Update: a per-frame position update for every projectile is
-        /// exactly the cost this design is avoiding.
+        /// How this projectile starts moving. Every projectile decides its own motion:
+        /// straight by velocity (DirectionalProjectile) or hand-driven out-and-back (boomerang).
+        /// Template Method step - Fire() calls it, subclasses fill it. The object is already
+        /// standing at the origin when it runs.
         /// </summary>
-        protected virtual void ApplyMovement(Vector2 direction)
-        {
-            if (_body != null)
-                _body.linearVelocity = direction.normalized * _stats.Speed;
-        }
+        protected abstract void StartMotion();
 
+        /// <summary>Optional hook, run after the projectile is placed and before it moves.</summary>
         protected virtual void OnBeforeFire() { }
-
-        protected virtual void OnAfterFire() { }
 
         /// <summary>
         /// Non-damageable things that stop the flight - ground, ceiling, walls.

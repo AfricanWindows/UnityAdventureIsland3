@@ -23,6 +23,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInjectable
 {
+    // Unity cannot serialize interfaces; the concrete type is only the Inspector slot, all
+    // logic uses ILevel.
     [Tooltip("Every level, in play order. Level 1 first. All of them may stay switched on " +
              "in the editor - this controller turns off the ones that are not current.")]
     [SerializeField] private Level[] levels;
@@ -30,6 +32,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     [Tooltip("Log every switch and reset.")]
     [SerializeField] private bool verbose = true;
 
+    private ILevel[] _levels;
     private IPlayerProvider _players;
     private IResetService _resets;
     private int _currentIndex = -1;
@@ -40,14 +43,14 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     /// <summary>Raised every time a level is entered. The projectile pools listen.</summary>
     public event Action LevelEntered;
 
-    private Level CurrentLevel
+    private ILevel CurrentLevel
     {
         get
         {
-            if (levels == null || _currentIndex < 0 || _currentIndex >= levels.Length)
+            if (_currentIndex < 0 || _currentIndex >= _levels.Length)
                 return null;
 
-            return levels[_currentIndex];
+            return _levels[_currentIndex];
         }
     }
 
@@ -55,7 +58,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     {
         get
         {
-            Level level = CurrentLevel;
+            ILevel level = CurrentLevel;
             return level != null ? level.SpawnPosition : Vector3.zero;
         }
     }
@@ -69,9 +72,23 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
         container.TryResolve(out _resets);
     }
 
+    /// <summary>The one place the concrete Level type is read: copied once into ILevel.</summary>
+    private void Awake()
+    {
+        int count = levels != null ? levels.Length : 0;
+        _levels = new ILevel[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            // Compared as Level, not as ILevel: Unity's == turns an empty or missing
+            // Inspector slot into a real null here, which an interface check would not.
+            _levels[i] = levels[i] != null ? levels[i] : null;
+        }
+    }
+
     private void Start()
     {
-        if (levels == null || levels.Length == 0)
+        if (_levels.Length == 0)
         {
             Debug.LogError("LevelFlowController: no levels assigned.", this);
             return;
@@ -83,12 +100,9 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     /// <summary>The door was opened. Next level, or the end of the game.</summary>
     public void GoToNextLevel()
     {
-        if (levels == null)
-            return;
-
         int next = _currentIndex + 1;
 
-        if (next >= levels.Length)
+        if (next >= _levels.Length)
         {
             if (verbose)
                 Debug.Log("[Flow] Last level finished - game completed");
@@ -128,15 +142,15 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     {
         _currentIndex = index;
 
-        for (int i = 0; i < levels.Length; i++)
+        for (int i = 0; i < _levels.Length; i++)
         {
-            if (levels[i] == null)
+            if (_levels[i] == null)
                 continue;
 
             if (i == index)
-                levels[i].Activate();
+                _levels[i].Activate();
             else
-                levels[i].Deactivate();
+                _levels[i].Deactivate();
         }
 
         StartLevelForPlayer();
@@ -174,7 +188,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
             handlers[i].OnLevelStarted(spawn);
     }
 
-    private static string SafeName(Level level)
+    private static string SafeName(ILevel level)
     {
         return level != null ? level.DisplayName : "(no level)";
     }

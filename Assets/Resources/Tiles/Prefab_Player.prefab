@@ -488,7 +488,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthController
   maxHealth: 9
   startHealth: 3
-  viewComponent: {fileID: 0}
 --- !u!95 &8444476018975068162
 Animator:
   serializedVersion: 7
@@ -556,7 +555,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerController
   config: {fileID: 11400000, guid: 6dd57403b6fc78c8f7657c81743f8ac0, type: 2}
-  viewComponent: {fileID: 0}
 --- !u!114 &7788110000000000023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,7 +580,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FruitCounterController
   fruitsPerLife: 20
-  viewComponent: {fileID: 0}
 --- !u!114 &7788110000000000401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,7 +674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.SpinAttack
   cooldown: 0.5
   unlockedFromStart: 0
-  radius: 2
+  radius: 2.5
   damage: 2
   hitLayers:
     serializedVersion: 2
@@ -747,7 +744,6 @@ MonoBehaviour:
   unlockedFromStart: 0
   firePoint: {fileID: 5443437825779546239}
   shotSprite: {fileID: 21300000, guid: 9447e3d8454c5b04ebe84b783a732fdd, type: 3}
-  shotPool: {fileID: 0}
 --- !u!114 &2613191876268775580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,7 +760,6 @@ MonoBehaviour:
   unlockedFromStart: 0
   firePoint: {fileID: 886867358893461584}
   shotSprite: {fileID: 21300000, guid: 40f4c621e7f415442a86c114eac66cdb, type: 3}
-  shotPool: {fileID: 0}
 --- !u!114 &3095156200714592886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,6 +802,43 @@ MonoBehaviour:
   targetRenderer: {fileID: 0}
   fadedAlpha: 0.5
   blinkInterval: 0.1
+--- !u!114 &8471920365172834519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1797660fbd18c542b28ebb1024b2990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FacingView
+  artFacesRight: 1
+--- !u!114 &7788110000000000501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8592fbbf2c4f33a3f713f8aa855ced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawn
+--- !u!114 &7788110000000000502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737513687079717171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b194fe0c9b59461c9a705759e8acfa19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MountHitAbsorber
 --- !u!1 &9004961795210391330
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +886,6 @@ MonoBehaviour:
   cooldown: 0.1
   unlockedFromStart: 0
   firePoint: {fileID: 0}
-  axePool: {fileID: 0}
 --- !u!1 &9105372525335112281
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,42 +932,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.BoomerangWeapon
   cooldown: 0
   unlockedFromStart: 0
-  boomerangPool: {fileID: 0}
   firePoint: {fileID: 0}
---- !u!114 &8471920365172834519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1797660fbd18c542b28ebb1024b2990, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FacingView
-  artFacesRight: 1
---- !u!114 &7788110000000000501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b8592fbbf2c4f33a3f713f8aa855ced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawn
---- !u!114 &7788110000000000502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737513687079717171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b194fe0c9b59461c9a705759e8acfa19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MountHitAbsorber

@@ -10,8 +10,10 @@ using UnityEngine;
 ///
 /// Because there is no logic in here, level three is a copy of this component on a new
 /// container and one more entry in the flow controller's list - no code (Open/Closed).
+///
+/// Everything that uses a level knows it only as ILevel (Dependency Inversion).
 /// </summary>
-public class Level : MonoBehaviour
+public class Level : MonoBehaviour, ILevel
 {
     [Tooltip("Where the player appears when this level starts, and where he returns after " +
              "dying. Empty = this object's own position.")]

@@ -6,13 +6,15 @@ namespace Game.Projectiles
     /// A projectile that is thrown the way its owner is facing.
     ///
     /// It exists so "remember which way I was thrown, turn the sprite to match, fly that
-    /// way" is written ONCE, for the axe and the enemy shot alike (Don't Repeat Yourself).
+    /// way" is written ONCE, for the axe, the animals' shots and the enemy shot alike (Don't
+    /// Repeat Yourself).
+    ///
+    /// Straight flight lives HERE and not in BaseProjectile: it is what these projectiles have
+    /// in common, and the boomerang - which does not fly straight - never inherits it, so it
+    /// has nothing to cancel (Liskov Substitution).
     ///
     /// Everything else - the Fire() template, the lifetime timer, the shared IDamageable
     /// hit rule, the pool handshake - is inherited from BaseProjectile and not restated.
-    ///
-    /// It is still abstract: "which way" is answered here, "how fast and along what path"
-    /// is not, and a class that answers only half a question should not be instantiable.
     /// </summary>
     public abstract class DirectionalProjectile : BaseProjectile
     {
@@ -38,10 +40,26 @@ namespace Game.Projectiles
             transform.localScale = scale;
         }
 
-        /// <summary>Straight ahead. A subclass with an arc overrides ApplyMovement instead.</summary>
-        protected override Vector2 GetDirection()
+        /// <summary>
+        /// The Fire() step, answered once for every directional shot: move the way it was
+        /// thrown. Sealed - a subclass with a different path (the axe's arc) overrides
+        /// ApplyMovement, the one part that differs.
+        /// </summary>
+        protected sealed override void StartMotion()
         {
-            return new Vector2(_facing, 0f);
+            ApplyMovement(new Vector2(_facing, 0f));
+        }
+
+        /// <summary>
+        /// Straight ahead at Stats.Speed. Speed is set ONCE, here, and physics carries the
+        /// object from then on. There is deliberately no Update: a per-frame position update
+        /// for every projectile is exactly the cost this design is avoiding.
+        /// </summary>
+        /// <param name="direction">(1, 0) thrown right, (-1, 0) thrown left.</param>
+        protected virtual void ApplyMovement(Vector2 direction)
+        {
+            if (Body != null)
+                Body.linearVelocity = direction.normalized * Stats.Speed;
         }
     }
 }

@@ -13,7 +13,7 @@ using UnityEngine.Serialization;
 /// Both numbers that shape the curve live HERE, including the gravity. That is deliberate:
 /// the flight path was previously split across the config asset, this component AND the
 /// Rigidbody's own Gravity Scale, so tuning the arc meant editing three assets and
-/// guessing which one was fighting the others. ApplyMovement is the hook the base class
+/// guessing which one was fighting the others. ApplyMovement is the hook DirectionalProjectile
 /// provides for "how do I move", so the whole answer belongs in it.
 /// </summary>
 public sealed class ProjectileAxe : DirectionalProjectile

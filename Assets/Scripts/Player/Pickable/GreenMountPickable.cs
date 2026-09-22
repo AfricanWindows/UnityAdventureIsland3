@@ -1,8 +1,4 @@
 /// <summary>The pickup for the green animal - Sprite_PowerGreen.</summary>
-public class GreenMountPickable : BasePickable
+public class GreenMountPickable : MountPickable<GreenMount>
 {
-    protected override IPowerUp CreatePowerUp()
-    {
-        return new MountAnimalPowerUp<GreenMount>();
-    }
 }

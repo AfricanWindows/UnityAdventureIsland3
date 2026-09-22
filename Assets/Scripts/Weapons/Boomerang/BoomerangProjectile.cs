@@ -11,9 +11,10 @@ namespace Game.Projectiles
     /// or jumped.
     ///
     /// It reuses the whole pooled skeleton from BaseProjectile (the Fire() template, the
-    /// lifetime timer, the shared IDamageable hit rule, the pool handshake) and only
-    /// replaces one inherited assumption - that a projectile is pushed once and carried by
-    /// physics - with a hand-driven out-and-back path, a step per FixedUpdate.
+    /// lifetime timer, the shared IDamageable hit rule, the pool handshake) and answers the
+    /// one step every projectile must answer, StartMotion, with a hand-driven out-and-back
+    /// path, a step per FixedUpdate. It is NOT a DirectionalProjectile, so it never inherits
+    /// straight flight and has nothing to switch off (Liskov Substitution).
     ///
     /// The trip lasts exactly Stats.Lifetime seconds; when the base class's lifetime timer
     /// fires, the boomerang returns itself to the pool. Keep Pierces Enemies ON in the
@@ -55,13 +56,11 @@ namespace Game.Projectiles
             Fire(origin);
         }
 
-        // Motion is a hand-driven out-and-back, not a straight velocity push.
-        protected override Vector2 GetDirection() { return Vector2.zero; }
-
-        protected override void ApplyMovement(Vector2 direction) { }
-
-        /// <summary>Runs at the end of Fire(): the object is already sitting at the origin.</summary>
-        protected override void OnAfterFire()
+        /// <summary>
+        /// The Fire() step: the object is already sitting at the origin, so the loop is
+        /// measured from here. No velocity is set - FixedUpdate drives the whole trip.
+        /// </summary>
+        protected override void StartMotion()
         {
             _start = transform.position;
             _elapsed = 0f;

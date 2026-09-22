@@ -2,13 +2,9 @@ using Game.Weapons;
 
 /// <summary>
 /// The boomerang pickup sitting in the level.
-/// Being picked up is written once in BasePickable; unlocking a weapon is written once in
-/// EquipWeaponPowerUp. This class only names which weapon.
+/// Being picked up is written once in BasePickable; handing over a weapon is written once in
+/// WeaponPickable and EquipWeaponPowerUp. This class only names which weapon.
 /// </summary>
-public class BoomerangPickable : BasePickable
+public class BoomerangPickable : WeaponPickable<BoomerangWeapon>
 {
-    protected override IPowerUp CreatePowerUp()
-    {
-        return new EquipWeaponPowerUp<BoomerangWeapon>();
-    }
 }
