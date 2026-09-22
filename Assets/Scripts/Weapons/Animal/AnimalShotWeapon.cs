@@ -1,4 +1,3 @@
-using Game.Core;
 using Game.Projectiles;
 using UnityEngine;
 
@@ -23,18 +22,6 @@ namespace Game.Weapons
         [Tooltip("The image this animal's shot flies with. Empty = whatever the projectile " +
                  "prefab already looks like.")]
         [SerializeField] private Sprite shotSprite;
-
-        [Tooltip("Optional override. Normally EMPTY: the pool arrives through injection, " +
-                 "so the pool object can live anywhere in the scene.")]
-        [SerializeField] private AnimalShotPoolManager shotPool;
-
-        protected override IObjectPool<AnimalShot> ResolveInspectorPool()
-        {
-            // Compared HERE, where the field still has its concrete Unity type, so Unity's
-            // overloaded == applies and a manager deleted from the scene comes back as a
-            // real null instead of a corpse.
-            return shotPool != null ? shotPool : null;
-        }
 
         /// <summary>
         /// Dress the shot on its way out. This is the whole of "two animals, one pool": the

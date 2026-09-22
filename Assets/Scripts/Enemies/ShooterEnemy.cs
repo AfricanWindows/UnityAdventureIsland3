@@ -21,10 +21,6 @@ using UnityEngine;
 /// </summary>
 public class ShooterEnemy : ActivatableEnemy, IInjectable, IAttacker
 {
-    [Tooltip("Optional override. Normally left empty: the pool arrives through injection, " +
-             "so a level full of snakes needs no wiring at all.")]
-    [SerializeField] private EnemyProjectilePoolManager shotPool;
-
     [Tooltip("Seconds between shots")]
     [SerializeField] private float shootInterval = 2f;
 
@@ -46,13 +42,11 @@ public class ShooterEnemy : ActivatableEnemy, IInjectable, IAttacker
 
     /// <summary>
     /// Called by GameInstaller before Awake. One pool is shared by every shooting
-    /// enemy in the game, so adding a snake costs nothing but the snake.
+    /// enemy in the game, so adding a snake costs nothing but the snake - and the snake
+    /// knows it only as IObjectPool, never as the manager that holds it (Dependency Inversion).
     /// </summary>
     public void Inject(IServiceResolver container)
     {
-        if (shotPool != null)
-            return;
-
         IObjectPool<EnemyProjectile> injected;
         if (container != null && container.TryResolve(out injected))
             pool = injected;
@@ -61,14 +55,11 @@ public class ShooterEnemy : ActivatableEnemy, IInjectable, IAttacker
     protected override void OnAwake()
     {
         // Resolved once. Neither of these is looked up while shooting.
-        if (shotPool != null)
-            pool = shotPool;
         muzzle = firePoint != null ? firePoint : transform;
 
         if (pool == null)
-            Debug.LogError("ShooterEnemy: no enemy shot pool - add an " +
-                           "EnemyProjectilePoolManager to the scene, or assign one on " +
-                           gameObject.name + ".", this);
+            Debug.LogError("ShooterEnemy: no enemy shot pool was injected into " + gameObject.name +
+                           " - add an EnemyProjectilePoolManager to the scene.", this);
     }
 
     // A fresh enemy, or one brought back by a restart, waits a full interval before its

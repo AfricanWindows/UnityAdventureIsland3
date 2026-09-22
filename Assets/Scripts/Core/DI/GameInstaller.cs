@@ -89,6 +89,10 @@ namespace Game.Core.DI
             // wants him calling FindGameObjectWithTag in its own Update.
             _container.Register<IPlayerProvider>(new TaggedPlayerProvider(playerTag));
 
+            // Resetting the game: the scene-wide search lives in a service of its own,
+            // so the level flow only decides WHEN to reset, never HOW to find what to reset.
+            _container.Register<IResetService>(new SceneResetService());
+
             // Every pool in the game, published under the interface its users ask for.
             // Three lines instead of three copies of the same eight - the repetition moved
             // into RegisterPool below, where it is written once (Don't Repeat Yourself).
@@ -179,9 +183,10 @@ namespace Game.Core.DI
         /// <summary>
         /// Hands the container to every component in the scene that asked for one.
         ///
-        /// The scan happens ONCE, during Awake, and is the only broad Find in the project.
-        /// That is the trade a composition root exists to make: one controlled lookup at
-        /// start-up, so that no gameplay class ever has to search for anything again.
+        /// The scan happens ONCE, during Awake. That is the trade a composition root exists
+        /// to make: one controlled lookup at start-up, so that no gameplay class ever has to
+        /// search for anything again. The only other broad searches live in the services
+        /// registered above (the player by tag, the restart), never in a gameplay class.
         /// </summary>
         private void InjectSceneObjects()
         {

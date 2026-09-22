@@ -19,9 +19,12 @@ using UnityEngine;
 /// It deliberately knows nothing about fairies. Anything that gets hold of an IForceKillable
 /// can break it, so a future bomb or a boss's stomp needs no change here (Dependency
 /// Inversion).
+///
+/// It is an IObstacle, which IS an IForceKillable - so the fairy still finds it, and riding
+/// an animal into it can tell it apart from an enemy without naming this class.
 /// </summary>
 [DisallowMultipleComponent]
-public class Destructible : MonoBehaviour, IForceKillable, IResettable
+public class Destructible : MonoBehaviour, IObstacle, IResettable
 {
     public void ForceKill()
     {

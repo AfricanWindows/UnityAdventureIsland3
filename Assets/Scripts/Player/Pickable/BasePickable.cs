@@ -36,10 +36,11 @@ public abstract class BasePickable : MonoBehaviour, IResettable, IRespawnable
         if (!col.gameObject.CompareTag(playerTag))
             return;
 
-        PlayerPowerUp playerPowerUp = col.gameObject.GetComponent<PlayerPowerUp>();
-        if (playerPowerUp == null)
+        // Asked for as IPowerUpCollector, so a pickable never names the class that receives it.
+        IPowerUpCollector collector = col.gameObject.GetComponent<IPowerUpCollector>();
+        if (collector == null)
         {
-            Debug.LogWarning("BasePickable: " + col.gameObject.name + " has no PlayerPowerUp component", this);
+            Debug.LogWarning("BasePickable: " + col.gameObject.name + " has no IPowerUpCollector", this);
             return;
         }
 
@@ -48,7 +49,7 @@ public abstract class BasePickable : MonoBehaviour, IResettable, IRespawnable
             return;
 
         collected = true;
-        playerPowerUp.CollectPowerUp(powerUp);
+        collector.CollectPowerUp(powerUp);
         gameObject.SetActive(false);
 
         // Raised last, like BaseEnemy does: a listener that asks IsDefeated gets the truth.

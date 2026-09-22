@@ -21,9 +21,11 @@ using UnityEngine.Serialization;
 /// Like every enemy here it owns only its behaviour: hurting the player on contact is
 /// KillPlayerOnTouch, coming back after being beaten is RespawnTimer, and health is
 /// BaseEnemy.
+///
+/// No RequireComponent on the concrete GroundCheck: the feet are read only through
+/// IGroundCheck, and a missing one is reported in Awake (Dependency Inversion).
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(GroundCheck))]
 public class HoppingEnemy : ActivatableEnemy
 {
     [Tooltip("Shortest pause on the ground between hops, in seconds, counted from the moment " +
@@ -55,6 +57,10 @@ public class HoppingEnemy : ActivatableEnemy
         // Both asked for as abstract bases, so this class never names a concrete jump or aim.
         jump = GetComponent<JumpBehaviour>();
         aim = GetComponent<HopAim>();
+
+        if (groundCheck == null)
+            Debug.LogError("HoppingEnemy: no IGroundCheck on " + gameObject.name +
+                           " - add a Ground Check component.", this);
 
         if (jump == null)
             Debug.LogError("HoppingEnemy: no JumpBehaviour on " + gameObject.name +

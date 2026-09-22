@@ -1,4 +1,3 @@
-using Game.Core;
 using Game.Projectiles;
 using UnityEngine;
 
@@ -20,10 +19,6 @@ namespace Game.Weapons
     /// </summary>
     public sealed class BoomerangWeapon : ProjectileWeapon<BoomerangProjectile>
     {
-        [Tooltip("Optional override. Normally EMPTY: the pool arrives through injection, " +
-                 "so the pool object can live anywhere in the scene.")]
-        [SerializeField] private BoomerangPoolManager boomerangPool;
-
         private BoomerangProjectile _inFlight;
 
         /// <summary>Unlocked, off cooldown, AND the one boomerang is already home.</summary>
@@ -37,13 +32,6 @@ namespace Game.Weapons
         private bool IsBoomerangOut
         {
             get { return _inFlight != null && _inFlight.IsFlying; }
-        }
-
-        protected override IObjectPool<BoomerangProjectile> ResolveInspectorPool()
-        {
-            // Compared while the field still has its concrete Unity type, so a manager
-            // deleted from the scene reads as a real null and the injected pool takes over.
-            return boomerangPool != null ? boomerangPool : null;
         }
 
         protected override void Launch(BoomerangProjectile boomerang, Transform from, float facing)

@@ -9,12 +9,11 @@ using UnityEngine;
 /// touches only this file (Single Responsibility). A character with no Animator simply
 /// does not carry this component.
 ///
-/// It reads STATES through small interfaces - IGroundCheck, ICrouchState, IHurtState,
-/// IDyingState, IAttacker - so it never names the class that owns them, exactly like
-/// EnemyAnimatorView. The one exception is PlayerMovement: walking speed is a number this
-/// view needs from the movement itself, not a state anything else could answer.
+/// It reads everything through small interfaces - IMovementSpeed, IGroundCheck, ICrouchState,
+/// IHurtState, IDyingState, IAttacker - so it never names the class that owns them, exactly
+/// like EnemyAnimatorView (Dependency Inversion).
 ///
-/// It reads PlayerMovement.OwnSpeedX rather than the Rigidbody, so the run cycle follows the
+/// It reads IMovementSpeed.OwnSpeedX rather than the Rigidbody, so the run cycle follows the
 /// steps he takes and not anything else that moves his body.
 /// </summary>
 [RequireComponent(typeof(Animator))]
@@ -53,7 +52,7 @@ public class PlayerAnimatorView : MonoBehaviour
     [SerializeField] private float runThreshold = 0.05f;
 
     private Animator animator;
-    private PlayerMovement movement;
+    private IMovementSpeed movement;
     private IGroundCheck groundCheck;
     private ICrouchState crouch;
     private IHurtState hurt;
@@ -84,7 +83,7 @@ public class PlayerAnimatorView : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        movement = GetComponent<PlayerMovement>();
+        movement = GetComponent<IMovementSpeed>();
         groundCheck = GetComponent<IGroundCheck>();
         crouch = GetComponent<ICrouchState>();
         hurt = GetComponent<IHurtState>();
@@ -123,7 +122,7 @@ public class PlayerAnimatorView : MonoBehaviour
             attackHash = Animator.StringToHash(attackTrigger);
 
         if (movement == null)
-            Debug.LogError("PlayerAnimatorView: no PlayerMovement on " + gameObject.name, this);
+            Debug.LogError("PlayerAnimatorView: no IMovementSpeed on " + gameObject.name, this);
     }
 
     /// <summary>

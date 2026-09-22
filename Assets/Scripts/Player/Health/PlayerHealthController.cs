@@ -28,9 +28,6 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
     [Tooltip("Lives at the start of the game. The assignment says 3.")]
     [SerializeField] private int startHealth = 3;
 
-    [Tooltip("Optional override. Normally left empty: the view arrives through injection.")]
-    [SerializeField] private PlayerHealthView viewComponent;
-
     private IPlayerHealthModel model;
     private IPlayerHealthView view;
 
@@ -38,14 +35,11 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
     public event Action OutOfLives;
 
     /// <summary>
-    /// Called by GameInstaller before Awake. An explicit field on this object still wins:
-    /// a hand-wired reference is a deliberate decision, and injection should not overrule it.
+    /// Called by GameInstaller before Awake. The view arrives as IPlayerHealthView only -
+    /// the controller never names the concrete view (Dependency Inversion).
     /// </summary>
     public void Inject(IServiceResolver container)
     {
-        if (viewComponent != null)
-            return;
-
         IPlayerHealthView injectedView;
         if (container != null && container.TryResolve(out injectedView))
             view = injectedView;
@@ -55,11 +49,8 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
     {
         model = new PlayerHealthModel(maxHealth, startHealth);
 
-        if (viewComponent != null)
-            view = viewComponent;
-
         if (view == null)
-            Debug.LogWarning("PlayerHealthController: no health view was injected or assigned - " +
+            Debug.LogWarning("PlayerHealthController: no IPlayerHealthView was injected - " +
                              "health will not be shown.", this);
 
         if (maxHealth <= startHealth)

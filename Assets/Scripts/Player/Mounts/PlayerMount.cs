@@ -47,7 +47,7 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
     private IInvincible[] invincibilitySources;
 
     // Opened when the animal is knocked out from under him - see TryAbsorbHit.
-    private HitInvincibility recovery;
+    private IHitRecovery recovery;
 
     public bool IsMounted { get { return current != null; } }
 
@@ -75,12 +75,12 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
         // animal, picked up during that window, from being spent by the same enemy the
         // player is still standing in.
         invincibilitySources = GetComponents<IInvincible>();
-        recovery = GetComponent<HitInvincibility>();
+        recovery = GetComponent<IHitRecovery>();
 
         if (recovery == null)
-            Debug.LogWarning("PlayerMount: no HitInvincibility on " + gameObject.name + " - after " +
+            Debug.LogWarning("PlayerMount: no IHitRecovery on " + gameObject.name + " - after " +
                              "losing an animal the player can die on the very next step. Add " +
-                             "a Hit Invincibility View.", this);
+                             "a Hit Invincibility.", this);
     }
 
     /// <summary>
@@ -176,11 +176,11 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
     /// <summary>
     /// Riding into an obstacle destroys it as well - the stone and the campfire from the
-    /// assignment, both of which already carry a Destructible for the fairy.
+    /// assignment, both of which already carry a Destructible (an IObstacle) for the fairy.
     ///
-    /// It asks for Destructible and NOT for IForceKillable, and that is the rule rather than
+    /// It asks for IObstacle and NOT for IForceKillable, and that is the rule rather than
     /// an oversight: enemies answer IForceKillable too, and riding into an enemy must cost
-    /// the animal WITHOUT killing the enemy. Destructible means "an obstacle in the way",
+    /// the animal WITHOUT killing the enemy. IObstacle means "an obstacle in the way",
     /// which is exactly the set that gets smashed.
     /// </summary>
     private void Smash(GameObject source)
@@ -190,7 +190,7 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IHitAb
 
         // InParent: the collider that hit us is often a child of the object that owns the
         // behaviour.
-        Destructible obstacle = source.GetComponentInParent<Destructible>();
+        IObstacle obstacle = source.GetComponentInParent<IObstacle>();
 
         if (obstacle != null)
             obstacle.ForceKill();

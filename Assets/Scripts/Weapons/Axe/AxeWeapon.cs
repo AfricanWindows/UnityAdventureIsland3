@@ -1,6 +1,3 @@
-using Game.Core;
-using UnityEngine;
-
 namespace Game.Weapons
 {
     /// <summary>
@@ -15,22 +12,12 @@ namespace Game.Weapons
     /// the player's weapon slot through the shared EquipWeaponPowerUp, and the slot takes
     /// it away when he dies.
     ///
-    /// Everything about throwing lives in DirectionalWeapon and ProjectileWeapon. What is left here is an
-    /// optional Inspector pool - normally empty, because the pool arrives from GameInstaller.
+    /// Everything about throwing lives in DirectionalWeapon and ProjectileWeapon, and the pool
+    /// arrives from GameInstaller. It is empty on purpose: Unity cannot put an open generic
+    /// MonoBehaviour on a GameObject, so the closed type needs a class of its own - the same
+    /// reason PickableDropper is empty.
     /// </summary>
     public sealed class AxeWeapon : DirectionalWeapon<ProjectileAxe>
     {
-        [Tooltip("Optional override. Normally EMPTY: the pool arrives through injection, " +
-                 "so the pool object can live anywhere in the scene.")]
-        [SerializeField] private AxePoolManager axePool;
-
-        protected override IObjectPool<ProjectileAxe> ResolveInspectorPool()
-        {
-            // Compared HERE, where the field still has its concrete Unity type, so Unity's
-            // overloaded == applies: a manager that was deleted from the scene must come
-            // back as a real null. An interface-typed field would not do that, and the
-            // weapon would hold a corpse instead of falling back to the injected pool.
-            return axePool != null ? axePool : null;
-        }
     }
 }

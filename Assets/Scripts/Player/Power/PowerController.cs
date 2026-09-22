@@ -22,21 +22,18 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
              "asset to change the difficulty - no code, no prefab surgery.")]
     [SerializeField] private PowerConfigSO config;
 
-    [Tooltip("Optional override. Normally left empty: the bar arrives through injection.")]
-    [SerializeField] private PowerBarView viewComponent;
-
     private IPowerModel model;
     private IPowerView view;
     private PowerDrainService drain;
     private IForceKillable death;
     private PowerStats stats;
 
-    /// <summary>Called by GameInstaller before Awake. A hand-wired view still wins.</summary>
+    /// <summary>
+    /// Called by GameInstaller before Awake. The bar arrives as IPowerView only - the
+    /// controller never names the concrete view (Dependency Inversion).
+    /// </summary>
     public void Inject(IServiceResolver container)
     {
-        if (viewComponent != null)
-            return;
-
         IPowerView injectedView;
         if (container != null && container.TryResolve(out injectedView))
             view = injectedView;
@@ -60,11 +57,8 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         drain = new PowerDrainService(model, stats.DrainIntervalSeconds);
         death = GetComponent<IForceKillable>();
 
-        if (viewComponent != null)
-            view = viewComponent;
-
         if (view == null)
-            Debug.LogWarning("PowerController: no PowerBarView was injected or assigned - " +
+            Debug.LogWarning("PowerController: no IPowerView was injected - " +
                              "the bar will not be drawn.", this);
 
         if (death == null)

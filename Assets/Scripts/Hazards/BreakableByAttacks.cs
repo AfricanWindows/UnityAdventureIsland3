@@ -32,10 +32,11 @@ using UnityEngine;
 ///
 /// It breaks itself through IForceKillable rather than deactivating the object directly, so
 /// an obstacle keeps ONE way of disappearing however it was destroyed - and that one way
-/// already knows how to come back on a restart (Single Responsibility).
+/// already knows how to come back on a restart (Single Responsibility). It depends on
+/// IForceKillable only - no RequireComponent on the concrete Destructible - and a missing
+/// one is reported in Awake (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-[RequireComponent(typeof(Destructible))]
 public class BreakableByAttacks : MonoBehaviour, IDamageable
 {
     [Tooltip("The weakest blow that breaks this. Anything below it bounces off with no " +

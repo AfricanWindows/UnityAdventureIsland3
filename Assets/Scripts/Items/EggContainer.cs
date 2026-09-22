@@ -6,10 +6,12 @@ using UnityEngine;
 /// The egg from the assignment: the player walks into it, it breaks open, and what was
 /// inside - a weapon, an animal, the fairy - pops out and lands next to it.
 ///
-/// This class is only the WHEN. What comes out is PickableDropper's business and how it
-/// flies is ItemToss's, so an egg that should always hold a boomerang, an egg with a random
+/// This class is only the WHEN. What comes out is the IItemDropper's business and how it
+/// flies is the IItemToss's, so an egg that should always hold a boomerang, an egg with a random
 /// prize and a beaten enemy leaving an animal behind are three different arrangements of
 /// the same two components and one script each (Single Responsibility, Open/Closed).
+/// Both are asked for as interfaces, so the egg never names PickableDropper or ItemToss
+/// (Dependency Inversion).
 ///
 /// Being touched by the player is not written here either - PlayerContactEffect already
 /// owns that: which collider is the player, trigger or collision, and once per touch. This
@@ -29,21 +31,20 @@ using UnityEngine;
 /// it was opened - the same component the enemies and the fruit use.
 /// </summary>
 [DisallowMultipleComponent]
-[RequireComponent(typeof(PickableDropper))]
 public class EggContainer : PlayerContactEffect, IResettable, IRespawnable
 {
-    [Tooltip("What is inside. Optional - taken from this object if left empty.")]
-    [SerializeField] private PickableDropper dropper;
-
-    [Tooltip("The little arc the contents fly along. Optional - leave the component off " +
-             "the egg and the item simply appears in place.")]
-    [SerializeField] private ItemToss toss;
-
     [Tooltip("The egg's own collider, switched off once it is broken. Optional - found here.")]
     [SerializeField] private Collider2D eggCollider;
 
     [Tooltip("The egg's sprite, hidden once it is broken. Optional - found here.")]
     [SerializeField] private SpriteRenderer eggRenderer;
+
+    // What is inside - required. Found on this object; Unity cannot serialize an interface.
+    private IItemDropper dropper;
+
+    // The little arc the contents fly along - optional. Leave the component off the egg and
+    // the item simply appears in place.
+    private IItemToss toss;
 
     private bool opened;
 
@@ -55,11 +56,12 @@ public class EggContainer : PlayerContactEffect, IResettable, IRespawnable
 
     private void Awake()
     {
-        if (dropper == null)
-            dropper = GetComponent<PickableDropper>();
+        dropper = GetComponent<IItemDropper>();
+        toss = GetComponent<IItemToss>();
 
-        if (toss == null)
-            toss = GetComponent<ItemToss>();
+        if (dropper == null)
+            Debug.LogError("EggContainer: " + name + " has no IItemDropper - there is nothing " +
+                           "inside it. Add a Pickable Dropper.", this);
 
         if (eggCollider == null)
             eggCollider = GetComponent<Collider2D>();
@@ -88,7 +90,7 @@ public class EggContainer : PlayerContactEffect, IResettable, IRespawnable
         if (opened || dropper == null)
             return;
 
-        BasePickable item = dropper.Drop();
+        Transform item = dropper.DropItem();
 
         if (item == null)
             return;
@@ -96,7 +98,7 @@ public class EggContainer : PlayerContactEffect, IResettable, IRespawnable
         opened = true;
 
         if (toss != null)
-            toss.Toss(item.transform, DirectionAwayFrom(player));
+            toss.Toss(item, DirectionAwayFrom(player));
 
         Hide();
 

@@ -9,7 +9,7 @@ using UnityEngine;
 /// This is the whole of WHAT drops. It deliberately does not know WHEN: the egg breaks on
 /// touch, and the assignment also wants a beaten enemy to leave an animal behind. Those are
 /// two different triggers over the same job, so the trigger is a separate component that
-/// calls Drop() (Single Responsibility, Open/Closed). Same split the project already uses
+/// calls DropItem() through IItemDropper (Single Responsibility, Open/Closed). Same split the project already uses
 /// for PlayerJump + JumpBehaviour and HoppingEnemy + HopAim.
 ///
 /// GENERIC over what it drops, and that is not decoration - it buys two real things:
@@ -29,7 +29,7 @@ using UnityEngine;
 /// AxePoolManager.
 /// </summary>
 /// <typeparam name="TItem">What this dropper is allowed to drop.</typeparam>
-public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable where TItem : Component
+public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable, IItemDropper where TItem : Component
 {
     /// <summary>How this particular dropper decides what comes out.</summary>
     public enum ContentMode
@@ -88,6 +88,17 @@ public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable where TIte
 
         dropped.Add(item);
         return item;
+    }
+
+    /// <summary>
+    /// The IItemDropper face of Drop(), for the triggers - the egg and a beaten enemy. They
+    /// only need to know WHERE the item is, so they get its Transform and never learn what
+    /// kind of dropper this is (Dependency Inversion).
+    /// </summary>
+    public Transform DropItem()
+    {
+        TItem item = Drop();
+        return item != null ? item.transform : null;
     }
 
     /// <summary>

@@ -5,12 +5,13 @@ using UnityEngine;
 /// says a destroyed enemy can drop.
 ///
 /// It is the second WHEN over the same WHAT: the egg drops on touch, this drops on death,
-/// and both hand the job to the very same PickableDropper next to them. That is the whole
+/// and both hand the job to the very same IItemDropper next to them. That is the whole
 /// reason the dropper was never written inside EggContainer (Open/Closed) - a third trigger,
 /// say a smashed crate, is another small class like this one and no change anywhere else.
 ///
-/// It talks to IRespawnable, not to BaseEnemy, so it never learns what an enemy is - only
-/// that something announced it was defeated (Dependency Inversion).
+/// It talks to IRespawnable, not to BaseEnemy, and to IItemDropper, not to PickableDropper,
+/// so it never learns what an enemy or a dropper is - only that something announced it was
+/// defeated, and that something can drop an item (Dependency Inversion).
 ///
 /// Subscribed in Start and dropped only in OnDestroy - deliberately NOT the usual
 /// OnEnable/OnDisable pair. The event we are waiting for is the one that DISABLES this
@@ -18,22 +19,24 @@ using UnityEngine;
 /// Same reasoning as RespawnTimer, which listens to the same event.
 /// </summary>
 [DisallowMultipleComponent]
-[RequireComponent(typeof(PickableDropper))]
 public class DropOnDefeat : MonoBehaviour
 {
     [Tooltip("Chance to leave something behind. 1 = always, 0.25 = one beating in four.")]
     [Range(0f, 1f)]
     [SerializeField] private float dropChance = 1f;
 
-    [Tooltip("What drops. Optional - taken from this object.")]
-    [SerializeField] private PickableDropper dropper;
+    // What drops. Found on this object; Unity cannot serialize an interface.
+    private IItemDropper dropper;
 
     private IRespawnable target;
 
     private void Awake()
     {
+        dropper = GetComponent<IItemDropper>();
+
         if (dropper == null)
-            dropper = GetComponent<PickableDropper>();
+            Debug.LogError("DropOnDefeat: no IItemDropper on " + gameObject.name + " - there is " +
+                           "nothing to drop. Add a Pickable Dropper.", this);
 
         target = GetComponent<IRespawnable>();
 
@@ -71,6 +74,6 @@ public class DropOnDefeat : MonoBehaviour
 
         // It appears where the enemy fell - no arc. A beaten enemy is switched off, and a
         // switched-off object cannot run the flight, so there is nothing to configure here.
-        dropper.Drop();
+        dropper.DropItem();
     }
 }

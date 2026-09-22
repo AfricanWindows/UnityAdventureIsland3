@@ -19,8 +19,10 @@ using UnityEngine;
 /// step. So Update records the intention and FixedUpdate acts on it. The old code pushed with
 /// AddForce straight from Update, which is why it needed a cooldown to stop double firing and
 /// why the jump was as high as the frame rate happened to allow.
+///
+/// No RequireComponent on the concrete GroundCheck: this class reads the feet only through
+/// IGroundCheck, and a missing one is reported in Awake (Dependency Inversion).
 /// </summary>
-[RequireComponent(typeof(GroundCheck))]
 public class PlayerJump : InputDrivenBehaviour
 {
     [Tooltip("JUMP BUFFER. How long a press is remembered, in seconds. Pressing jump a moment " +
@@ -49,6 +51,10 @@ public class PlayerJump : InputDrivenBehaviour
         // Asked for as the abstract base, so this class never names a concrete jump. Swapping
         // the feel of the jump is swapping the component, not editing anything here.
         jump = GetComponent<JumpBehaviour>();
+
+        if (groundCheck == null)
+            Debug.LogError("PlayerJump: no IGroundCheck on " + gameObject.name +
+                           " - add a Ground Check component.", this);
 
         if (jump == null)
             Debug.LogError("PlayerJump: no JumpBehaviour on " + gameObject.name +

@@ -19,8 +19,9 @@ using UnityEngine;
 ///
 /// It moves a Transform that belongs to somebody else and keeps no other link to it, so it
 /// works for anything: an item out of an egg today, an animal out of a beaten enemy later.
+/// The egg knows it only as IItemToss (Dependency Inversion).
 /// </summary>
-public class ItemToss : MonoBehaviour
+public class ItemToss : MonoBehaviour, IItemToss
 {
     [Tooltip("How far the item travels sideways. The direction is given by the caller - " +
              "this is the distance, always positive.")]

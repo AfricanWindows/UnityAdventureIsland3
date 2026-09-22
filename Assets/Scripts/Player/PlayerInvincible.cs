@@ -3,10 +3,9 @@ using UnityEngine;
 /// <summary>
 /// The player's invincibility STATE and nothing else.
 /// The countdown lives in TimedPlayerEffect, the red tint lives in TimedEffectView.
-/// RequireComponent makes Unity add that view automatically, so the visual
-/// can never be forgotten in the scene.
+/// This class does not require or name that view: in MVC the view listens to the state,
+/// the state never knows it is being drawn (Dependency Inversion).
 /// </summary>
-[RequireComponent(typeof(TimedEffectView))]
 public class PlayerInvincible : TimedPlayerEffect, IInvincible, IInvincibilityEffect
 {
     public bool IsInvincible

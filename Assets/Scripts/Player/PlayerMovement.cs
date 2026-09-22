@@ -14,7 +14,7 @@ using UnityEngine;
 /// IInputSource, injected by GameInstaller, so this class works unchanged with a gamepad
 /// or inside a test (Dependency Inversion).
 /// </summary>
-public class PlayerMovement : InputDrivenBehaviour, IFacing
+public class PlayerMovement : InputDrivenBehaviour, IFacing, IMovementSpeed
 {
     [Tooltip("Normal walking speed, before any power up")]
     [SerializeField] private float speed = 5f;

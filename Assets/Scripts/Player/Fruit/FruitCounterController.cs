@@ -24,18 +24,16 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
     [Tooltip("How many fruit earn one extra life. The assignment says 20.")]
     [SerializeField] private int fruitsPerLife = 20;
 
-    [Tooltip("Optional override. Normally left empty: the label arrives through injection.")]
-    [SerializeField] private FruitCounterView viewComponent;
-
     private IFruitCounterModel model;
     private IFruitCounterView view;
     private IExtraLife lives;
 
+    /// <summary>
+    /// Called by GameInstaller before Awake. The label arrives as IFruitCounterView only -
+    /// the controller never names the concrete view (Dependency Inversion).
+    /// </summary>
     public void Inject(IServiceResolver container)
     {
-        if (viewComponent != null)
-            return;
-
         IFruitCounterView injectedView;
         if (container != null && container.TryResolve(out injectedView))
             view = injectedView;
@@ -46,12 +44,9 @@ public class FruitCounterController : MonoBehaviour, IInjectable, IResettable, I
         model = new FruitCounterModel(fruitsPerLife);
         lives = GetComponent<IExtraLife>();
 
-        if (viewComponent != null)
-            view = viewComponent;
-
         if (view == null)
-            Debug.LogWarning("FruitCounterController: no FruitCounterView was injected or " +
-                             "assigned - the fruit count will not be shown.", this);
+            Debug.LogWarning("FruitCounterController: no IFruitCounterView was injected - " +
+                             "the fruit count will not be shown.", this);
 
         if (lives == null)
             Debug.LogError("FruitCounterController: no IExtraLife on " + gameObject.name +

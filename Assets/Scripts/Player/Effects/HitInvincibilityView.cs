@@ -2,18 +2,18 @@ using UnityEngine;
 
 /// <summary>
 /// VIEW of the recovery window: the sprite blinks between full and half transparency while
-/// HitInvincibility is active, so the player can SEE that he is untouchable for a moment.
+/// the IHitRecovery window is open, so the player can SEE that he is untouchable for a moment.
 ///
 /// It only reads a bool and changes one number - the sprite's alpha. It never decides when
-/// the window starts or ends. Only the alpha is touched, never the colour, so it does not
-/// fight TimedEffectView, which tints the same sprite red while the fairy is active.
+/// the window starts or ends, and it never names the class that owns it (Dependency
+/// Inversion). Only the alpha is touched, never the colour, so it does not fight
+/// TimedEffectView, which tints the same sprite red while the fairy is active.
 ///
 /// Update and not a coroutine: the blink is a picture of a state that can start, restart or
 /// end at any moment, and polling that state every frame is simpler and safer than keeping
 /// a coroutine in step with it. Time.time drives the rhythm, so a paused game freezes it.
 /// </summary>
 [DisallowMultipleComponent]
-[RequireComponent(typeof(HitInvincibility))]
 public class HitInvincibilityView : MonoBehaviour
 {
     [Tooltip("The sprite that blinks. Empty = the first active one on this object or below it.")]
@@ -27,13 +27,17 @@ public class HitInvincibilityView : MonoBehaviour
     [Min(0.02f)]
     [SerializeField] private float blinkInterval = 0.1f;
 
-    private IInvincible window;
+    private IHitRecovery window;
     private float fullAlpha = 1f;
     private bool blinking;
 
     private void Awake()
     {
-        window = GetComponent<HitInvincibility>();
+        window = GetComponent<IHitRecovery>();
+
+        if (window == null)
+            Debug.LogError("HitInvincibilityView: no IHitRecovery on " + gameObject.name +
+                           " - there is no window to show. Add a Hit Invincibility.", this);
 
         if (targetRenderer == null)
             targetRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -47,7 +51,7 @@ public class HitInvincibilityView : MonoBehaviour
 
     private void Update()
     {
-        if (targetRenderer == null)
+        if (targetRenderer == null || window == null)
             return;
 
         if (window.IsInvincible)

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Game.Core;
 using Game.Core.DI;
 using UnityEngine;
@@ -14,9 +13,11 @@ using UnityEngine;
 /// write and far easier to reason about: the reset is explicit, and objects that must
 /// SURVIVE a restart - the player, the UI, this controller - simply are not reset.
 ///
-/// It knows nothing about enemies, fruit or weapons. It asks for IResettable and gets
-/// whatever the scene happens to contain, so a new kind of object joins the restart by
-/// implementing one interface (Open/Closed).
+/// It knows nothing about enemies, fruit or weapons. It asks IResetService to reset the game,
+/// and the service finds whatever IResettable the scene happens to contain, so a new kind of
+/// object joins the restart by implementing one interface (Open/Closed). This class decides
+/// only WHEN to reset; HOW to find what to reset is not its job (Single Responsibility,
+/// Dependency Inversion).
 /// </summary>
 [DefaultExecutionOrder(-500)]
 [DisallowMultipleComponent]
@@ -30,6 +31,7 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
     [SerializeField] private bool verbose = true;
 
     private IPlayerProvider _players;
+    private IResetService _resets;
     private int _currentIndex = -1;
 
     /// <summary>Raised when the last level is finished.</summary>
@@ -60,8 +62,11 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
 
     public void Inject(IServiceResolver container)
     {
-        if (container != null)
-            container.TryResolve(out _players);
+        if (container == null)
+            return;
+
+        container.TryResolve(out _players);
+        container.TryResolve(out _resets);
     }
 
     private void Start()
@@ -108,7 +113,9 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
         // a frozen world.
         Time.timeScale = 1f;
 
-        int count = ResetEverything();
+        int count = _resets != null ? _resets.ResetAll() : 0;
+        if (_resets == null)
+            Debug.LogError("[Flow] No IResetService - add a GameInstaller to the scene.", this);
 
         if (verbose)
             Debug.Log("[Flow] Restart - " + count + " object(s) reset");
@@ -165,34 +172,6 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, IInjectable
 
         for (int i = 0; i < handlers.Length; i++)
             handlers[i].OnLevelStarted(spawn);
-    }
-
-    /// <summary>
-    /// Asks every resettable object in the scene to restore itself.
-    ///
-    /// Inactive objects are included: level two is switched off during level one, and its
-    /// enemies still have to be reset. This is the one broad search in the game flow, and
-    /// it runs only on a restart - never per frame.
-    /// </summary>
-    private int ResetEverything()
-    {
-        MonoBehaviour[] all = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include);
-        List<IResettable> targets = new List<IResettable>();
-
-        for (int i = 0; i < all.Length; i++)
-        {
-            IResettable resettable = all[i] as IResettable;
-
-            if (resettable != null)
-                targets.Add(resettable);
-        }
-
-        // Collected first, then called: a ResetToStart that switches an object back on
-        // must not disturb the array we are walking.
-        for (int i = 0; i < targets.Count; i++)
-            targets[i].ResetToStart();
-
-        return targets.Count;
     }
 
     private static string SafeName(Level level)

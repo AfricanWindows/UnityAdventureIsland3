@@ -4,7 +4,7 @@ using UnityEngine;
 /// What happens to the player when a hazard hurts him without killing him: he loses power
 /// and he is shoved in the direction he was already going.
 ///
-/// After the hit it opens the recovery window (HitInvincibility): a moment in which nothing
+/// After the hit it opens the recovery window (IHitRecovery): a moment in which nothing
 /// can hurt him, shown by a blinking sprite. This class only says WHEN it starts; how long it
 /// lasts and how it looks are not its business.
 ///
@@ -31,7 +31,7 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock, IHurtState
     private Rigidbody2D body;
     private IPowerWallet power;
     private IInvincible[] invincibilitySources;
-    private HitInvincibility recovery;
+    private IHitRecovery recovery;
 
     private Vector2 knockbackVelocity;
     private float knockbackUntil;
@@ -50,11 +50,11 @@ public class PlayerHurt : MonoBehaviour, IHurtable, IMovementLock, IHurtState
 
         // The fairy, the death animation, and the recovery window after a hit.
         invincibilitySources = GetComponents<IInvincible>();
-        recovery = GetComponent<HitInvincibility>();
+        recovery = GetComponent<IHitRecovery>();
 
         if (recovery == null)
-            Debug.LogWarning("PlayerHurt: no HitInvincibility on " + gameObject.name + " - a hit " +
-                             "opens no recovery window. Add a Hit Invincibility View.", this);
+            Debug.LogWarning("PlayerHurt: no IHitRecovery on " + gameObject.name + " - a hit " +
+                             "opens no recovery window. Add a Hit Invincibility.", this);
     }
 
     public bool TryHurt(int powerCost, Vector2 knockback)
