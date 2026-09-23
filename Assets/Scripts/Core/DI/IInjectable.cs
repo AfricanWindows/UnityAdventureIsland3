@@ -13,12 +13,20 @@ namespace Game.Core.DI
     public interface IInjectable
     {
         /// <summary>
-        /// Called once by <see cref="GameInstaller"/>. Resolve here, cache here, and never
-        /// keep the resolver itself - holding on to it would turn injection back into a
-        /// Service Locator.
+        /// Called once by <see cref="GameInstaller"/>, before any Awake. Resolve here, cache
+        /// here, and never keep the resolver itself - holding on to it would turn injection
+        /// back into a Service Locator.
         ///
         /// It receives the READING half of the container: a component asks for what it needs
         /// and cannot register anything.
+        ///
+        /// SUBSCRIBING HERE IS ALLOWED, and a few components do it. The reason is the timing:
+        /// this runs before every Awake, so a listener that subscribes here cannot miss an
+        /// event, while one that waits for OnEnable can. The price is that it must let go in
+        /// OnDestroy rather than in OnDisable - OnEnable/OnDisable is the symmetric pair, and
+        /// a subscription made here has no OnDisable to match it. What must NOT happen here is
+        /// anything that CHANGES the world - moving objects, starting timers, showing panels.
+        /// Injection is wiring, and the game has not started yet.
         /// </summary>
         void Inject(IServiceResolver services);
     }

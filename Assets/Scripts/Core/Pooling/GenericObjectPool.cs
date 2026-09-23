@@ -19,7 +19,7 @@ namespace Game.Core
     /// Note: Unity ships UnityEngine.Pool.ObjectPool&lt;T&gt;, which does roughly this.
     /// The exercise asks for our own, so here it is.
     /// </summary>
-    public class GenericObjectPool<T> : IObjectPool<T> where T : Component, IPoolable
+    public class GenericObjectPool<T> : IFlushablePool<T> where T : Component, IPoolable
     {
         private readonly IFactory<T> _factory;
         private readonly int _maxSize;

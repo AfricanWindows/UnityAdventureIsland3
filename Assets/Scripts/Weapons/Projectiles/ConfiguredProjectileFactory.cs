@@ -24,11 +24,11 @@ namespace Game.Projectiles
     public class ConfiguredProjectileFactory<TProjectile> : IFactory<TProjectile>
         where TProjectile : BaseProjectile
     {
-        private readonly ProjectileDirector<TProjectile> _director;
+        private readonly IProjectileDirector<TProjectile> _director;
         private readonly ProjectileConfigSO _config;
         private readonly string _logPrefix;
 
-        public ConfiguredProjectileFactory(ProjectileDirector<TProjectile> director, ProjectileConfigSO config)
+        public ConfiguredProjectileFactory(IProjectileDirector<TProjectile> director, ProjectileConfigSO config)
         {
             _director = director;
             _config = config;

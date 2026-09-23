@@ -120,13 +120,15 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
     /// Everything from scratch. Every IResettable in the scene restores itself - beaten
     /// enemies come back, eaten fruit reappears, lives go back to three, weapons are lost -
     /// and then level one is entered as if the game had just been opened.
+    ///
+    /// Note what is NOT here: unfreezing the game. A Game Over screen is what set
+    /// Time.timeScale to 0, and that same screen puts it back in its own ResetToStart - which
+    /// the sweep below already calls. Pausing is the screen's business from beginning to end,
+    /// so this class does not touch it (Single Responsibility). Doing it here as well was
+    /// harmless but told a lie about who owns the pause.
     /// </summary>
     public void RestartGame()
     {
-        // A Game Over screen freezes the game; a restart that forgot this would hand back
-        // a frozen world.
-        Time.timeScale = 1f;
-
         int count = _resets != null ? _resets.ResetAll() : 0;
         if (_resets == null)
             Debug.LogError("[Flow] No IResetService - add a GameInstaller to the scene.", this);

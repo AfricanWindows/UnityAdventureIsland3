@@ -15,7 +15,7 @@ using System;
 /// for the one job that really needs it: RespawnTimer, which must keep counting while its
 /// object is switched off.
 /// </summary>
-public class PowerDrainService
+public class PowerDrainService : IPowerDrain
 {
     private readonly IPowerModel _model;
     private readonly float _intervalSeconds;

@@ -45,8 +45,13 @@ namespace Game.Weapons
         private bool _isEquipped;
         private string _logPrefix;
 
-        /// <summary>True once the matching power-up has been collected.</summary>
-        public bool IsEquipped { get { return _isEquipped; } }
+        /// <summary>
+        /// The Inspector flag, read straight from the serialized field. Deserialization
+        /// happens before any Awake, so this answer is settled before the first line of game
+        /// code runs - which is what removed the start-up race the weapon slot used to work
+        /// around by reading the equipped flag in Start instead of Awake.
+        /// </summary>
+        public bool IsOwnedFromStart { get { return unlockedFromStart; } }
 
         /// <summary>Unlocked and off cooldown.</summary>
         public virtual bool CanFire
@@ -72,10 +77,14 @@ namespace Game.Weapons
         }
 
         // Private on purpose: a subclass that declared its own Awake would silently replace
-        // this one and never get equipped. Subclasses use OnAwake() instead.
+        // this one. Subclasses use OnAwake() instead.
+        //
+        // It no longer pre-sets the equipped flag from unlockedFromStart. That line was what
+        // gave the flag two meanings at once - "in his hand" and "his from the start" - and
+        // the weapon slot used to read the second one out of it. The slot now asks
+        // IsOwnedFromStart and calls Equip() itself, so the flag means one thing only.
         private void Awake()
         {
-            _isEquipped = unlockedFromStart;
             OnAwake();
         }
 
@@ -130,9 +139,10 @@ namespace Game.Weapons
         }
 
         /// <summary>
-        /// Put in the player's hand. Called by his IWeaponSlot and by nothing else - one
-        /// weapon at a time is the slot's rule to keep, and a second writer of this flag
-        /// would be a second opinion about what he is carrying.
+        /// Put in the player's hand. Called by whichever SLOT is holding this weapon and by
+        /// nothing else: the weapon slot for the axe and the boomerang, the saddle for an
+        /// animal's attack. Keeping to one at a time is the slot's rule, and anyone else
+        /// writing this flag would be a second opinion about what the player is carrying.
         /// </summary>
         public void Equip()
         {

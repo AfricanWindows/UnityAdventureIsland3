@@ -55,7 +55,11 @@ namespace Game.Weapons
         [Tooltip("May the pool create more than it prewarmed, up to Max Size?")]
         [SerializeField] private bool allowGrowth;
 
-        private GenericObjectPool<TProjectile> _pool;
+        // IFlushablePool, not the concrete pool: this class owns the pool, so it is entitled to
+    // the larger view that includes ReleaseAll - but it still names an abstraction, so the
+    // implementation behind it can be swapped without touching this file (Dependency
+    // Inversion). A weapon, which only borrows, is handed the smaller IObjectPool instead.
+    private IFlushablePool<TProjectile> _pool;
         private ILevelEvents _levelEvents;
         private string _logPrefix;
 

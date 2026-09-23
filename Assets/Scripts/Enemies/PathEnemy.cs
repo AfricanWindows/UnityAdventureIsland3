@@ -30,7 +30,8 @@ public class PathEnemy : ActivatableEnemy
     private Rigidbody2D body;
     private MovementPath path;
 
-    // Where the editor put it. The whole route is measured from here.
+    // The anchor the whole route is measured from. Where the editor put it to begin with,
+    // and after being beaten, wherever it fell - see Revive.
     private Vector2 origin;
 
     // Its OWN clock, not Time.time - so a revived or restarted enemy starts its route from the
@@ -57,12 +58,46 @@ public class PathEnemy : ActivatableEnemy
     }
 
     /// <summary>
-    /// A whole-game restart. OnEnable does not run for an enemy that was never switched off, so
-    /// the clock has to be put back here as well, or it would carry on from mid-route.
+    /// Comes back where it FELL, which is what the assignment asks for - and what this enemy
+    /// could not do before.
+    ///
+    /// The route is measured from `origin`, and `origin` was captured once in OnAwake. So
+    /// however carefully the base class left the body at the spot where it died, the very
+    /// next FixedUpdate computed `origin + GetOffset(0)` and snapped it back to where the
+    /// level had first placed it: Revive At Start Position was ticked for a spider and a bird
+    /// whether the designer ticked it or not. Moving the ANCHOR, not just the body, is what
+    /// actually keeps it where it died.
+    ///
+    /// transform.position and not body.position: the base class moves the enemy through the
+    /// Transform, and a Rigidbody2D only picks that up at the next physics step - the
+    /// Transform is correct at this instant either way.
+    /// </summary>
+    public override void Revive()
+    {
+        // The base class quietly ignores a Revive on a living enemy. Asked here as well, so
+        // that such a call cannot drag a healthy enemy's route anchor to wherever it is now.
+        if (!IsDefeated)
+            return;
+
+        base.Revive();
+
+        origin = transform.position;
+        travelTime = 0f;
+    }
+
+    /// <summary>
+    /// A whole-game restart. Two things have to go back, not one: the clock, because OnEnable
+    /// does not run for an enemy that was never switched off and it would otherwise carry on
+    /// from mid-route - and the ANCHOR, because a Revive during the previous run has very
+    /// likely moved it. Without the second line a restarted game would rebuild every route
+    /// around the spot where that enemy last died.
     /// </summary>
     public override void ResetToStart()
     {
         base.ResetToStart();
+
+        // The base class has just put the transform back where the level starts it.
+        origin = transform.position;
         travelTime = 0f;
     }
 

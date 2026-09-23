@@ -10,8 +10,11 @@ using UnityEngine;
 /// no rule of its own - the clamping lives in ClampedCounterModel, the numbers live in a
 /// PowerConfigSO asset - and it draws nothing itself.
 ///
-/// Everything it touches is replaceable through an abstraction: IPowerModel, IPowerView,
-/// IForceKillable and a config asset. Losing a life goes through the project's EXISTING death
+/// Everything it touches is replaceable through an abstraction: IPowerModel, IPowerDrain,
+/// IPowerView, IForceKillable and a config asset. It CREATES the model and the drain clock,
+/// which is the owner's privilege - they are private to this bar and nothing else may share
+/// them - but it never names those classes again afterwards. Losing a life goes through the
+/// project's EXISTING death
 /// path (PlayerDeath), so respawning, the lives counter and the weapon loss keep working
 /// without a single line about them here.
 /// </summary>
@@ -24,7 +27,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
 
     private IPowerModel model;
     private IPowerView view;
-    private PowerDrainService drain;
+    private IPowerDrain drain;
     private IForceKillable death;
     private PowerStats stats;
 

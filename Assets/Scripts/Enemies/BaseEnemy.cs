@@ -6,10 +6,13 @@ using UnityEngine;
 /// Everything every enemy shares: it can be damaged, and it dies. HOW an enemy behaves is
 /// decided by the child class.
 ///
-/// It does not kill the player on contact - that is KillPlayerOnTouch - and it does not
-/// decide whether it comes back - that is RespawnTimer. All this class owns is health
-/// and the two states around it (Single Responsibility). An enemy that should stay dead
-/// simply carries no timer; a harmless one carries no touch effect.
+/// It does not kill the player on contact - that is KillPlayerOnTouch - and it does not decide
+/// WHETHER OR WHEN it comes back, which is RespawnTimer's. What it does own is HOW an enemy
+/// puts itself back together once somebody asks: its health, its beaten/alive state, and the
+/// position it returns to (Single Responsibility). The split is drawn where the knowledge is -
+/// only this class remembers where the level first placed it, captured in Awake, and the timer
+/// deliberately knows nothing about what it is reviving so that it can serve fruit and eggs too.
+/// An enemy that should stay dead simply carries no timer; a harmless one carries no touch effect.
 ///
 /// A beaten enemy is switched OFF, not destroyed. That single choice is what makes both
 /// features possible: the object survives to be brought back by the timer, and it survives
@@ -27,7 +30,10 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     [Tooltip("Where it comes back after being beaten. OFF = where it fell, which is what the " +
              "assignment asks for. ON = where the level put it - tick this for anything that " +
              "MOVES, or every respawn leaves it a few steps further from home until it has " +
-             "crept across the level.")]
+             "crept across the level.\n\n" +
+             "On an enemy that does NOT move it changes nothing: it dies where it started, so " +
+             "both answers are the same point. That is why the static ones are left unticked " +
+             "and every moving one is ticked.")]
     [SerializeField] private bool reviveAtStartPosition;
 
     // Set only once Awake has actually run. An enemy inside a level that has never been
@@ -128,6 +134,12 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     ///
     /// The position it returns to is the one captured in Awake - the one set in the editor -
     /// so there is nothing to type in and nothing to keep in step when the enemy is moved.
+    ///
+    /// WHAT AN OVERRIDE MUST HONOUR. This method promises only to leave the BODY where it fell.
+    /// A subclass that computes its position from a remembered anchor rather than from the body
+    /// has to move that anchor too, or the next frame quietly drags the enemy back and the flag
+    /// above means nothing - which is exactly what PathEnemy used to do, and why it now overrides
+    /// this (Liskov Substitution: the override keeps the promise the base class made).
     /// </summary>
     public virtual void Revive()
     {

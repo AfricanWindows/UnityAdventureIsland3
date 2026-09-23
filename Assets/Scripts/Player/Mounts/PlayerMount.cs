@@ -1,27 +1,36 @@
 using Game.Core;
-using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
-/// The player's saddle: which animal he is riding, and the trigger finger that fires it.
+/// The player's saddle: WHICH animal he is riding, and what that animal costs or gives him.
 ///
-/// It is the twin of WeaponsHandler, deliberately - the same shape for the same job, so
-/// there is one idea to explain and not two. He owns ONE animal, a new one replaces it, and
-/// that rule is written in Mount() and nowhere else.
+/// He owns ONE animal, a new one replaces it, and that rule is written in Mount() and
+/// nowhere else.
 ///
 /// It is a SEPARATE slot from the weapon, which is the whole reason the axe survives a ride:
 /// nothing here ever touches IWeaponSlot. While an animal is carried this component answers
-/// IAttackLock, so WeaponsHandler holds its fire and the same button reaches the animal
-/// instead; the moment the animal is lost the axe answers the button again, with no state to
-/// restore and nothing to remember.
+/// IAttackOverride with that animal's attack, so the ONE reader of the attack button
+/// (WeaponsHandler) fires the animal instead of the axe; the moment the animal is lost the
+/// answer goes back to null and the axe has the button again, with no state to restore and
+/// nothing to remember.
 ///
-/// Two jobs - hold and fire - the two halves of "the animal I am riding", exactly like
-/// WeaponsHandler's slot and trigger. The animal TAKING A HIT for the player is a rule of its
-/// own and lives in MountHitAbsorber, which only asks this class through IMountSlot
-/// (Single Responsibility).
+/// It does NOT read the attack button itself, and that is deliberate. It used to, which meant
+/// two components polled the same key on the same frame and a flag (the old IAttackLock) had
+/// to keep them from both firing. One reader and one question - "whose weapon is it?" - is
+/// the same behaviour with nothing left to keep in step (Single Responsibility).
+///
+/// It is a plain MonoBehaviour and no longer an InputDrivenBehaviour. That base class exists
+/// to hand a component the player's IInputSource, and this one stopped reading the button when
+/// IAttackOverride replaced its Update - so it was being injected with a device it never asked
+/// a single question. A class should not carry a dependency it does not use (Dependency
+/// Inversion), and dropping it costs nothing: the base serializes no fields, and PlayerDeath
+/// still reaches this component through IPlayerDeathHandler, which it never stopped answering.
+///
+/// The animal TAKING A HIT for the player is a rule of its own and lives in MountHitAbsorber,
+/// which only asks this class through IMountSlot.
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IResettable, IPlayerDeathHandler
+public class PlayerMount : MonoBehaviour, IMountSlot, IAttackOverride, IResettable, IPlayerDeathHandler
 {
     [Tooltip("The player's Animator. Empty = the one on this object.")]
     [SerializeField] private Animator animator;
@@ -40,8 +49,17 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IReset
 
     public bool IsMounted { get { return current != null; } }
 
-    /// <summary>While he rides, the weapon in his hand waits.</summary>
-    public bool BlocksAttack { get { return IsMounted; } }
+    /// <summary>
+    /// While he rides, the button fires the ANIMAL and the weapon in his hand waits.
+    ///
+    /// An explicit null test rather than "current?.Weapon": behind the interface sits a
+    /// Unity Object with its own overloaded ==, which the null-conditional operator does
+    /// not honour.
+    /// </summary>
+    public IUseableWeapon OverrideWeapon
+    {
+        get { return current != null ? current.Weapon : null; }
+    }
 
     private void Awake()
     {
@@ -70,20 +88,6 @@ public class PlayerMount : InputDrivenBehaviour, IMountSlot, IAttackLock, IReset
     public void OnPlayerDied()
     {
         Dismount();
-    }
-
-    private void Update()
-    {
-        if (!IsMounted || !HasInput)
-            return;
-
-        if (!InputSource.AttackPressed)
-            return;
-
-        // Whether the shot is allowed - cooldown, an empty pool - is the attack's own
-        // business, answered behind Attack() exactly as it is for a weapon.
-        if (current.Weapon != null)
-            current.Weapon.Attack();
     }
 
     // ===================== IMountSlot =====================

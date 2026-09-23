@@ -6,13 +6,21 @@ using UnityEngine;
 namespace Game.Core.DI
 {
     /// <summary>
-    /// THE COMPOSITION ROOT. The single object in the scene that is allowed to say the
-    /// word "new" about a service, and the single place where an abstraction is married to
-    /// a concrete implementation.
+    /// THE COMPOSITION ROOT for everything SHARED: every service that more than one object
+    /// depends on is created here, and here is where each of those abstractions is married to
+    /// a concrete implementation. Swapping the keyboard for a gamepad, or the real health view
+    /// for a silent one, is an edit in THIS FILE and nowhere else (Open/Closed, Dependency
+    /// Inversion) - because no one else ever names those classes.
     ///
-    /// Everything else in the game only ever sees interfaces. Swapping the keyboard for a
-    /// gamepad, or the real health view for a silent one, is an edit in THIS FILE and
-    /// nowhere else (Open/Closed, Dependency Inversion).
+    /// It is NOT the only "new" in the project, and claiming that would be a lie worth
+    /// spotting. Two kinds of object legitimately build their own:
+    ///   - a PRIVATE dependency nobody else can see - PowerController creates its own
+    ///     PowerModel and PowerDrainService, because no second object may share that bar;
+    ///   - a LOCAL composition root - each ProjectilePoolManager wires its own
+    ///     builder -&gt; director -&gt; factory -&gt; pool chain from its own Inspector fields,
+    ///     which is the one place where that prefab, that config and that pool belong together.
+    /// What all of them have in common is the rule this class exists to protect: the OWNER
+    /// may name a concrete type, and nobody else may.
     ///
     /// Why DefaultExecutionOrder instead of the Script Execution Order window: the order
     /// requirement is a property of this class, not of the project, so it belongs in the

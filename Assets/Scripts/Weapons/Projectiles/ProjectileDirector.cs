@@ -7,8 +7,12 @@ namespace Game.Projectiles
     ///
     /// Swap the builder and the very same recipe produces a different representation - a
     /// different kind of axe, or a debug projectile with gizmos - with no change here.
+    ///
+    /// The factory above it sees only IProjectileDirector, so a second recipe - or a test
+    /// double - replaces this class without touching it (Dependency Inversion).
     /// </summary>
-    public class ProjectileDirector<TProjectile> where TProjectile : BaseProjectile
+    public class ProjectileDirector<TProjectile> : IProjectileDirector<TProjectile>
+        where TProjectile : BaseProjectile
     {
         private readonly IProjectileBuilder<TProjectile> _builder;
 

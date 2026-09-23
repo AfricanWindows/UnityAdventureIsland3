@@ -37,25 +37,32 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     // pickup can happen, so a restart never has to guess (see ResetToStart).
     private IUseableWeapon _startingWeapon;
 
-    // Everything that may hold the trigger shut. Collected once, through the interface, so
-    // this class never learns that animals exist (Dependency Inversion) - the same shape
-    // PlayerMovement already uses for IMovementLock.
-    private IAttackLock[] _attackLocks;
+    // Everything that may take the button away from the weapon in his hand. Collected once,
+    // through the interface, so this class never learns that animals exist (Dependency
+    // Inversion) - the same shape PlayerMovement already uses for IMovementLock.
+    private IAttackOverride[] _attackOverrides;
 
     /// <summary>
-    /// Start, not Awake: a weapon's own Awake is what turns "Unlocked From Start" into
-    /// IsEquipped, and Unity gives no order between the Awakes of two different objects.
-    /// Every Awake has run by the time any Start does, so the scan below reads a settled
-    /// answer instead of a race.
+    /// Start, not Awake. It used to HAVE to be Start: the scan read IsEquipped, which a
+    /// weapon's own Awake filled in from its Inspector flag, and Unity gives no order between
+    /// the Awakes of two different objects. Now the scan asks IsOwnedFromStart, which is the
+    /// serialized field itself and is settled before any Awake, so the race is gone. Start is
+    /// kept because the locks below still want every Awake to have run.
     /// </summary>
     private void Start()
     {
         TakeStartingWeapon();
 
-        // true = include inactive, so a lock on a switched-off component still counts.
-        _attackLocks = ResolveRoot().GetComponentsInChildren<IAttackLock>(true);
+        // true = include inactive, so an override on a switched-off component still counts.
+        _attackOverrides = ResolveRoot().GetComponentsInChildren<IAttackOverride>(true);
     }
 
+    /// <summary>
+    /// The ONE place in the game that reads the attack button. Riding an animal used to add
+    /// a second reader on the player and a flag to keep the two from both firing; now the
+    /// animal only answers WHICH weapon the button is wired to, and this stays the single
+    /// trigger finger.
+    /// </summary>
     private void Update()
     {
         if (!HasInput)
@@ -64,19 +71,15 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
         if (!InputSource.AttackPressed)
             return;
 
-        // Somebody else has the trigger - riding an animal is the one case today, and the
-        // same button reaches the animal instead. The weapon is NOT taken away, it simply
-        // waits, so stepping off gives it straight back with nothing to restore.
-        if (IsAttackBlocked())
-            return;
+        IUseableWeapon weapon = ResolveWeapon();
 
         // No weapon and no animal: the attack button does nothing, as the assignment says.
-        if (_current == null)
+        if (weapon == null)
             return;
 
         // Whether the shot is allowed - cooldown, a boomerang still in the air - is the
         // weapon's own business, answered behind Attack() (see BaseWeapon).
-        _current.Attack();
+        weapon.Attack();
     }
 
     // ===================== IWeaponSlot =====================
@@ -132,10 +135,15 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
     }
 
     /// <summary>
-    /// Puts into the hand whatever weapon says it is already equipped - that is, one
-    /// ticked "Unlocked From Start". Today no weapon is, and the player starts empty
-    /// handed; the scan costs one search at startup and keeps that Inspector flag honest
-    /// instead of quietly meaningless.
+    /// Puts into the hand whatever weapon says the player owns from the start - one ticked
+    /// "Unlocked From Start". Today no weapon is, and the player starts empty handed; the
+    /// scan costs one search at startup and keeps that Inspector flag honest instead of
+    /// quietly meaningless.
+    ///
+    /// It asks IsOwnedFromStart and not IsEquipped. Those were the same answer once, by
+    /// accident of how BaseWeapon woke up, which meant any other IUseableWeapon would have
+    /// silently lost its starting weapon here. The question being asked is now the question
+    /// being answered.
     /// </summary>
     private void TakeStartingWeapon()
     {
@@ -146,7 +154,7 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
 
         for (int i = 0; i < found.Length; i++)
         {
-            if (!found[i].IsEquipped)
+            if (!found[i].IsOwnedFromStart)
                 continue;
 
             if (_startingWeapon == null)
@@ -156,12 +164,11 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
             }
 
             // One hand, so a second one cannot be carried. Said out loud, because this is
-            // a mistake in the Inspector rather than in the game.
+            // a mistake in the Inspector rather than in the game. Nothing to un-equip: no
+            // weapon is in the hand until the Equip below puts one there.
             Debug.LogWarning("[Weapons] " + Name(found[i]) + " is also ticked Unlocked From " +
                              "Start, but the player has one slot - keeping " +
                              Name(_startingWeapon) + ".", this);
-
-            found[i].UnEquip();
         }
 
         if (_startingWeapon != null)
@@ -180,18 +187,25 @@ public class WeaponsHandler : InputDrivenBehaviour, IWeaponSlot, IResettable
         return transform.parent != null ? transform.parent : transform;
     }
 
-    private bool IsAttackBlocked()
+    /// <summary>
+    /// What the button fires this frame: whoever has claimed it, otherwise the weapon in
+    /// his hand. The weapon is never taken AWAY while an animal has the button, it simply
+    /// waits - so stepping off gives it straight back with nothing to restore.
+    /// </summary>
+    private IUseableWeapon ResolveWeapon()
     {
-        if (_attackLocks == null)
-            return false;
-
-        for (int i = 0; i < _attackLocks.Length; i++)
+        if (_attackOverrides != null)
         {
-            if (_attackLocks[i].BlocksAttack)
-                return true;
+            for (int i = 0; i < _attackOverrides.Length; i++)
+            {
+                IUseableWeapon claimed = _attackOverrides[i].OverrideWeapon;
+
+                if (claimed != null)
+                    return claimed;
+            }
         }
 
-        return false;
+        return _current;
     }
 
     private static string Name(IUseableWeapon weapon)
