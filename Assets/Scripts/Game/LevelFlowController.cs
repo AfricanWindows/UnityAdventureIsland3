@@ -166,11 +166,12 @@ public class LevelFlowController : MonoBehaviour, ILevelFlow, ILevelEvents, IInj
 
     /// <summary>
     /// Announces the start of a level to whoever on the player cares: PlayerSpawn moves
-    /// him and remembers the new respawn point, PowerController refills the bar.
+    /// him and remembers the new respawn point, PowerController refills the bar,
+    /// FruitCounterController starts counting from zero.
     ///
-    /// This class names NEITHER of them. It asks for ILevelStartHandler and calls
-    /// whatever it finds, so a third thing that must react to a new level - a checkpoint
-    /// marker, an ammo refill - joins by implementing one method (Open/Closed).
+    /// This class names NONE of them. It asks for ILevelStartHandler and calls whatever
+    /// it finds - which is exactly how the fruit counter joined without an edit here, and
+    /// how the next thing that must react to a new level will (Open/Closed).
     /// </summary>
     private void StartLevelForPlayer()
     {

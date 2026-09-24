@@ -44,7 +44,8 @@ namespace Game.Projectiles
         // one physics step, or being hit at the exact frame its lifetime runs out.
         private bool _isLive;
 
-        public ProjectileStats Stats { get { return _stats; } }
+        // Protected, like Body: only the projectile itself reads its numbers, to fly and to hit.
+        protected ProjectileStats Stats { get { return _stats; } }
 
         protected Rigidbody2D Body { get { return _body; } }
 
@@ -103,10 +104,11 @@ namespace Game.Projectiles
         /// override inside one projectile class, which meant every new projectile that wanted
         /// the same behaviour had to copy the same eight lines (Open/Closed).
         ///
-        /// Still virtual: a projectile with a genuinely different rule - one that bounces,
-        /// one that only stops on breakable walls - overrides it and loses nothing.
+        /// Private: every projectile in the game follows this one rule, so it is a fixed step
+        /// of the template, not a hook. A projectile that genuinely stops differently is the
+        /// day this opens up - not before.
         /// </summary>
-        protected virtual bool IsBlockedBy(Collider2D other)
+        private bool IsBlockedBy(Collider2D other)
         {
             if (!stopsOnScenery)
                 return false;
@@ -180,8 +182,13 @@ namespace Game.Projectiles
             return true;
         }
 
-        /// <summary>Ends the flight and returns the object to whoever handed it out.</summary>
-        public void Despawn()
+        /// <summary>
+        /// Ends the flight and returns the object to whoever handed it out.
+        ///
+        /// Protected: a flight ends from the inside - a hit, a wall, the lifetime, the
+        /// boomerang arriving home. Nothing outside a projectile ever ends one.
+        /// </summary>
+        protected void Despawn()
         {
             if (!_isLive)
                 return;
@@ -199,7 +206,7 @@ namespace Game.Projectiles
         /// look exactly like a fresh one, which is what the old pool in the lecture got
         /// wrong: leftover velocity from the previous shot came back with it.
         /// </summary>
-        public virtual void OnSpawned()
+        public void OnSpawned()
         {
             _isLive = true;
 

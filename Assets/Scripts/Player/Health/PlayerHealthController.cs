@@ -17,9 +17,15 @@ using UnityEngine;
 /// class reached out and grabbed, which meant it could not be tested, could not be given
 /// a different view, and failed at runtime rather than at wiring time. The view is now
 /// handed in by GameInstaller (Dependency Inversion).
+///
+/// It is also the one place that knows what a death MEANT, because only it knows how many
+/// lives are left: the last one is gone (OutOfLives - the Game Over screen listens), or the
+/// player plays on (NextLifeStarted - the power bar listens). Each outcome is its own small
+/// interface, so every listener sees only the event it uses (Interface Segregation), and
+/// neither listener is named here (Dependency Inversion).
 /// </summary>
 [DisallowMultipleComponent]
-public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife, IPlayerDeathHandler, IOutOfLivesNotifier
+public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, IExtraLife, IPlayerDeathHandler, IOutOfLivesNotifier, INextLifeNotifier
 {
     [Tooltip("Most lives the player can hold. Keep it ABOVE Start Health: an extra life for " +
              "twenty fruit that does not fit under the ceiling is lost.")]
@@ -33,6 +39,9 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
 
     /// <summary>Raised when the last life is gone. The Game Over screen listens.</summary>
     public event Action OutOfLives;
+
+    /// <summary>Raised when a life was lost but others are left. The power bar listens.</summary>
+    public event Action NextLifeStarted;
 
     /// <summary>
     /// Called by GameInstaller before Awake. The view arrives as IPlayerHealthView only -
@@ -99,11 +108,16 @@ public class PlayerHealthController : MonoBehaviour, IInjectable, IResettable, I
 
     /// <summary>
     /// Called by PlayerDeath once he is back at the start. PlayerDeath already decided WHEN
-    /// he dies (the fairy, the recovery window); here that only becomes "one life less".
+    /// he dies (the fairy, the recovery window); here that becomes "one life less" - and one
+    /// of the two endings. The last life: the model's Empty has just raised OutOfLives.
+    /// Any other: NextLifeStarted.
     /// </summary>
     public void OnPlayerDied()
     {
         model.Remove(1);
+
+        if (model.Current > 0 && NextLifeStarted != null)
+            NextLifeStarted();
     }
 
     private void UpdateView()

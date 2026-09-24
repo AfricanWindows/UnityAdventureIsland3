@@ -68,7 +68,10 @@ namespace Game.Core.DI
         [Tooltip("Log every registration and every injected component on start-up.")]
         [SerializeField] private bool verbose = true;
 
-        private readonly ServiceContainer _container = new ServiceContainer();
+        // Held as IServiceContainer, the WRITING half: this class fills the container and is
+        // the only one allowed to. The concrete ServiceContainer is named exactly once, on the
+        // right of this line; everything else receives it as the reading half, IServiceResolver.
+        private readonly IServiceContainer _container = new ServiceContainer();
 
         private void Awake()
         {
@@ -102,7 +105,7 @@ namespace Game.Core.DI
             _container.Register<IResetService>(new SceneResetService());
 
             // Every pool in the game, published under the interface its users ask for.
-            // Three lines instead of three copies of the same eight - the repetition moved
+            // Four lines instead of four copies of the same eight - the repetition moved
             // into RegisterPool below, where it is written once (Don't Repeat Yourself).
             //
             // This is also what frees a pool from the player prefab. A prefab cannot hold
@@ -132,10 +135,11 @@ namespace Game.Core.DI
         /// Publishes one pool under IObjectPool&lt;TProjectile&gt; - the only face of a pool
         /// that anything else in the game is allowed to see (Interface Segregation).
         ///
-        /// GENERIC because the three pools differ in exactly two things: what they hand
-        /// out, and which manager holds them. Both are type arguments, so the find, the
-        /// registration, the log and the warning are written ONCE. A fourth pool is one
-        /// more line at the call site and no new code here (Open/Closed).
+        /// GENERIC because the four pools differ in exactly two things: what they hand
+        /// out, and which manager holds them. Both are type arguments, so each pool is one
+        /// line at the call site: the find and the warning are RegisterSceneService's, the
+        /// pool-specific log is written here, once. A fifth pool is one more line at the
+        /// call site and no new code here (Open/Closed).
         ///
         /// TManager is a type argument rather than a search for the abstract base class on
         /// purpose: Unity's find is given the exact concrete component, which is what it

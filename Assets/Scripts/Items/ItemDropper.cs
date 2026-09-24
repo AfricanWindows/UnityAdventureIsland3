@@ -12,17 +12,21 @@ using UnityEngine;
 /// calls DropItem() through IItemDropper (Single Responsibility, Open/Closed). Same split the project already uses
 /// for PlayerJump + JumpBehaviour and HoppingEnemy + HopAim.
 ///
-/// GENERIC over what it drops, and that is not decoration - it buys two real things:
-///   * the Inspector slots become typed. A PickableDropper shows a BasePickable field, so
-///     a floor tile or an enemy CANNOT be dragged into the loot list by mistake; the
-///     mistake is caught in the editor instead of at runtime.
-///   * Drop() hands back a TItem, not a GameObject, so the caller needs no GetComponent.
-/// A dropper for something that is not a pickable - a spawner that drops an enemy, say -
-/// is one new subclass and no new code here.
+/// GENERIC over what it drops, and that is not decoration: the Inspector slots become typed.
+/// A PickableDropper shows a BasePickable field, so a floor tile or an enemy CANNOT be
+/// dragged into the loot list by mistake - the mistake is caught in the editor instead of at
+/// runtime. A dropper for something that is not a pickable - a spawner that drops an enemy,
+/// say - is one new subclass and no new code here.
 ///
 /// The contents are PREFABS, never an enum of item kinds. That is why the three animals and
-/// the fairy, none of which exist yet, will cost this class exactly nothing: a new item is
-/// dragged into the list on the egg prefab and nobody opens a script.
+/// the fairy cost this class nothing at all: each one was dragged into the list on the egg
+/// prefab, and nobody opened a script.
+///
+/// Nor is there an enum for HOW the item is chosen. There used to be one - Random or
+/// Specific - and it only repeated what the data already says: a filled Specific Item slot
+/// IS the choice "always this one", an empty one means "draw from the pool". One rule, read
+/// off the Inspector, instead of a mode switch that every new way of choosing would have had
+/// to edit (Open/Closed).
 ///
 /// Note it is abstract: Unity cannot put an open generic MonoBehaviour on a GameObject, so
 /// every dropper needs a concrete subclass - the same shape as ProjectilePoolManager and
@@ -31,26 +35,13 @@ using UnityEngine;
 /// <typeparam name="TItem">What this dropper is allowed to drop.</typeparam>
 public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable, IItemDropper where TItem : Component
 {
-    /// <summary>How this particular dropper decides what comes out.</summary>
-    public enum ContentMode
-    {
-        /// <summary>Draw one from the Random Pool below.</summary>
-        Random,
-
-        /// <summary>Always the one item named in Specific Item.</summary>
-        Specific
-    }
-
     [Header("What drops")]
-    [Tooltip("Random = drawn from the pool below. Specific = always the Specific Item.")]
-    [SerializeField] private ContentMode contentMode = ContentMode.Random;
-
-    [Tooltip("Used only in Specific mode.")]
+    [Tooltip("Set = always drops exactly this. Empty = one is drawn from the Random Pool below.")]
     [SerializeField] private TItem specificItem;
 
-    [Tooltip("Used only in Random mode. Fill this ONCE on the prefab: every egg placed in " +
-             "the level inherits the list, and a single egg can still be overridden to " +
-             "Specific without touching the others.")]
+    [Tooltip("Used while Specific Item is empty. Fill this ONCE on the prefab: every egg " +
+             "placed in the level inherits the list, and a single egg can still be given a " +
+             "Specific Item without touching the others.")]
     [SerializeField] private TItem[] randomPool;
 
     [Header("Where it appears")]
@@ -64,13 +55,15 @@ public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable, IItemDrop
     private readonly List<TItem> dropped = new List<TItem>();
 
     /// <summary>
-    /// Creates one item and hands it to the caller, or null if there was nothing to create.
+    /// Creates one item and says where it is, or null if there was nothing to create. The
+    /// triggers - the egg and a beaten enemy - only need to know WHERE the item is, so they
+    /// get its Transform and never learn what kind of dropper this is (Dependency Inversion).
     ///
     /// The item is parented to OUR parent, not to us. That matters: it must keep lying
     /// where it fell even after the egg changes state, and it must still be switched off
     /// together with the level it belongs to.
     /// </summary>
-    public TItem Drop()
+    public Transform DropItem()
     {
         TItem prefab = ChooseItem();
 
@@ -87,18 +80,7 @@ public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable, IItemDrop
         TItem item = Instantiate(prefab, position, Quaternion.identity, transform.parent);
 
         dropped.Add(item);
-        return item;
-    }
-
-    /// <summary>
-    /// The IItemDropper face of Drop(), for the triggers - the egg and a beaten enemy. They
-    /// only need to know WHERE the item is, so they get its Transform and never learn what
-    /// kind of dropper this is (Dependency Inversion).
-    /// </summary>
-    public Transform DropItem()
-    {
-        TItem item = Drop();
-        return item != null ? item.transform : null;
+        return item.transform;
     }
 
     /// <summary>
@@ -143,10 +125,13 @@ public abstract class ItemDropper<TItem> : MonoBehaviour, IResettable, IItemDrop
         dropped.Clear();
     }
 
-    /// <summary>The prefab to use, or null when this dropper was left unconfigured.</summary>
+    /// <summary>
+    /// The prefab to use, or null when this dropper was left unconfigured. A Specific Item,
+    /// when one is set, always wins; otherwise one is drawn from the pool.
+    /// </summary>
     private TItem ChooseItem()
     {
-        if (contentMode == ContentMode.Specific)
+        if (specificItem != null)
             return specificItem;
 
         return PickRandom();

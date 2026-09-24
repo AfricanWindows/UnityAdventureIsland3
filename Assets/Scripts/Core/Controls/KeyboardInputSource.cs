@@ -74,7 +74,7 @@ namespace Game.Core.Controls
         }
 
         /// <summary>
-        /// Z throws whatever the player is carrying. One button, because he has
+        /// Space throws whatever the player is carrying. One button, because he has
         /// one weapon - the number keys that used to pick a slot are gone with the slots.
         /// </summary>
         public bool AttackPressed

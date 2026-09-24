@@ -9,9 +9,8 @@ using UnityEngine;
 /// two reasons to change and made it useless for anything that grants power without being
 /// a fruit (Single Responsibility).
 ///
-/// It is an IPowerUp made of IPowerUps, so it can hold a composite of its own. The egg
-/// from the assignment - "an animal, a weapon or a fairy appears" - is the next thing that
-/// will want this.
+/// It is an IPowerUp made of IPowerUps, so a pickable still hands over ONE effect whatever
+/// is inside it: BasePickable never learns that a fruit does two things.
 /// </summary>
 public class CompositePowerUp : IPowerUp
 {

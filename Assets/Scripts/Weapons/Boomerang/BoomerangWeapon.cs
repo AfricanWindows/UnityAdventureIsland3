@@ -22,7 +22,7 @@ namespace Game.Weapons
         private BoomerangProjectile _inFlight;
 
         /// <summary>Unlocked, off cooldown, AND the one boomerang is already home.</summary>
-        public override bool CanFire
+        protected override bool CanFire
         {
             get { return base.CanFire && !IsBoomerangOut; }
         }

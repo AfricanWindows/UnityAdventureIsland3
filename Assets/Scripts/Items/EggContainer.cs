@@ -23,12 +23,14 @@ using UnityEngine;
 /// twice means. Nothing in the game needs that today. If it ever does, the trigger is one
 /// more call to Open() and nothing below changes.
 ///
-/// A broken egg is HIDDEN, not switched off. That is deliberate: this object is still
-/// running the throw its contents are riding on, and it is where the broken-egg sprite will
-/// go - swapping a sprite needs a renderer that still exists.
+/// A broken egg is HIDDEN, not switched off. That is deliberate: the throw its contents are
+/// riding on is a coroutine of the ItemToss on this very object, and Unity stops the
+/// coroutines of a switched-off object - the arc would be cut short and the prize dropped
+/// straight onto its landing spot.
 ///
-/// It is IRespawnable, so a RespawnTimer on the egg makes it whole again some seconds after
-/// it was opened - the same component the enemies and the fruit use.
+/// It is IRespawnable, so a RespawnTimer dropped on the egg would make it whole again some
+/// seconds after it was opened - the same component the enemies and the fruit use. Today no
+/// egg carries one: an opened egg stays open until a new game (ResetToStart).
 /// </summary>
 [DisallowMultipleComponent]
 public class EggContainer : PlayerContactEffect, IResettable, IRespawnable

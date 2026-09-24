@@ -7,10 +7,14 @@
 /// reset its timer on waking, and only that enemy misbehaves (Don't Repeat Yourself).
 ///
 /// Activate and Deactivate are NOT virtual: whatever a subclass does, the flag must end up
-/// right, so the flag is set here and the subclass fills in the hooks (Template Method). The
+/// right, so the flag is set here and the subclass fills in the hook (Template Method). The
 /// snake and the frog use OnActivated to start their pause over, the shooting snake to start
 /// its countdown over; ActivateNearPlayer, which calls this, knows none of that - it only
 /// sees IActivatable (Dependency Inversion).
+///
+/// Falling asleep has no hook, because no enemy needs one: each of them already reads
+/// IsActive in its own FixedUpdate and simply stops starting new moves. An empty hook that
+/// nothing overrides would be an extension point for a need that does not exist.
 /// </summary>
 public abstract class ActivatableEnemy : BaseEnemy, IActivatable
 {
@@ -31,12 +35,8 @@ public abstract class ActivatableEnemy : BaseEnemy, IActivatable
     public void Deactivate()
     {
         active = false;
-        OnDeactivated();
     }
 
     /// <summary>Waking up: a subclass may start its own clock over here.</summary>
     protected virtual void OnActivated() { }
-
-    /// <summary>Falling asleep.</summary>
-    protected virtual void OnDeactivated() { }
 }

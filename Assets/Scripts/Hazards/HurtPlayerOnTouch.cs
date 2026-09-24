@@ -11,9 +11,10 @@ using UnityEngine;
 /// works - it states the price and lets the player decide whether the hit lands at all
 /// (Dependency Inversion).
 ///
-/// Nothing about being destructible is here either. The stone cannot be broken by any
-/// weapon, so it carries no IDamageable and no health; the fairy will destroy it through
-/// the same IKillable route everything else uses.
+/// Nothing about being DESTROYED is here either - that is the job of two other components on
+/// the same stone: BreakableByAttacks lets the boomerang and the animals' attacks break it,
+/// and Destructible (an IObstacle) lets the fairy's touch and a ridden animal wipe it out.
+/// This class only hurts (Single Responsibility).
 /// </summary>
 public class HurtPlayerOnTouch : PlayerContactEffect
 {

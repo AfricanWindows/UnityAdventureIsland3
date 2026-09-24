@@ -11,15 +11,19 @@ using UnityEngine;
 /// PowerConfigSO asset - and it draws nothing itself.
 ///
 /// Everything it touches is replaceable through an abstraction: IPowerModel, IPowerDrain,
-/// IPowerView, IForceKillable and a config asset. It CREATES the model and the drain clock,
-/// which is the owner's privilege - they are private to this bar and nothing else may share
-/// them - but it never names those classes again afterwards. Losing a life goes through the
-/// project's EXISTING death
-/// path (PlayerDeath), so respawning, the lives counter and the weapon loss keep working
-/// without a single line about them here.
+/// IPowerView, IForceKillable, INextLifeNotifier and a config asset. It CREATES the model and
+/// the drain clock, which is the owner's privilege - they are private to this bar and nothing
+/// else may share them - but it never names those classes again afterwards. Losing a life
+/// goes through the project's EXISTING death path (PlayerDeath), so respawning, the lives
+/// counter and the weapon loss keep working without a single line about them here.
+///
+/// WHEN THE BAR IS FULL AGAIN: only when the player stands at a start ALIVE - a level begins,
+/// the game restarts, or the lives counter says a next life begins. Never at the moment of
+/// death: an empty bar stays empty through the death animation, and behind the Game Over
+/// screen if that was the last life.
 /// </summary>
 [DisallowMultipleComponent]
-public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IPlayerDeathHandler, IPowerWallet
+public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelStartHandler, IPowerWallet
 {
     [Tooltip("The asset holding Start Power, Max Power and the drain interval. Swap the " +
              "asset to change the difficulty - no code, no prefab surgery.")]
@@ -29,6 +33,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     private IPowerView view;
     private IPowerDrain drain;
     private IForceKillable death;
+    private INextLifeNotifier lives;
     private PowerStats stats;
 
     /// <summary>
@@ -59,6 +64,7 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         model = new PowerModel(stats.MaxPower, stats.StartPower);
         drain = new PowerDrainService(model, stats.DrainIntervalSeconds);
         death = GetComponent<IForceKillable>();
+        lives = GetComponent<INextLifeNotifier>();
 
         if (view == null)
             Debug.LogWarning("PowerController: no IPowerView was injected - " +
@@ -67,6 +73,11 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         if (death == null)
             Debug.LogError("PowerController: no IForceKillable on " + gameObject.name +
                            " - running out of power will do nothing.", this);
+
+        if (lives == null)
+            Debug.LogError("PowerController: no INextLifeNotifier on " + gameObject.name +
+                           " - the bar will not refill after a death. Add a Player Health " +
+                           "Controller.", this);
     }
 
     private void OnEnable()
@@ -81,6 +92,12 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
         model.Changed += UpdateView;
         model.Empty -= HandleEmpty;
         model.Empty += HandleEmpty;
+
+        if (lives != null)
+        {
+            lives.NextLifeStarted -= HandleNextLife;
+            lives.NextLifeStarted += HandleNextLife;
+        }
     }
 
     private void OnDisable()
@@ -90,6 +107,9 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
 
         model.Changed -= UpdateView;
         model.Empty -= HandleEmpty;
+
+        if (lives != null)
+            lives.NextLifeStarted -= HandleNextLife;
     }
 
     // Only runs while this component is enabled, and Time.deltaTime is 0 while the game is
@@ -108,8 +128,8 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     }
 
     /// <summary>
-    /// A full bar and a fresh clock. Called when a level is entered, when the player
-    /// respawns, and by the whole-game restart - the three moments the timer must not
+    /// A full bar and a fresh clock. Called when a level is entered, when a next life begins
+    /// after a death, and by the whole-game restart - the three moments the timer must not
     /// carry anything over from before.
     /// </summary>
     public void ResetToStart()
@@ -130,10 +150,10 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     }
 
     /// <summary>
-    /// Any death refills the bar - an enemy, spikes, or the timer itself. Called by
-    /// PlayerDeath once he is back at the start.
+    /// He died, had a life to spare, and is back at the start alive: full bar, fresh clock.
+    /// The last death never gets here, so the Game Over screen shows the bar as it was.
     /// </summary>
-    public void OnPlayerDied()
+    private void HandleNextLife()
     {
         ResetToStart();
     }
@@ -163,21 +183,21 @@ public class PowerController : MonoBehaviour, IInjectable, IResettable, ILevelSt
     }
 
     /// <summary>
-    /// The bar ran out. Refill FIRST, then die.
+    /// The bar ran out: he dies. Nothing is refilled here - the bar stays empty until
+    /// HandleNextLife, a new level or a restart fills it.
     ///
-    /// The order matters: the death respawns the player, and he must come back with a full
-    /// bar - and a death that is already under way still leaves a running bar instead of a
-    /// player stuck at zero with a clock that can never fire Empty again.
+    /// It cannot get stuck at zero. The model announces Empty only once, so a bar that ran
+    /// out while a death was already under way (ForceKill is refused then) needs that death
+    /// to refill it - and it does: every death ends in a next life or in a Game Over, and the
+    /// restart after a Game Over refills it too.
     ///
-    /// ForceKill, not Kill - the same door the abyss uses. Running out of power
-    /// is a RULE of the game, not a blow, so no protection may refuse it. With Kill the fairy
-    /// (or the recovery window after a hit) made PlayerDeath say no, and the
-    /// refill above then turned an empty bar into a free full one.
+    /// ForceKill, not Kill - the same door the abyss uses. Running out of power is a RULE of
+    /// the game, not a blow, so no protection may refuse it. With Kill the fairy (or the
+    /// recovery window after a hit) would make PlayerDeath say no, and the player would walk
+    /// on with an empty bar that never fires Empty again.
     /// </summary>
     private void HandleEmpty()
     {
-        model.Reset(stats.StartPower);
-
         if (death != null)
             death.ForceKill();
     }

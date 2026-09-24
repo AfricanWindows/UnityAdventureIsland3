@@ -8,7 +8,8 @@ namespace Game.Core.Controls
     /// <see cref="IInputSource"/> from the composition root and exposes it to the subclass.
     ///
     /// It exists so the injection handshake and the "who forgot the GameInstaller?" guard
-    /// are written ONCE instead of in four movement scripts (Don't Repeat Yourself), and so
+    /// are written ONCE instead of in each of the four scripts that read the player - walking,
+    /// jumping, crouching and the attack button (Don't Repeat Yourself), and so
     /// that no gameplay class ever names a device. A subclass reads intentions - Horizontal,
     /// JumpPressed - and cannot tell a keyboard from a gamepad from a replay file.
     ///
@@ -22,8 +23,19 @@ namespace Game.Core.Controls
         private IInputSource _inputSource;
         private bool _errorReported;
 
-        /// <summary>True once the composition root has handed over an input source.</summary>
-        protected bool HasInput { get { return _inputSource != null; } }
+        /// <summary>
+        /// True when there is input to act on: the composition root has handed over an input
+        /// source, AND the game is running.
+        ///
+        /// The second half is the pause. Behind the Game Over and Level Complete screens
+        /// Time.timeScale is 0, but Update still runs - so a key pressed there used to be
+        /// obeyed: an axe left the hand and hung frozen in the air, and a jump pressed there
+        /// was remembered and could fire by itself the moment the game restarted. Asked HERE,
+        /// once, every component that reads the player stops listening while the game stands
+        /// still, and none of them has to know that pausing exists (Don't Repeat Yourself).
+        /// The pause itself stays EndScreenController's; this only respects it.
+        /// </summary>
+        protected bool HasInput { get { return _inputSource != null && Time.timeScale > 0f; } }
 
         /// <summary>
         /// The player's intentions. Null only when the scene has no GameInstaller, which is
@@ -48,7 +60,7 @@ namespace Game.Core.Controls
         /// Called by GameInstaller before Awake. Resolved once and cached; the container
         /// itself is NOT kept, so this stays injection and never becomes a Service Locator.
         /// </summary>
-        public virtual void Inject(IServiceResolver container)
+        public void Inject(IServiceResolver container)
         {
             if (container != null)
                 container.TryResolve(out _inputSource);

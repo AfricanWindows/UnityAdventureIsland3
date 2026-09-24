@@ -10,9 +10,8 @@ namespace Game.Core
     ///   - reaching zero is announced exactly ONCE, not on every further call
     ///
     /// Before this class existed, PlayerHealthModel and PowerModel each carried their own
-    /// copy of it, and the lives counter and the fruit counter from the final assignment
-    /// were about to become copies three and four. The rule that "20 fruit = a life" must
-    /// live in a model, but it does not need its own arithmetic.
+    /// copy of it - two copies of the same three rules, waiting to drift apart. Both now
+    /// inherit this one.
     ///
     /// No UnityEngine reference on purpose: this is data and rules, not a GameObject.
     ///

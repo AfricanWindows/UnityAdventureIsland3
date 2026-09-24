@@ -80,10 +80,9 @@ public class PlayerMount : MonoBehaviour, IMountSlot, IAttackOverride, IResettab
     }
 
     /// <summary>
-    /// Dying costs the animal. Called by PlayerDeath directly, so it arrives even though
-    /// this component is switched off for the length of the death animation - the old
-    /// static-event version had to subscribe in Start and unsubscribe in OnDestroy to
-    /// survive that.
+    /// Dying costs the animal. Called by PlayerDeath directly, through IPlayerDeathHandler -
+    /// there is no event to subscribe to, so there is nothing to forget to let go of. (The
+    /// old static-event version had to subscribe in Start and unsubscribe in OnDestroy.)
     /// </summary>
     public void OnPlayerDied()
     {

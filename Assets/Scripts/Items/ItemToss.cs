@@ -18,8 +18,10 @@ using UnityEngine;
 /// configure per level.
 ///
 /// It moves a Transform that belongs to somebody else and keeps no other link to it, so it
-/// works for anything: an item out of an egg today, an animal out of a beaten enemy later.
-/// The egg knows it only as IItemToss (Dependency Inversion).
+/// works for any item the egg hands it. Only the egg carries one: a beaten enemy is already
+/// switched off when it drops, so DropOnDefeat never throws anything - the item simply
+/// appears where the enemy fell. The egg knows this class only as IItemToss (Dependency
+/// Inversion).
 /// </summary>
 public class ItemToss : MonoBehaviour, IItemToss
 {
@@ -76,11 +78,11 @@ public class ItemToss : MonoBehaviour, IItemToss
 
         // No flight possible: put the item straight down on its landing spot.
         //
-        // isActiveAndEnabled is not paranoia. A beaten enemy is switched OFF before it
-        // announces its defeat, and Unity refuses to start a coroutine on an inactive
-        // object - StartCoroutine would throw instead of throwing the item. So a drop from
-        // an enemy simply appears where it fell, exactly as in the original game, and only
-        // an egg (which stays in the scene after it breaks) really flies.
+        // isActiveAndEnabled is a safety net, not a path the game takes today. Unity refuses
+        // to start a coroutine on an inactive object - StartCoroutine would throw instead of
+        // throwing the item. The egg stays switched on after it breaks, so it always flies;
+        // an ItemToss put on something that switches itself off (a beaten enemy, say) would
+        // land its item on the spot instead of crashing.
         if (flightTime <= 0f || !isActiveAndEnabled)
         {
             FinishFlight();

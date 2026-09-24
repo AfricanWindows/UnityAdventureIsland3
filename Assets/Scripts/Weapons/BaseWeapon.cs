@@ -53,13 +53,18 @@ namespace Game.Weapons
         /// </summary>
         public bool IsOwnedFromStart { get { return unlockedFromStart; } }
 
-        /// <summary>Unlocked and off cooldown.</summary>
-        public virtual bool CanFire
+        /// <summary>
+        /// Unlocked and off cooldown. A hook of the Attack() template: a weapon with a rule
+        /// of its own - the boomerang, which waits until it is home - adds it here.
+        ///
+        /// Protected, not public: Attack() is the only one that asks. The weapon slot never
+        /// needs to, because pulling the trigger of a weapon that cannot fire simply does
+        /// nothing - so nothing outside the weapon depends on this question.
+        /// </summary>
+        protected virtual bool CanFire
         {
-            get { return _isEquipped && Time.time >= _lastFireTime + Cooldown; }
+            get { return _isEquipped && Time.time >= _lastFireTime + cooldown; }
         }
-
-        protected virtual float Cooldown { get { return cooldown; } }
 
         /// <summary>
         /// Built once and cached - "[AxeWeapon]", "[BoomerangWeapon]". The class name, so a new

@@ -7,8 +7,8 @@ namespace Game.Core
     /// to what a user of it needs.
     ///
     /// The split is Interface Segregation drawn along a real line. A weapon only ever asks for
-    /// an item and gives it back, so it sees IObjectPool and nothing more: it cannot reach in
-    /// and recall everyone else's shots. The pool manager, which is the one object entitled to
+    /// an item - the item goes home by itself - so it sees IObjectPool and nothing more: it
+    /// cannot reach in and recall everyone else's shots. The pool manager, which is the one object entitled to
     /// say "this level is over, everything comes home", sees this larger view.
     ///
     /// Before it existed, the manager had to hold the CONCRETE GenericObjectPool for the sake

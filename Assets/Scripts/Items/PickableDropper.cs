@@ -1,6 +1,6 @@
 /// <summary>
-/// The dropper for things the player picks up: weapons, fruit, the fairy, and later the
-/// animals and the fairy.
+/// The dropper for things the player picks up: the weapons, the three animals, the fairy -
+/// whatever the egg, the bird and the frog are given to drop.
 ///
 /// It is empty on purpose. Unity cannot add an open generic MonoBehaviour to a GameObject,
 /// so a generic base needs one concrete subclass per closed type - exactly what

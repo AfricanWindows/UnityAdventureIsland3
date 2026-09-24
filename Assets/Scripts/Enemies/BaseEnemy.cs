@@ -100,8 +100,8 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     ///
     /// It goes around TakeDamage on purpose. Health is the protection an enemy has against
     /// WEAPONS, and this is the door that exists for things no protection survives - which
-    /// is also how the ghost will work: immune to every weapon, and still gone the moment
-    /// the fairy brushes past.
+    /// is also how the ghost works: immune to every weapon, and still gone the moment the
+    /// fairy brushes past.
     /// </summary>
     public void ForceKill()
     {
@@ -114,8 +114,12 @@ public abstract class BaseEnemy : MonoBehaviour, IDamageable, IRespawnable, IRes
     /// <summary>
     /// Switched off, not destroyed. The announcement comes AFTER the object is asleep, so
     /// a listener that asks IsDefeated during the event gets the truth.
+    ///
+    /// Private and not virtual: no enemy dies differently, and anything that should happen
+    /// on a death - coming back, dropping an item - listens to Defeated from a component of
+    /// its own (RespawnTimer, DropOnDefeat) instead of overriding this.
     /// </summary>
-    protected virtual void Die()
+    private void Die()
     {
         defeated = true;
         gameObject.SetActive(false);

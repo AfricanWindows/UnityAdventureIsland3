@@ -3,11 +3,13 @@ using UnityEngine;
 /// <summary>
 /// "A level has just begun - put yourself in the state it should begin in."
 ///
-/// Two things on the player need to know: where he now respawns, and that his timer starts
-/// over. Before this interface existed, LevelFlowController reached for PlayerDeath and
-/// PowerController BY NAME to tell them - which meant the flow controller knew about
-/// respawning and about power bars, and a third thing that needed the same news would have
-/// been a third GetComponent in there (Dependency Inversion, Open/Closed).
+/// Three things on the player need to know: where he now respawns (PlayerSpawn), that his
+/// power bar starts full (PowerController), and that this level's fruit are counted from
+/// zero (FruitCounterController). Before this interface existed, LevelFlowController
+/// reached for the first two BY NAME - which meant the flow controller knew about
+/// respawning and about power bars. The fruit counter, the third, would have been a third
+/// GetComponent in there; instead it joined by implementing one method, and the flow
+/// controller was not edited (Dependency Inversion, Open/Closed).
 ///
 /// Now the flow announces once and whoever cares answers, exactly as PlayerDeath already
 /// asks every IInvincible and PlayerMovement asks every IMovementLock.

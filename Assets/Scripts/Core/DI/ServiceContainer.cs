@@ -14,9 +14,10 @@ namespace Game.Core.DI
     /// injection and a Service Locator.
     ///
     /// It stores instances rather than factories on purpose: everything this game shares
-    /// (input, the game flow, the drain service) is a single long-lived object. Adding
+    /// (input, the HUD views, the pools, the game flow) is a single long-lived object. Adding
     /// transient registrations later means adding an overload here and changing nothing
-    /// else, because callers already talk through IServiceContainer (Open/Closed).
+    /// else, because nobody talks to this class directly: GameInstaller fills it through
+    /// IServiceContainer, and everyone else reads it through IServiceResolver (Open/Closed).
     /// </summary>
     public class ServiceContainer : IServiceContainer
     {

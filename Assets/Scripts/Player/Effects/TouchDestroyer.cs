@@ -13,9 +13,9 @@ using UnityEngine;
 /// what makes the assignment's rules fall out by themselves:
 ///   * an enemy dies, and its respawn timer brings it back as usual - BaseEnemy answers
 ///     ForceKill by dying, so no enemy needed a single component added to it;
-///   * the campfire and the stone die although no weapon can scratch them, because they
-///     carry a Destructible and weapons do not go through this door;
-///   * the ghost, which nothing else can touch, will die to the fairy for the same reason.
+///   * the campfire, which no weapon can scratch, and the stone, which the axe cannot, both
+///     die, because they carry a Destructible and weapons do not go through this door;
+///   * the ghost, which nothing else can touch, dies to the fairy for the same reason.
 ///
 /// It asks a TimedPlayerEffect whether it is allowed to act, and not IInvincible: "the
 /// player is currently immune" and "the player currently destroys what he touches" are two

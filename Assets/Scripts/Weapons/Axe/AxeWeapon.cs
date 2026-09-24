@@ -4,9 +4,9 @@ namespace Game.Weapons
     /// The axe thrower.
     ///
     /// The axe is UNLIMITED once found, exactly as in Adventure Island: there is no ammo
-    /// count. What limits a held fire button is the pool - three axes exist, and a fourth
-    /// throw waits until one lands. That cap refills by itself, which is why it is a pool
-    /// size and not a counter.
+    /// count. What limits a held fire button is the pool - its Max Size is how many axes
+    /// exist, and one more throw waits until one of them lands. That cap refills by itself,
+    /// which is why it is a pool size and not a counter.
     ///
     /// "How you get it" and "how you lose it" are not here either: AxePickable puts it in
     /// the player's weapon slot through the shared EquipWeaponPowerUp, and the slot takes

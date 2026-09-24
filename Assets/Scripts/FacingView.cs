@@ -12,9 +12,9 @@ using UnityEngine;
 /// Responsibility, Dependency Inversion), and there is ONE flipping mechanism in the project
 /// instead of one per character.
 ///
-/// It flips the SCALE, not SpriteRenderer.flipX, exactly like PlayerMovement does for the
-/// player. flipX mirrors only the picture; the scale mirrors the children too, so a child
-/// in front of the face - a fire point, say - stays in front when it turns round.
+/// It flips the SCALE, not SpriteRenderer.flipX. flipX mirrors only the picture; the scale
+/// mirrors the children too, so a child in front of the face - a fire point, say - stays in
+/// front when it turns round.
 /// </summary>
 [DisallowMultipleComponent]
 public class FacingView : MonoBehaviour

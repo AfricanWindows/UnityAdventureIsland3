@@ -22,7 +22,7 @@ namespace Game.Projectiles
         }
 
         /// <summary>Runs the full recipe and returns the assembled projectile.</summary>
-        public virtual TProjectile Construct(ProjectileConfigSO config)
+        public TProjectile Construct(ProjectileConfigSO config)
         {
             if (_builder == null || config == null)
                 return null;

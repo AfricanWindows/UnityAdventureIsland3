@@ -115,8 +115,11 @@ namespace Game.Core
         /// <summary>
         /// Takes the item back. Called by the item itself through the release callback,
         /// so nothing outside the pool has to remember where an object belongs.
+        ///
+        /// Private: the callback and ReleaseAll are the only two ways home, and both are
+        /// written in this class. No interface offers it, because no borrower ever needed it.
         /// </summary>
-        public void Release(T item)
+        private void Release(T item)
         {
             if (item == null)
                 return;

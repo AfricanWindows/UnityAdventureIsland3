@@ -8,7 +8,8 @@ using UnityEngine;
 ///
 /// It knows nothing about snakes, ghosts, jumping or shooting. It asks for IActivatable and
 /// calls two methods, so the same component wakes a hopping snake, a fire-breathing snake and
-/// a ghost written later, with no edit here (Open/Closed, Dependency Inversion). What "asleep"
+/// the ghost - written after this class, with no edit here (Open/Closed, Dependency
+/// Inversion). What "asleep"
 /// means is each enemy's own business - see IActivatable.
 ///
 /// WHY A DISTANCE AND NOT A TRIGGER COLLIDER

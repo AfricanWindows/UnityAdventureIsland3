@@ -15,6 +15,10 @@ using UnityEngine;
 /// </summary>
 public abstract class TimedPlayerEffect : MonoBehaviour, IResettable
 {
+    [Tooltip("How long the effect lasts once switched on, in seconds. The fairy's is 10, as " +
+             "the assignment says - set on the player prefab. Picking up the same effect " +
+             "again starts the full time over.")]
+    [Min(0f)]
     [SerializeField] private float duration = 5f;
 
     private Coroutine running;

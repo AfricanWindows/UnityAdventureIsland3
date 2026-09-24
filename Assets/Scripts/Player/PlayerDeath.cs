@@ -4,8 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Dying: play the death animation where he fell, THEN put him back at the start of the
-/// level and tell every IPlayerDeathHandler on the player - the lives counter, the power bar,
-/// the weapon, the fairy and the animal each do their own part.
+/// level and tell every IPlayerDeathHandler on the player - the lives counter, the weapon,
+/// the fairy and the animal each do their own part. (The power bar is not one of them: it
+/// refills only when the lives counter says a next life begins - see INextLifeNotifier.)
 ///
 /// The pause is the whole reason this class grew. Before it, Kill() teleported the player
 /// on the same frame, so a death animation would have played at the spawn point instead of
@@ -20,8 +21,9 @@ using UnityEngine;
 /// A coroutine, not a Task: this object stays enabled the whole time, so Unity's own timing
 /// is the simplest thing that works, and it stops by itself when the object is disabled.
 ///
-/// It is the single implementation of IKillable, which is how enemies, their shots, hazards
-/// and the two timers kill the player without any of them knowing what respawning is.
+/// It is the single implementation of IKillable - how enemies, their shots and the campfire
+/// kill the player without any of them knowing what respawning is - and of IForceKillable,
+/// the door the abyss and the empty power bar use (see ForceKill).
 ///
 /// WHERE he comes back is not decided here either: that is IPlayerSpawn (PlayerSpawn), which
 /// also answers the start of a new level. Every interface left on this class is a facet of
@@ -39,9 +41,9 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, IInvincible
     private Rigidbody2D body;
     private bool isDying;
 
-    // Everything the player steers with: movement, both jumps, crouching, weapons. Collected
-    // through their shared base class, so dying switches off "being controlled" without
-    // naming a single one of them - a new controllable component is covered for free.
+    // Everything the player steers with: movement, both jumps, crouching, the attack button.
+    // Collected through their shared base class, so dying switches off "being controlled"
+    // without naming a single one of them - a new controllable component is covered for free.
     private InputDrivenBehaviour[] inputComponents;
 
     // Everyone who has a part in "what dying costs". Found once, in Awake.
@@ -68,7 +70,12 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, IInvincible
         // Includes this component. That is deliberate: it is what makes Kill() refuse a
         // second death while the first one is still playing.
         invincibilitySources = GetComponents<IInvincible>();
-        inputComponents = GetComponents<InputDrivenBehaviour>();
+
+        // InChildren, not just this object: the attack button's reader (WeaponsHandler) sits
+        // on a CHILD of the player. Searched only here, it stayed switched on through the
+        // death animation, and the player could throw his axe - or fire his animal's attack -
+        // out of his own death. true = include inactive, the same rule as the handlers below.
+        inputComponents = GetComponentsInChildren<InputDrivenBehaviour>(true);
 
         // true = include inactive, so a handler on a switched-off child is still told.
         deathHandlers = GetComponentsInChildren<IPlayerDeathHandler>(true);
@@ -90,7 +97,7 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, IInvincible
     }
 
     /// <summary>
-    /// Starts dying. The consequences - a life gone, a full power bar, the weapon lost -
+    /// Starts dying. The consequences - a life gone, the weapon lost, the animal gone -
     /// are announced only when the animation is over, so the Game Over popup does not land
     /// on top of it.
     /// </summary>
@@ -105,13 +112,15 @@ public class PlayerDeath : MonoBehaviour, IKillable, IForceKillable, IInvincible
     }
 
     /// <summary>
-    /// Dying with no way out - the abyss, and nothing else in the game.
+    /// Dying with no way out - the abyss, and the power bar running empty. Both are RULES of
+    /// the game, not blows, so no protection may refuse them.
     ///
     /// It is the same death, minus one question: whether anything is protecting him. The
-    /// fairy and the death animation both answer through IInvincible, and this
-    /// method simply never asks. That is the whole implementation of "only the pit can kill
-    /// the player even with the fairy" - a rule that lives in one place instead of as a tick
-    /// box on every hazard in two levels.
+    /// fairy and the recovery window both answer through IInvincible, and this method simply
+    /// never asks. That is the whole implementation of "the fairy does not save him from the
+    /// pit" - a rule that lives in one place instead of as a tick box on every hazard in two
+    /// levels. The one thing it still refuses is a second death on top of the first - see
+    /// BeginDeath.
     ///
     /// The player is on the RECEIVING end of IForceKillable here, while the fairy is on the
     /// giving end of the same interface. One idea - "an end nothing survives" - serving both

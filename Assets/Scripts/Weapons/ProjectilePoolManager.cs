@@ -22,7 +22,7 @@ namespace Game.Weapons
     /// (Single Responsibility).
     ///
     /// It implements IObjectPool&lt;T&gt;, which is the only thing a weapon is allowed to
-    /// see: Get and Release, no prewarm counts, no growth policy (Interface Segregation).
+    /// see: Get, no prewarm counts, no growth policy (Interface Segregation).
     /// </summary>
     /// <typeparam name="TProjectile">What this pool hands out.</typeparam>
     public abstract class ProjectilePoolManager<TProjectile> : MonoBehaviour, IObjectPool<TProjectile>, IInjectable
@@ -56,15 +56,15 @@ namespace Game.Weapons
         [SerializeField] private bool allowGrowth;
 
         // IFlushablePool, not the concrete pool: this class owns the pool, so it is entitled to
-    // the larger view that includes ReleaseAll - but it still names an abstraction, so the
-    // implementation behind it can be swapped without touching this file (Dependency
-    // Inversion). A weapon, which only borrows, is handed the smaller IObjectPool instead.
-    private IFlushablePool<TProjectile> _pool;
+        // the larger view that includes ReleaseAll - but it still names an abstraction, so the
+        // implementation behind it can be swapped without touching this file (Dependency
+        // Inversion). A weapon, which only borrows, is handed the smaller IObjectPool instead.
+        private IFlushablePool<TProjectile> _pool;
         private ILevelEvents _levelEvents;
         private string _logPrefix;
 
         /// <summary>Prefix for this pool's console messages, e.g. "[ProjectileAxe]".</summary>
-        protected string LogPrefix
+        private string LogPrefix
         {
             get
             {
@@ -132,10 +132,11 @@ namespace Game.Weapons
         /// <summary>
         /// Parks the pooled objects on their own object at the root of the scene.
         ///
-        /// This matters more than it looks. If the container were this object - and this
-        /// component usually sits on the player - then every sleeping projectile would be a
-        /// child of the player and would be dragged around by him. The hierarchy stays flat and
-        /// still, so Unity never recalculates those transforms.
+        /// This matters more than it looks. If the container were this object, every sleeping
+        /// projectile would share its fate: dragged along whenever it moves, switched off
+        /// whenever it is. The pools once sat on the player, where both happened; a container
+        /// of their own at the root keeps the hierarchy flat and still, so Unity never
+        /// recalculates those transforms.
         /// </summary>
         private Transform CreateRootContainer()
         {
@@ -144,20 +145,13 @@ namespace Game.Weapons
             return holder.transform;
         }
 
-        /// <summary>An active item, or null when the pool is empty and may not grow.</summary>
+        /// <summary>
+        /// An active item, or null when the pool is empty and may not grow. There is no
+        /// Release beside it: a projectile returns itself through the callback the pool gave it.
+        /// </summary>
         public TProjectile Get()
         {
             return _pool != null ? _pool.Get() : null;
-        }
-
-        /// <summary>
-        /// Normally never called by hand: a projectile returns itself through the callback
-        /// the pool gave it. This exists so the pool stays usable through IObjectPool.
-        /// </summary>
-        public void Release(TProjectile item)
-        {
-            if (_pool != null)
-                _pool.Release(item);
         }
 
         /// <summary>

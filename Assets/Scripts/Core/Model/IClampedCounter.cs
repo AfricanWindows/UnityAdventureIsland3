@@ -3,11 +3,12 @@ using System;
 namespace Game.Core
 {
     /// <summary>
-    /// A number with a floor, a ceiling and two events. Health, power, lives and the fruit
-    /// counter are all this - which is exactly why it is written once.
+    /// A number with a floor, a ceiling and two events. The lives and the power bar are both
+    /// this - which is exactly why it is written once. (The fruit counter is NOT: it wraps
+    /// round at its threshold instead of stopping there - see IFruitCounterModel.)
     ///
     /// It is deliberately domain-free: it does not know what a heart is, and it has no
-    /// UnityEngine reference. That is what lets one implementation serve four features and
+    /// UnityEngine reference. That is what lets one implementation serve both features and
     /// still be unit-testable without opening the editor.
     ///
     /// Features derive their OWN interface from this (IPowerModel, IPlayerHealthModel).

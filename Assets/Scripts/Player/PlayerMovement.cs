@@ -61,6 +61,16 @@ public class PlayerMovement : InputDrivenBehaviour, IFacing, IMovementSpeed
         movementLocks = GetComponents<IMovementLock>();
     }
 
+    /// <summary>
+    /// Switched off - PlayerDeath does it for the length of the death animation - he stands.
+    /// Without this the speed he died with outlived the death: back on the spawn point, the
+    /// first physics steps carried him a little forward and the run cycle flickered on.
+    /// </summary>
+    private void OnDisable()
+    {
+        ownSpeedX = 0f;
+    }
+
     private void FixedUpdate()
     {
         ReadInput();
