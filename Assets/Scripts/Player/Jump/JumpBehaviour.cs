@@ -2,18 +2,19 @@ using UnityEngine;
 
 /// <summary>
 /// ROLE: HOW a jump behaves: the push-off, releasing the key, gravity in the air.
-/// PATTERNS: Template Method - abstract steps; Strategy - PlayerJump and HoppingEnemy use any jump.
+/// PATTERNS: Strategy - the abstract jump; PlayerJump and HoppingEnemy are the contexts that call it.
 /// SOLID: O - a new jump feel is a new subclass.
 ///
 /// HOW a jump behaves: the push-off, what letting go of the key does, and what gravity does
 /// in the air. It knows nothing about WHEN a jump is allowed, who asked for it or which key
 /// was pressed - that is PlayerJump's job.
 ///
-/// This is the Template pattern. The base fixes the shape of a jump - three moments, always
-/// the same three - and every subclass answers all three itself. None of them has an empty
-/// default: the one jump in the game both shortens its rise and falls faster, so such a
-/// default would be code that never runs. A jump with one fixed height writes an empty Cut()
-/// and says so in plain sight.
+/// This is the Strategy pattern. The base names the three moments of a jump - the push-off,
+/// letting go of the key, gravity in the air - and every subclass answers all three itself.
+/// WHEN each moment happens is decided by the caller: PlayerJump for the player, HoppingEnemy
+/// for the snake and the frog. None of the steps has an empty default: the one jump in the
+/// game both shortens its rise and falls faster, so such a default would be code that never
+/// runs. A jump with one fixed height writes an empty Cut() and says so in plain sight.
 ///
 /// PlayerJump talks to THIS type, never to a concrete jump, so a different feel is a new
 /// subclass and not an edit to any existing file (Open/Closed). Nothing here mentions a

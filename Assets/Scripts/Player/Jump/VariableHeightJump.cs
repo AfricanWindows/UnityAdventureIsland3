@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// ROLE: The Adventure Island jump: a tap is low, holding is high, the fall is heavier.
-/// PATTERNS: Template Method - fills every step of JumpBehaviour; Strategy - the concrete jump.
+/// PATTERNS: Strategy - the concrete jump that PlayerJump and HoppingEnemy use.
 ///
 /// The Adventure Island jump: a tap lifts the player a little, holding the key lifts him high.
 ///

@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ROLE: Controller of the power bar: ticks the drain, draws the bar, an empty bar = death.
 /// PATTERNS: MVC (Controller); DI - the view in Inject; Observer - listens to Changed and Empty.
-/// SOLID: S - no rules, no drawing; D - every field is an interface.
+/// SOLID: S - no rules, no drawing; D - every collaborator is an interface (the config is a data asset).
 ///
 /// CONTROLLER of the power bar - Adventure Island's central mechanic.
 ///
