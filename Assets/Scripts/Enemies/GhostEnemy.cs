@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The ghost: chases the player, freezes and hides while he looks at it (the Boo rule).
+/// PATTERNS: Template Method - overrides the CanMove hook of ChasingEnemy.
+/// SOLID: O - one rule added, the chase untouched.
+///
 /// The ghost: a chaser that is shy. While the player is in range it comes straight at him -
 /// but the moment he turns to face it, it freezes and hides its face, and it only moves again
 /// once he looks away.

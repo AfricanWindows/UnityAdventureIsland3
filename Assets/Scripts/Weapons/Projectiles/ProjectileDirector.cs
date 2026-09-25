@@ -1,6 +1,9 @@
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Owns the recipe: which building steps run, and in which order.
+    /// PATTERNS: Builder - the Director.
+    ///
     /// DIRECTOR. Owns the recipe: which steps run, and in which order. It never touches a
     /// prefab and never decides a number - it reads them off the config and dictates the
     /// sequence to whatever builder it was handed.

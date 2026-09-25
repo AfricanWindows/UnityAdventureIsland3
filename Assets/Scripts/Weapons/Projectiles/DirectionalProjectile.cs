@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Base of projectiles that fly the way they were thrown.
+    /// PATTERNS: Template Method - seals StartMotion, leaves the ApplyMovement hook.
+    ///
     /// A projectile that is thrown the way its owner is facing.
     ///
     /// It exists so "remember which way I was thrown, turn the sprite to match, fly that

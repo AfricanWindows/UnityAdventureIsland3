@@ -1,6 +1,10 @@
 using Game.Core.Controls;
 
 /// <summary>
+/// ROLE: Lying down (Down or S): he stops walking but can still turn around.
+/// PATTERNS: DI - the input arrives through InputDrivenBehaviour.
+/// SOLID: S - a separate component, not a branch inside PlayerMovement.
+///
 /// Lying down: hold Down or S and the player drops to the ground, stops walking, but can
 /// still turn to face the other way - exactly as in Adventure Island.
 ///

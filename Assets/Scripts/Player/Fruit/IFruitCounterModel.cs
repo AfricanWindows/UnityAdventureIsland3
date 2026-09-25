@@ -1,6 +1,9 @@
 using System;
 
 /// <summary>
+/// ROLE: Model contract of the fruit counter.
+/// PATTERNS: MVC (Model contract); Observer - its events.
+///
 /// MODEL contract of the fruit counter.
 ///
 /// It counts UP to a threshold and wraps, which is why it is not an IClampedCounter: that

@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "The attack button is mine right now" - the animal while it is ridden.
+/// PATTERNS: none - a role interface.
+/// SOLID: O - WeaponsHandler fires the animal's attack without knowing animals exist.
+///
 /// "Right now the attack button belongs to ME, and this is what it fires."
 ///
 /// Riding an animal is the one reason today: while the player is mounted the button throws

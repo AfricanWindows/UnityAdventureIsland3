@@ -4,6 +4,9 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The boomerang launcher.
+    /// PATTERNS: Template Method - fills Launch and extends CanFire; Pooling; DI - the pool in Inject.
+    ///
     /// The boomerang launcher. It only decides WHEN a boomerang may leave the hand; it does
     /// not build, move or destroy boomerangs - it borrows one, and the boomerang brings
     /// itself back.

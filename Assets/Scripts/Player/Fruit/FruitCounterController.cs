@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Controller of the fruit counter: counts, draws, 20 fruit = one extra life.
+/// PATTERNS: MVC (Controller); DI - the view arrives in Inject; Observer - listens to the model.
+/// SOLID: I - uses only IExtraLife from the lives counter.
+///
 /// CONTROLLER of the fruit counter.
 ///
 /// It is the only piece that talks to Unity: it owns the model, pushes values into the

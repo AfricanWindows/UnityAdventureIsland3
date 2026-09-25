@@ -4,6 +4,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of effects that switch on, last N seconds and switch off (the fairy).
+/// PATTERNS: Observer - raises OnActiveChanged; a coroutine counts the time.
+/// SOLID: S - it knows nothing about how the effect looks.
+///
 /// Base class for any effect that turns ON, lasts for a while and turns OFF by itself
 /// (invincibility today, shield or speed boost tomorrow).
 /// The timer logic is written here ONCE - a child class only gives it a meaning.

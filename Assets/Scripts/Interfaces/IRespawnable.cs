@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Can be taken out AND brought back (enemies, fruit, eggs) - RespawnTimer drives it.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - the "taken out" half is IDefeatable.
+///
 /// Something that can be taken out of the game - an enemy beaten, a fruit eaten, an egg
 /// opened - and later brought back.
 ///

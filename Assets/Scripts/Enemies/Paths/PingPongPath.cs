@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Route there and back along a straight line - the spider on its thread.
+/// PATTERNS: Strategy - a concrete MovementPath.
+///
 /// There and back along a straight line, forever - the spider on its thread.
 ///
 /// The line is a direction rather than "up or down", so the same route serves a spider going

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: One level: its name, its spawn point, switch it on or off.
+/// PATTERNS: none - a role interface.
+/// SOLID: D - the level flow never names Level.
+///
 /// One playable level: switch it on or off and tell where the player starts.
 /// The level flow and the pools depend on this, not on the concrete Level (Dependency Inversion).
 /// </summary>

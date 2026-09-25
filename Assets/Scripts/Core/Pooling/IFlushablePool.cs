@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: The OWNER's view of a pool: Get plus ReleaseAll (bring every item home).
+    /// PATTERNS: Pooling.
+    /// SOLID: I - weapons see only IObjectPool; only the owner sees this bigger view.
+    ///
     /// A pool that can also be emptied in one go - what the OWNER of a pool needs, as opposed
     /// to what a user of it needs.
     ///

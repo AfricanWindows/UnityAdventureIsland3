@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
+/// ROLE: View - draws the power bar as a row of segments.
+/// PATTERNS: MVC (View).
+/// SOLID: S - it only draws.
+///
 /// VIEW of the power bar: a row of little images, of which the first Current ones are lit.
 ///
 /// It only draws. It holds no reference to the model, contains no rule about starving, and

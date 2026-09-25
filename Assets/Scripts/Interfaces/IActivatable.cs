@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Can be woken up and put to sleep by the game (enemies near the player).
+/// PATTERNS: none - a role interface.
+/// SOLID: D - ActivateNearPlayer never names an enemy class.
+///
 /// Something that can be switched on and off by the game rather than by the player: an enemy
 /// that only moves once he is worth watching, a trap that only arms when someone is near.
 ///

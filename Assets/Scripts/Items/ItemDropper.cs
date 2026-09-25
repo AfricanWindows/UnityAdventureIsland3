@@ -3,6 +3,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: WHAT drops: the Specific Item if it is set, otherwise a random one from the list.
+/// PATTERNS: Generics - TItem keeps the Inspector slots typed (no tile or enemy by mistake).
+/// SOLID: S - never decides WHEN; O - a new trigger needs no edit here.
+///
 /// "When something asks me to, put one item into the world - either the one I was told to
 /// hold, or one drawn at random from a list."
 ///

@@ -5,6 +5,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: The pool itself: keeps sleeping objects in a queue and hands them out again.
+    /// PATTERNS: Pooling - the core; Generics - one class for any T; Factory - asks IFactory to create.
+    /// SOLID: S - plain C# bookkeeping; O - works for every projectile without a change.
+    ///
     /// Reuses objects instead of creating and destroying them, which is what keeps the
     /// frame rate flat while the player holds the fire button: Instantiate/Destroy allocate,
     /// and allocations are what the garbage collector eventually stops the game to clean.

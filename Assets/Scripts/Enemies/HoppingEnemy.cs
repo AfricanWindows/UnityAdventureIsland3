@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
+/// ROLE: The snake and the frog: stand, hop, land, stand - it owns only this cycle.
+/// PATTERNS: Strategy - HopAim decides where, JumpBehaviour decides how; Template Method - OnActivated.
+/// SOLID: S - only the cycle; O - snake and frog differ by component, not by code.
+///
 /// An enemy that hops: stands still, jumps, lands, stands still again - the snake and the frog.
 ///
 /// It owns the CYCLE and nothing else. The three other questions are answered by components

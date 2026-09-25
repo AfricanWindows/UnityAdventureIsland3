@@ -1,6 +1,9 @@
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The axe thrower.
+    /// PATTERNS: Template Method - every step is inherited from DirectionalWeapon; Pooling.
+    ///
     /// The axe thrower.
     ///
     /// The axe is UNLIMITED once found, exactly as in Adventure Island: there is no ammo

@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Flies straight at the player through anything - the base of the ghost.
+/// PATTERNS: Template Method - the CanMove hook (GhostEnemy overrides it); DI - IPlayerProvider.
+/// SOLID: O - the ghost adds its rule without touching the chase.
+///
 /// An enemy that flies straight at the player, through anything in the way - the ghost.
 ///
 /// It is named for what it DOES, not for the ghost, because nothing here is ghostly: a bee or

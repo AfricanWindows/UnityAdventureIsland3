@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Helper: "is ANY protection active right now?" over a list of IInvincible.
+/// PATTERNS: none - an extension method.
+/// SOLID: DRY - one loop for PlayerDeath, PlayerHurt and MountHitAbsorber.
+///
 /// "Is ANY of these protecting the player right now?"
 ///
 /// PlayerDeath, PlayerHurt and MountHitAbsorber each ask exactly this about the same list - the

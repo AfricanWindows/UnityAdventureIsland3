@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The green animal's attack: hits everything in a circle around the player.
+    /// PATTERNS: Template Method - fills FireInternal of BaseWeapon.
+    ///
     /// The green animal's attack: it spins on the spot and everything within a wide circle
     /// around the player is hit at once. No projectile, no direction, no pool - which is
     /// exactly why it is its own class and not another DirectionalWeapon.

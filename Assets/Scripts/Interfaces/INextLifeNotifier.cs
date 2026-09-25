@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: Announces "he lost a life and plays on" (NextLifeStarted) - the power bar refills on it.
+/// PATTERNS: Observer - the event.
+/// SOLID: D - the power bar never names PlayerHealthController.
+///
 /// "The player lost a life, has more left, and plays on." The moment he is back at the start
 /// of the level, alive - which is when the power bar refills.
 ///

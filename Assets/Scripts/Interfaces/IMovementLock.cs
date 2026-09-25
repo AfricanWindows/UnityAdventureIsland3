@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "The player must not walk right now" (lying down, being hurt, dying).
+/// PATTERNS: none - a role interface.
+/// SOLID: O - a new reason to stop walking is a new implementation.
+///
 /// "Right now the player must not walk."
 ///
 /// Lying down is one reason. Being stunned, sliding, opening a door, standing in a

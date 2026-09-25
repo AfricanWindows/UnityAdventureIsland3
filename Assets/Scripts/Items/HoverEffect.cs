@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Bobs a pickup gently up and down.
+/// PATTERNS: none - a plain component.
+/// SOLID: S - works on anything and knows nothing about it.
+///
 /// Bobs the object gently up and down, so a fruit lying on the ground looks like it is
 /// waiting to be picked up instead of like a sprite someone forgot to animate.
 ///

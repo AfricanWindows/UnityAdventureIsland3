@@ -3,6 +3,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of every enemy: health, taking damage, being beaten (switched off), reviving.
+/// PATTERNS: Template Method - the OnAwake hook; Observer - raises Defeated.
+/// SOLID: S - no contact damage, no respawn timing; L - every enemy can stand in for BaseEnemy.
+///
 /// Everything every enemy shares: it can be damaged, and it dies. HOW an enemy behaves is
 /// decided by the child class.
 ///

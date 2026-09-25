@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Builds any projectile step by step (speed, damage, size...).
+    /// PATTERNS: Builder - the concrete builder; Generics.
+    ///
     /// CONCRETE BUILDER - one class for every projectile in the game.
     ///
     /// It replaced a hand-written builder per weapon, which were byte-for-byte identical

@@ -3,6 +3,9 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Hop aim of the frog: lands where the player stood at the moment of take-off.
+/// PATTERNS: Strategy - a concrete HopAim; DI - gets IPlayerProvider in Inject.
+///
 /// Lands where the player was standing at the moment of the push-off - the frog.
 ///
 /// The spot is taken ONCE, as the frog leaves the ground, and never updated in the air. That

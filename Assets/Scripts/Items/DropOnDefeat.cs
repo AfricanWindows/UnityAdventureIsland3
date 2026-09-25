@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: When this enemy is beaten it drops an item (the bird an axe, the frog a random animal).
+/// PATTERNS: Observer - listens to IDefeatable.Defeated.
+/// SOLID: I - depends on IDefeatable only; D - drops through IItemDropper.
+///
 /// "When this enemy is beaten, it may leave something behind" - the animal the assignment
 /// says a destroyed enemy can drop.
 ///

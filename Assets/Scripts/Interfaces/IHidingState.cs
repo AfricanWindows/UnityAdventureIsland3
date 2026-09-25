@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "The ghost is hiding its face" - read by the animator view.
+/// PATTERNS: none - a state interface.
+/// SOLID: I - one property.
+///
 /// "It is hiding right now" - the ghost covering its face because the player is looking.
 ///
 /// A pose, read by the view, and nothing else - the same shape as ICrouchState. The ghost

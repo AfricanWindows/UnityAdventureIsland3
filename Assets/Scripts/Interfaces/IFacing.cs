@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Which way the owner looks: +1 right, -1 left.
+/// PATTERNS: none - a role interface.
+/// SOLID: D - the weapons and FacingView read this, not the transform's scale.
+///
 /// Which way its owner is looking: +1 right, -1 left.
 ///
 /// Weapons depend on this abstraction instead of reading transform.localScale, so the

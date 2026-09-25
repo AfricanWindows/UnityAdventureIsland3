@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Route straight ahead while bobbing up and down - the bird.
+/// PATTERNS: Strategy - a concrete MovementPath.
+///
 /// Straight ahead at a steady speed while bobbing up and down - the bird.
 ///
 /// Two independent movements added together: the horizontal one grows with time, the vertical

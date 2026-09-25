@@ -1,6 +1,9 @@
 using Game.Weapons;
 
 /// <summary>
+/// ROLE: The axe lying in the level.
+/// PATTERNS: Factory Method - inherited from WeaponPickable; Generics - one line.
+///
 /// The axe pickup lying in the level.
 ///
 /// It grants the weapon itself, not ammunition: in Adventure Island the axe is unlimited

@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "The player is lying down" - read by the animator view.
+/// PATTERNS: none - a state interface.
+/// SOLID: I - one property.
+///
 /// "The player is lying down right now."
 ///
 /// Deliberately separate from IMovementLock. They answer different questions: the lock

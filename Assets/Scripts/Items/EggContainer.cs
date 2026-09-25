@@ -3,6 +3,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The egg: the player touches it, it opens and throws out what was inside.
+/// PATTERNS: Template Method - fills Affect of PlayerContactEffect; Observer - raises Defeated.
+/// SOLID: S - only WHEN; WHAT drops is IItemDropper, HOW it flies is IItemToss.
+///
 /// The egg from the assignment: the player walks into it, it breaks open, and what was
 /// inside - a weapon, an animal, the fairy - pops out and lands next to it.
 ///

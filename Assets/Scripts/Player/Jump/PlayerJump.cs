@@ -2,6 +2,10 @@ using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Decides WHEN the player may jump; the jump itself is a JumpBehaviour.
+/// PATTERNS: Strategy - the context that uses a JumpBehaviour; DI - input via InputDrivenBehaviour.
+/// SOLID: S - never knows how high a jump goes.
+///
 /// Decides WHEN the player may jump, and leaves the jump itself to a JumpBehaviour.
 ///
 /// It knows two things and nothing else: the player asked (IInputSource) and his feet are on

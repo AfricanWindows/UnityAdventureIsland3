@@ -7,6 +7,11 @@ using UnityEngine.Serialization;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: Builds one projectile pool: builder, then director, then factory, then pool.
+    /// PATTERNS: Pooling; Builder; Factory; DI - registered by GameInstaller; Generics;
+    ///           Observer - listens to LevelEntered.
+    /// SOLID: S - builds and forwards, the pooling itself is GenericObjectPool.
+    ///
     /// COMPOSITION ROOT for one kind of projectile: the single place that knows which
     /// prefab, which config asset and which container belong together. It builds the chain
     /// builder -&gt; director -&gt; factory -&gt; pool once, in Awake, and afterwards does

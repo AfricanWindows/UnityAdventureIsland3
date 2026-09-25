@@ -2,6 +2,10 @@ using Game.Projectiles;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The snake's shot: kills the player, ignores other enemies.
+/// PATTERNS: Template Method - overrides TryHit of BaseProjectile; Pooling - the enemy shot pool.
+/// SOLID: L - behaves like any DirectionalProjectile; only WHO it hurts differs.
+///
 /// A shot fired BY an enemy - the snake's shot. It kills the player and ignores other
 /// enemies, so enemies can never hurt each other.
 ///

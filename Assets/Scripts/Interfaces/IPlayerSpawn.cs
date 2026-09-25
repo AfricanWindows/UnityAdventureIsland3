@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "Put the player back at the start of the level."
+/// PATTERNS: none - a role interface.
+/// SOLID: I - one method.
+///
 /// "Put the player back where the current level starts."
 ///
 /// PlayerDeath needs exactly this and nothing more: once the death animation is over, the

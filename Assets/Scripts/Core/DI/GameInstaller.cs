@@ -6,6 +6,10 @@ using UnityEngine;
 namespace Game.Core.DI
 {
     /// <summary>
+    /// ROLE: Wires the game at start-up: fills the service container, then injects every IInjectable.
+    /// PATTERNS: DI - the Composition Root; Generics - the RegisterSceneService and RegisterPool helpers.
+    /// SOLID: D - the one place that matches interfaces to concrete classes; O - a new service is one line.
+    ///
     /// THE COMPOSITION ROOT for everything SHARED: every service that more than one object
     /// depends on is created here, and here is where each of those abstractions is married to
     /// a concrete implementation. Swapping the keyboard for a gamepad, or the real health view

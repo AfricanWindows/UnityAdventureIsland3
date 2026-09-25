@@ -2,6 +2,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The level's exit: touching it tells ILevelFlow the level is finished.
+/// PATTERNS: Template Method - fills Affect of PlayerContactEffect; DI - gets ILevelFlow.
+/// SOLID: S - it only detects.
+///
 /// The end of a level: the player touches it, the level is finished.
 ///
 /// It only DETECTS. What happens next - switching to the next level, or showing the win

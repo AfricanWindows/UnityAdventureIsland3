@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Contract of the drain clock: Tick and Restart.
+/// PATTERNS: none - a role interface.
+/// SOLID: D - PowerController never names PowerDrainService.
+///
 /// The clock that eats the power bar: tick it every frame, restart it when the run restarts.
 ///
 /// PowerController depends on THIS rather than on PowerDrainService, so the rule "power leaks

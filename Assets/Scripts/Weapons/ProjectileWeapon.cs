@@ -6,6 +6,10 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: Base of weapons that borrow their projectiles from a pool.
+    /// PATTERNS: Template Method - fixed shot order, Launch is abstract; Pooling; DI - the pool in Inject.
+    /// SOLID: D - the pool is an IObjectPool.
+    ///
     /// Every weapon that borrows its projectile from a pool: the axe, the animals' shots and
     /// the boomerang. What they share is written here once - where the pool comes from,
     /// where the projectile appears, which way the owner is looking, and the order of a

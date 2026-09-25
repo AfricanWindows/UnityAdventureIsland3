@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Generic base of the weapon pickups.
+/// PATTERNS: Factory Method - creates an EquipWeaponPowerUp; Generics - the weapon is a type argument.
+///
 /// A pickup that hands the player a weapon of type TWeapon.
 ///
 /// Generic base so each weapon pickup is one line: AxePickable and BoomerangPickable used to

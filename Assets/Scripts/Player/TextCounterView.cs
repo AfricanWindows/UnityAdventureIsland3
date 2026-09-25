@@ -2,6 +2,10 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View base: one text label with two numbers ("Lives: 3", "Fruits: 7/20").
+/// PATTERNS: MVC (View) - the base of the lives view and the fruit view.
+/// SOLID: S - it only draws; DRY - one label class for two counters.
+///
 /// A VIEW that shows two numbers in one text label - "Lives: 3", "Fruits: 7/20".
 ///
 /// It only draws. It holds no reference to a model, contains no rule, and never decides

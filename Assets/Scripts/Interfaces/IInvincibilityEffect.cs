@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "Make the player untouchable for a while" - what the fairy pickup calls.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - one method.
+///
 /// Something that can make the player untouchable for a while - the fairy.
 ///
 /// One method, so the pickup that grants it never learns how long it lasts, how it is shown

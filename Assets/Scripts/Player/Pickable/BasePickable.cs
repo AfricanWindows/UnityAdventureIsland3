@@ -3,6 +3,11 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of every pickup: give the effect to the player, disappear, come back on a restart.
+/// PATTERNS: Factory Method - subclasses create the IPowerUp; Template Method - fills Affect;
+///           Observer - raises Defeated.
+/// SOLID: O - a new pickup is a small subclass.
+///
 /// Base class for everything the player can pick up (fruit, weapons, the fairy...).
 /// The "hand the effect to the player and disappear" logic is written here ONCE.
 /// A child class only decides WHAT effect it gives, by creating an IPowerUp (Factory Method).

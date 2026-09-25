@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View - blinks the sprite while the recovery window is open.
+/// PATTERNS: MVC-style View.
+/// SOLID: D - reads IHitRecovery only.
+///
 /// VIEW of the recovery window: the sprite blinks between full and half transparency while
 /// the IHitRecovery window is open, so the player can SEE that he is untouchable for a moment.
 ///

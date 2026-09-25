@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The SHAPE of a route: where to be after t seconds, measured from the start point.
+/// PATTERNS: Strategy - the abstract route PathEnemy uses.
+/// SOLID: O - a new route is a new subclass.
+///
 /// The SHAPE of a route: where the object should be, measured from where it was placed, after
 /// a given number of seconds. That is all it answers. It never moves anything, never touches a
 /// Rigidbody and knows nothing about enemies.

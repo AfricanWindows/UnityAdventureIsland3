@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Lets weapons and animal attacks break the stone (the damage must reach a threshold).
+/// PATTERNS: none - a small component that implements IDamageable.
+/// SOLID: O - the rule is which components the prefab carries, not a flag.
+///
 /// "Weapons and animal attacks can break this" - the stone, which the assignment says goes
 /// down to a boomerang or an animal's fire.
 ///

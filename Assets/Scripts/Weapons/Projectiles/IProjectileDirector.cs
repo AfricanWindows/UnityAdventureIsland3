@@ -1,6 +1,10 @@
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Director contract: give it a config, get a finished projectile.
+    /// PATTERNS: Builder - the Director part.
+    /// SOLID: D - the factory never names ProjectileDirector.
+    ///
     /// What a factory needs from a director: hand it a config, get a finished projectile.
     ///
     /// It exists so that ConfiguredProjectileFactory names an ABSTRACTION rather than the one

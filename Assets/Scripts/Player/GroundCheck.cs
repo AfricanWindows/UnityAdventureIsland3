@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Is the owner standing on something solid? Reads the collision normals.
+/// PATTERNS: none - a plain component behind IGroundCheck.
+///
 /// Tells whether we are standing on ANY solid object - floor tile, spikes, crate, enemy -
 /// by reading the physics contact normals instead of expecting a special component on
 /// the other side.

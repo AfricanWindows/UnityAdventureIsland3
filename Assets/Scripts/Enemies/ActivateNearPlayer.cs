@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Wakes every IActivatable on its object when the player comes close, sleeps it when he leaves.
+/// PATTERNS: DI - gets IPlayerProvider in Inject.
+/// SOLID: O, D - works for any IActivatable enemy without an edit.
+///
 /// A range: everything IActivatable on this object sleeps until the player is close, and goes
 /// back to sleep when he walks away.
 ///

@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: The game's commands: finish this level, restart the game.
+/// PATTERNS: DI - registered by GameInstaller.
+/// SOLID: I - a commander does not see the events; D - the door never names LevelFlowController.
+///
 /// The game's course, as COMMANDS: finish this level, or start everything over.
 ///
 /// Doors and the restart button talk to THIS, never to the concrete controller, so any of

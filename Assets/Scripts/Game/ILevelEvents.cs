@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: The game's news: LevelEntered and GameCompleted.
+/// PATTERNS: Observer - the events; DI - registered by GameInstaller.
+/// SOLID: I - a listener cannot switch levels.
+///
 /// The game's course, as NEWS: a level was entered, the last level was finished.
 ///
 /// Split from ILevelFlow because the two have different clients. The Level Complete panel

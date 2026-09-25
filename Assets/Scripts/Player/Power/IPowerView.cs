@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: View contract of the power bar: Render(current, max).
+/// PATTERNS: MVC (View contract); DI - registered by GameInstaller.
+///
 /// VIEW contract of the power bar. The controller pushes values in; the view never asks
 /// the model for anything and holds no reference to it.
 ///

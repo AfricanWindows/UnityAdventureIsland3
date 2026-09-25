@@ -2,6 +2,9 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Shows LEVEL COMPLETE after the last level.
+/// PATTERNS: Template Method - fills Subscribe; Observer - listens to ILevelEvents.GameCompleted; DI.
+///
 /// Shows the LEVEL COMPLETE screen - but only when the LAST level is finished.
 ///
 /// It used to listen to the door directly, which meant it fired at the end of every level

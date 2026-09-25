@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Camera - every frame (in LateUpdate) it stands over the player.
+/// PATTERNS: DI - gets IPlayerProvider in Inject instead of searching the scene.
+/// SOLID: S - it only follows; D - knows the player only through IPlayerProvider.
+///
 /// Keeps the camera on the player.
 ///
 /// It does not search for him. It asks IPlayerProvider, which finds the object tagged

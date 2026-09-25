@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Effect: make the player untouchable for a while (the fairy).
+/// PATTERNS: Template Method - fills Apply of PlayerComponentPowerUp.
+///
 /// "Picking this up makes the player untouchable for a while." Today that is the fairy.
 ///
 /// The effect is named after what it DOES, not after what grants it. It was called

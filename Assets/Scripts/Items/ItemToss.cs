@@ -2,6 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Throws an item out of the egg along a short arc.
+/// PATTERNS: none - a coroutine animation (IEnumerator and yield).
+/// SOLID: D - the egg knows it only as IItemToss.
+///
 /// Throws an object along a short arc and leaves it where it lands - the little hop an
 /// item makes when it comes out of an egg.
 ///

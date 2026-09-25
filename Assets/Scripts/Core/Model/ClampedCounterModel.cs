@@ -3,6 +3,10 @@ using System;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: A number with a floor (0) and a ceiling (Max) - shared by the power bar and the lives.
+    /// PATTERNS: MVC (Model) - plain C#, no Unity; Observer - raises Changed and Empty.
+    /// SOLID: S - only arithmetic and events; DRY - one copy of the rules for two features.
+    ///
     /// The one implementation of a clamped counter, and the only place these three rules
     /// are written:
     ///   - never above Max

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Helper: "can anything on the player take this hit instead of him?" (the animal).
+/// PATTERNS: none - an extension method.
+/// SOLID: O - a new IHitAbsorber (a shield) is covered without editing any hazard.
+///
 /// "Ask whether anything on the player can take this hit for him."
 ///
 /// Written here once, as an extension, because the question is asked from three unrelated

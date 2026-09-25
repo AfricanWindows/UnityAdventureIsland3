@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Controller of the power bar: ticks the drain, draws the bar, an empty bar = death.
+/// PATTERNS: MVC (Controller); DI - the view in Inject; Observer - listens to Changed and Empty.
+/// SOLID: S - no rules, no drawing; D - every field is an interface.
+///
 /// CONTROLLER of the power bar - Adventure Island's central mechanic.
 ///
 /// It is the only piece that talks to Unity: it owns the model, ticks the drain clock once

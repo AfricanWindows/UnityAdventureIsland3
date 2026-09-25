@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: "A level has begun - reset yourself for it" (spawn point, power bar, fruit count).
+/// PATTERNS: Observer-style - the level flow notifies every handler on the player.
+/// SOLID: O - a new handler needs no edit in the flow.
+///
 /// "A level has just begun - put yourself in the state it should begin in."
 ///
 /// Three things on the player need to know: where he now respawns (PlayerSpawn), that his

@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: Announces "I was taken out of the game" (the Defeated event).
+/// PATTERNS: Observer - the event.
+/// SOLID: I - split from IRespawnable, because DropOnDefeat needs only this.
+///
 /// Something that can be taken out of the game - an enemy beaten, a fruit eaten, an egg
 /// opened - and says so the moment it happens.
 ///

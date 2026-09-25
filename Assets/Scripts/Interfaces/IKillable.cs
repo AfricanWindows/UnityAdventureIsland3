@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "Kill me by a blow" (an enemy's touch, a shot, the campfire) - protections may refuse.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - one method.
+///
 /// Something that can be killed by a BLOW - an enemy's touch, its shot, the campfire - as
 /// opposed to being damaged. One method, so a caller that only needs to kill is not also
 /// handed respawning, invincibility or the death event (Interface Segregation).

@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: A BORROWER's view of a pool: just Get.
+    /// PATTERNS: Pooling; DI - weapons receive their pool through this interface.
+    /// SOLID: I - no Release and no sizes: a borrower only asks.
+    ///
     /// The only thing a weapon needs to know about pooling: ask for one.
     ///
     /// Kept deliberately tiny (Interface Segregation) - a weapon has no business seeing

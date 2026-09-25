@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: The clock that takes one segment every N seconds.
+/// PATTERNS: none - plain C# ticked from Update (deliberately NOT async - see below).
+/// SOLID: D - it drains any IPowerModel.
+///
 /// The clock behind the power bar: one segment gone every few seconds, forever.
 ///
 /// A plain C# class, not a MonoBehaviour: the controller owns it and calls Tick once per

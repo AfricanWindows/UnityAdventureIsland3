@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: The fairy pickup: ten seconds of invincibility.
+/// PATTERNS: Factory Method - creates an InvincibilityPowerUp.
+///
 /// The fairy: ten seconds during which nothing in the game can touch the player.
 ///
 /// Three lines, and that is the point - being picked up is written once in BasePickable,

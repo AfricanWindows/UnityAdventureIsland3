@@ -1,6 +1,10 @@
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: "Make one T" - all the pool knows about creating objects.
+    /// PATTERNS: Factory - the creator abstraction; Generics - covariant (out T).
+    /// SOLID: D - the pool never sees Instantiate or a builder.
+    ///
     /// Makes one T on demand, and that is the whole contract.
     ///
     /// The pool depends on THIS and on nothing else, so it never learns what an axe is,

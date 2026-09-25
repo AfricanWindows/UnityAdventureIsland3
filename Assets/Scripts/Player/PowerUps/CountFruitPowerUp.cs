@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Effect: count one fruit.
+/// PATTERNS: Template Method - fills Apply; Composite - a leaf in the fruit.
+///
 /// "This counts as fruit eaten."
 ///
 /// Deliberately separate from AddPowerPowerUp: how much power a fruit restores and whether

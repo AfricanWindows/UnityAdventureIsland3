@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Builder contract: put a projectile together step by step.
+    /// PATTERNS: Builder - the builder interface; Generics - covariant (out T).
+    ///
     /// BUILDER. Knows HOW to put a projectile together, one step at a time - and
     /// deliberately does NOT know which values to use. The numbers arrive from outside.
     ///

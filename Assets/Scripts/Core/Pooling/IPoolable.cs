@@ -3,6 +3,10 @@ using System;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: Something that lives in a pool: told when it wakes, when it sleeps, and how to go home.
+    /// PATTERNS: Pooling - the pooled product; a release callback replaces a pool reference.
+    /// SOLID: D - a projectile never names its pool.
+    ///
     /// Something that can live in a pool: it is told when it wakes up, when it goes back
     /// to sleep, and how to send itself home.
     ///

@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: Finds the player by tag once, remembers him, finds him again if he is replaced.
+    /// PATTERNS: DI - the concrete IPlayerProvider, created and registered by GameInstaller.
+    /// SOLID: O - a different way of finding him is one line in GameInstaller.
+    ///
     /// Finds the player by TAG, once, and remembers him.
     ///
     /// A plain C# class, not a MonoBehaviour: looking something up is not behaviour that

@@ -3,6 +3,9 @@ using Game.Projectiles;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The pool both shooting animals borrow from.
+    /// PATTERNS: Pooling; Generics - an empty closed type of ProjectilePoolManager.
+    ///
     /// The one pool both shooting animals borrow from.
     ///
     /// Empty, like AxePoolManager: Unity cannot put an open generic MonoBehaviour on a

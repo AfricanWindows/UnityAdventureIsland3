@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The spider and the bird: moves along a route that a MovementPath describes.
+/// PATTERNS: Strategy - the shape of the route is a MovementPath component.
+/// SOLID: O - a new route never touches this file; L - Revive and ResetToStart re-anchor the route.
+///
 /// An enemy that follows a fixed route through the air - the spider on its thread, the bird
 /// flying across the screen.
 ///

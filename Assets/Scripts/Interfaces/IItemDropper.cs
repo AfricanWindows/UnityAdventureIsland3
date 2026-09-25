@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: "Put one item into the world" - WHAT drops.
+/// PATTERNS: none - a role interface.
+/// SOLID: D, O - the triggers (egg, beaten enemy) never name the dropper.
+///
 /// "Put one item into the world and tell me where it is."
 /// The triggers (egg, beaten enemy) depend on this, not on PickableDropper,
 /// so WHEN something drops and WHAT drops stay independent (Dependency Inversion, Open/Closed).

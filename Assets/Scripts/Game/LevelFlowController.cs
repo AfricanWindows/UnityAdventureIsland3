@@ -4,6 +4,11 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Runs the game: which level is on, where the player starts, what a restart does.
+/// PATTERNS: DI - gets IPlayerProvider and IResetService, registered as ILevelFlow and ILevelEvents;
+///           Observer - raises LevelEntered and GameCompleted.
+/// SOLID: S - decides WHEN, not HOW; O - a new level is one more object in the list.
+///
 /// Runs the game: which level is switched on, where the player stands, and what a restart
 /// means. It is the ONE place that knows there is more than one level.
 ///

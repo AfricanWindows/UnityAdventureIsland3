@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: The red and the blue animals' shot.
+    /// PATTERNS: Pooling - lives in the animal shot pool; Template Method - inherits the Fire skeleton.
+    ///
     /// What the shooting animals spit - the red one's fire and the blue one's shot, both
     /// out of ONE pool.
     ///

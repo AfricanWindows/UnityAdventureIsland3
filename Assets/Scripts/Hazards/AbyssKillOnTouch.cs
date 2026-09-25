@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The pit: falling in ends the life, even under the fairy.
+/// PATTERNS: Template Method - fills Affect of PlayerContactEffect.
+/// SOLID: O - the rule is a component; uses IForceKillable, which no protection can refuse.
+///
 /// The bottomless pit: falling in ends the run, fairy or no fairy.
 ///
 /// It is the twin of KillPlayerOnTouch and differs in exactly one line - the interface it

@@ -3,6 +3,10 @@ using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Dying: plays the death animation, returns him to the start, tells every death handler.
+/// PATTERNS: Observer-style - notifies every IPlayerDeathHandler; a coroutine waits for the animation.
+/// SOLID: S - only dying; O - a new death rule is a new handler, not an edit here.
+///
 /// Dying: play the death animation where he fell, THEN put him back at the start of the
 /// level and tell every IPlayerDeathHandler on the player - the lives counter, the weapon,
 /// the fairy and the animal each do their own part. (The power bar is not one of them: it

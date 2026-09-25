@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "The player died - do your part" (lose the weapon, the fairy, the animal, a life).
+/// PATTERNS: Observer-style - PlayerDeath notifies every handler on the player.
+/// SOLID: O - a new death rule is a new small component, PlayerDeath is not edited.
+///
 /// "The player has just died and is back at the start of the level - do your part."
 ///
 /// The same shape as ILevelStartHandler, on purpose: PlayerDeath finds every component on

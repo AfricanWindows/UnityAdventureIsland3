@@ -4,6 +4,11 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Controller of the lives: one less on death, one more from fruit, next life or game over.
+/// PATTERNS: MVC (Controller); DI - the view in Inject; Observer - listens to the model,
+///           raises NextLifeStarted and OutOfLives.
+/// SOLID: D - the model and the view are interfaces.
+///
 /// CONTROLLER of the health feature.
 ///
 /// It is the only piece that talks to Unity: it listens to what happens in the game

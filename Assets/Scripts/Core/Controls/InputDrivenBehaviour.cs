@@ -4,6 +4,10 @@ using UnityEngine;
 namespace Game.Core.Controls
 {
     /// <summary>
+    /// ROLE: Base class of every script that reads the player's input (walk, jump, crouch, attack).
+    /// PATTERNS: DI - receives IInputSource in Inject, once for all its subclasses.
+    /// SOLID: D - subclasses read intentions, never a device; DRY - the handshake is written once.
+    ///
     /// Base class for every component that reacts to the player: it receives an
     /// <see cref="IInputSource"/> from the composition root and exposes it to the subclass.
     ///

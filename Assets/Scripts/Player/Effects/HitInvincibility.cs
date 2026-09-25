@@ -2,6 +2,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The short untouchable window after a hit.
+/// PATTERNS: none - implements IHitRecovery.
+/// SOLID: S - how it looks is HitInvincibilityView's job.
+///
 /// The short recovery window after the player takes a hit: for a moment nothing can hurt him.
 ///
 /// Two things start it - a stone hurting him (PlayerHurt) and his animal being knocked out

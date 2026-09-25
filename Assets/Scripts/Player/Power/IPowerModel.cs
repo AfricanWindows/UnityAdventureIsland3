@@ -1,6 +1,9 @@
 using Game.Core;
 
 /// <summary>
+/// ROLE: Model contract of the power bar - adds only a name to IClampedCounter.
+/// PATTERNS: MVC (Model contract).
+///
 /// MODEL contract of the power bar - Adventure Island's vitality meter.
 ///
 /// It adds nothing to IClampedCounter, and that is deliberate. Power, health and lives are

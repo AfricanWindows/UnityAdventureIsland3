@@ -4,6 +4,10 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Creates a projectile for the pool by running the director.
+    /// PATTERNS: Factory - the concrete creator; Generics.
+    /// SOLID: D - the pool sees only IFactory.
+    ///
     /// FACTORY - one class for every projectile, replacing the hand-written factory each
     /// weapon used to have, which differed only in a type name.
     ///

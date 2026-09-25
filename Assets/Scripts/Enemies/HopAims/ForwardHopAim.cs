@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Hop aim of the snake: always the same distance to the left.
+/// PATTERNS: Strategy - a concrete HopAim.
+/// SOLID: O - a new aim is a new class; HoppingEnemy is not edited.
+///
 /// Always to the left, always the same distance - the snake.
 /// </summary>
 public class ForwardHopAim : HopAim

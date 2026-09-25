@@ -5,6 +5,10 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: Base of every weapon: Attack = unlocked? cooldown over? then fire.
+    /// PATTERNS: Template Method - Attack is fixed, FireInternal is abstract; Observer - raises Attacked.
+    /// SOLID: D - the rest of the game sees only IUseableWeapon.
+    ///
     /// TEMPLATE METHOD, second application. Pulling the trigger always means the same
     /// three questions - am I unlocked, is the cooldown over, then shoot - and that order
     /// is written HERE. A weapon subclass supplies only the shooting.

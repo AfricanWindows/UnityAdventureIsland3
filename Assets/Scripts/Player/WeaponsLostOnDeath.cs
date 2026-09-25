@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Game rule: dying costs you the weapon.
+/// PATTERNS: Observer-style - an IPlayerDeathHandler.
+/// SOLID: O - a rule added as a component; D - empties IWeaponSlot.
+///
 /// One rule of the game, written once: dying costs you the weapon you found.
 ///
 /// It empties the player's IWeaponSlot, so it locks the axe, the boomerang and anything

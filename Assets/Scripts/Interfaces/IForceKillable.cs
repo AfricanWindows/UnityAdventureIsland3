@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "Be removed, and no protection may refuse" (the pit, the empty bar, the fairy's touch).
+/// PATTERNS: none - a role interface.
+/// SOLID: I - kept apart from IKillable, which protections may refuse.
+///
 /// "Be destroyed, and do not argue."
 ///
 /// The second and last way anything in this game is removed, next to IDamageable. The

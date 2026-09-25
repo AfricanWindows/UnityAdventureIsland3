@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: "Give one more life" - all the fruit counter needs from the lives.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - one method.
+///
 /// Something that can be given one more life.
 ///
 /// One method, because the fruit counter needs exactly one thing from the lives counter

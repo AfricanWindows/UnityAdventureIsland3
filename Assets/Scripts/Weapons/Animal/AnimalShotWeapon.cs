@@ -4,6 +4,9 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The red or blue animal's attack: a straight shot.
+    /// PATTERNS: Template Method - fills OnBeforeLaunch of DirectionalWeapon; Pooling.
+    ///
     /// The attack of a shooting animal, sitting on the player and equipped only while he
     /// rides that animal.
     ///

@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Effect: put weapon T into the player's hand.
+/// PATTERNS: Template Method - fills PutIn of SlotPowerUp; Generics - one class for every weapon.
+///
 /// "Picking this up puts weapon T in the player's hand, and takes out whatever was there."
 ///
 /// One class for every weapon in the game. It replaced four near-identical power-up

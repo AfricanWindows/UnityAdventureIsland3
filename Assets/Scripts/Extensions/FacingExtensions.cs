@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Helper: "is that point to my left or to my right?", with a dead zone.
+/// PATTERNS: none - an extension method (a static helper with no state).
+/// SOLID: DRY - written once for the ghost's two questions.
+///
 /// "Which way is that from here - left or right?"
 ///
 /// Written once because two places ask it: the ghost turning to the player, and the ghost

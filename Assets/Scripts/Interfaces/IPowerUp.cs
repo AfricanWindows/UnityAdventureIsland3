@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: One effect a pickup gives the player.
+/// PATTERNS: Composite - the component interface; Factory Method - what CreatePowerUp returns.
+/// SOLID: O - a new effect is a new class.
+///
 /// One effect a pickup gives the player - refill the bar, count a fruit, start the fairy, put
 /// a weapon in his hand, sit him on an animal.
 ///

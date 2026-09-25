@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
+/// ROLE: The axe in flight: a downward parabola.
+/// PATTERNS: Template Method - overrides ApplyMovement; Pooling; the product of Builder and Factory.
+///
 /// CONCRETE PRODUCT: the axe leaves the hand travelling forward and immediately starts to
 /// fall - a plain downward parabola, y = -k * x^2, whose VERTEX is the moment of release.
 ///

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Asset with the power bar's numbers (start 15, max 15, 3 seconds per segment).
+/// PATTERNS: none - a ScriptableObject config.
+/// SOLID: O - another difficulty is another asset, not new code.
+///
 /// Where the power bar's numbers actually live: once, in one asset on disk.
 ///
 /// The alternative - fields on the player prefab - means re-balancing the game requires

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View - turns what the player does into Animator parameters.
+/// PATTERNS: MVC-style View; Observer - listens to IAttacker.Attacked.
+/// SOLID: S - movement keeps no Animator field; D - reads interfaces only.
+///
 /// VIEW. Turns what the player is already doing into Animator parameters, and does
 /// nothing else: it never moves him, never reads input, never decides when he may run.
 ///

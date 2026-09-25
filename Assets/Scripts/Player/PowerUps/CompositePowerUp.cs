@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Several effects handed over as one (a fruit = power + one fruit counted).
+/// PATTERNS: Composite - the composite itself.
+/// SOLID: S - every effect stays a small class that does one thing.
+///
 /// COMPOSITE. One pickup, several effects - and every effect stays a small class that does
 /// exactly one thing.
 ///

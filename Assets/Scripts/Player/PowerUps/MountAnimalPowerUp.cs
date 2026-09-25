@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: Effect: put the player on animal T.
+/// PATTERNS: Template Method - fills PutIn of SlotPowerUp; Generics - one class for every animal.
+///
 /// "Picking this up puts the player on animal T, and whatever he was riding is gone."
 ///
 /// One class for all three animals, and for any animal added later. It is the twin of

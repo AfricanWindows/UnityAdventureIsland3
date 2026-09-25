@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: An enemy that just hangs there: kills on touch, can be beaten, comes back.
+/// PATTERNS: Template Method - uses BaseEnemy as it is (the class body is empty).
+/// SOLID: L - a full BaseEnemy with nothing added.
+///
 /// An enemy that does nothing but exist: it hangs where the level put it, kills on contact,
 /// can be beaten, and comes back. No route, no jump, no shot.
 ///

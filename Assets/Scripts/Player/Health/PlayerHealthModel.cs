@@ -1,6 +1,9 @@
 using Game.Core;
 
 /// <summary>
+/// ROLE: Model of the lives - empty, the rules are in ClampedCounterModel.
+/// PATTERNS: MVC (Model).
+///
 /// MODEL of the lives counter: never above its ceiling, never below zero. Both numbers -
 /// the lives at the start and the most he may hold - are set on PlayerHealthController and
 /// handed to the constructor.

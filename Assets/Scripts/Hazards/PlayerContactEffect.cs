@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of "something happens when the player touches me, once per touch".
+/// PATTERNS: Template Method - the base: detection is written here, subclasses fill Affect.
+/// SOLID: O - a new hazard or pickup is a subclass; DRY - detection is written once.
+///
 /// TEMPLATE METHOD. "Something happens to the player when he touches me, once per touch."
 ///
 /// Detecting the player is the same few lines every time - is it a collision or a trigger,

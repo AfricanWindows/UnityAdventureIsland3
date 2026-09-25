@@ -4,6 +4,10 @@ using System.Collections.Generic;
 namespace Game.Core.DI
 {
     /// <summary>
+    /// ROLE: The DI container itself: a dictionary "interface type - live object".
+    /// PATTERNS: DI - the container. NOT a Service Locator: no static access, it is handed out.
+    /// SOLID: O - new registrations need no edit here.
+    ///
     /// The smallest container that is still a real one: a map from an abstraction to the
     /// single live instance that implements it.
     ///

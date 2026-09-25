@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View - turns what an enemy does (attack, hop, hide) into Animator parameters.
+/// PATTERNS: MVC-style View; Observer - listens to IAttacker.Attacked.
+/// SOLID: S - the enemies keep no Animator field; D - reads interfaces only.
+///
 /// VIEW. Turns what an enemy is already doing into Animator parameters, and does nothing else:
 /// it never decides when to attack or jump, never fires anything, never moves anybody.
 ///

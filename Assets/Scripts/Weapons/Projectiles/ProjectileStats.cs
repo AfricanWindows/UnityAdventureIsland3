@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: One projectile's numbers, read-only.
+    /// PATTERNS: none - an immutable struct.
+    ///
     /// The numbers that describe one projectile, and nothing else - no behaviour, no
     /// references, no Unity objects. That is what makes it safe to copy into a struct
     /// and hand around without allocating.

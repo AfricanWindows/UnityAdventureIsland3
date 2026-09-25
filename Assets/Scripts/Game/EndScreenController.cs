@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
+/// ROLE: Base of the end screens: shows a panel, pauses the game, closes itself on a restart.
+/// PATTERNS: Template Method - subclasses fill Subscribe and Unsubscribe (WHEN to show); DI.
+/// SOLID: S - the only owner of the pause (Time.timeScale); O - a third screen is a small subclass.
+///
 /// An end-of-game screen: a panel that appears when something announces "the game is over"
 /// - no lives left, or the last level finished - freezes the game while it is up, and
 /// closes itself when the game restarts.

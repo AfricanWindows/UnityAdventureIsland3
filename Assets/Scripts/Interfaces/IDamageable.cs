@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Anything a projectile can hurt (TakeDamage).
+/// PATTERNS: none - a role interface.
+/// SOLID: D - a projectile never knows what it hit.
+///
 /// Anything a projectile can hurt. Projectiles talk to this interface,
 /// so they never need to know what kind of enemy they hit.
 ///

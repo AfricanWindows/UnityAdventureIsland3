@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Starts the short untouchable window after a hit.
+/// PATTERNS: none - a role interface.
+/// SOLID: D - nobody names HitInvincibility.
+///
 /// The short recovery window after a hit. Whoever hurts the player starts it,
 /// whoever draws it reads it - nobody depends on the concrete HitInvincibility
 /// (Dependency Inversion).

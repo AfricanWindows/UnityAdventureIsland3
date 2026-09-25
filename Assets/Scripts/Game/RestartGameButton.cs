@@ -3,6 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
+/// ROLE: Any UI button with this component starts the game over.
+/// PATTERNS: DI - gets ILevelFlow in Inject.
+/// SOLID: DRY - one restart for both end screens.
+///
 /// Put this on any UI button and pressing it starts the game over.
 ///
 /// It exists so that "restart" is written ONCE. The Game Over popup needed it first, and

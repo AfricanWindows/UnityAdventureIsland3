@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The power bar's numbers, clamped and read-only.
+/// PATTERNS: none - an immutable struct.
+///
 /// The numbers that describe one power bar, and nothing else - no behaviour, no
 /// references, no Unity objects.
 ///

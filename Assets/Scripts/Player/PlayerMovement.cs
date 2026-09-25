@@ -2,6 +2,10 @@ using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Walks the player left and right with acceleration and says which way he faces.
+/// PATTERNS: DI - the input arrives through InputDrivenBehaviour.
+/// SOLID: S - owns only walking; D - reads IInputSource and IMovementLock.
+///
 /// Moves the player left and right.
 ///
 /// It OWNS its speed: no other class writes into the field from outside.

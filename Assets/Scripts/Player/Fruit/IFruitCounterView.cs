@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: View contract of the fruit counter.
+/// PATTERNS: MVC (View contract); DI - registered by GameInstaller.
+///
 /// VIEW contract of the fruit counter. The controller pushes values in; the view never
 /// asks the model for anything.
 ///

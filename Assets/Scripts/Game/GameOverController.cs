@@ -3,6 +3,10 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Shows GAME OVER when the lives run out.
+/// PATTERNS: Template Method - fills Subscribe; Observer - listens to IOutOfLivesNotifier;
+///           DI - gets IPlayerProvider.
+///
 /// Shows the GAME OVER popup when the last life is gone.
 ///
 /// Everything a screen does - the panel, the freeze, closing itself on a restart - is

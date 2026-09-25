@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: Generic base of the animal pickups.
+/// PATTERNS: Factory Method - creates a MountAnimalPowerUp; Generics - the animal is the type argument.
+///
 /// A pickup that puts the player on an animal of type TMount.
 ///
 /// Generic base so each animal pickup is one line: the blue, red and green pickups used to be

@@ -1,6 +1,10 @@
 namespace Game.Core.DI
 {
     /// <summary>
+    /// ROLE: The WRITING half of the DI container (Register) - held only by GameInstaller.
+    /// PATTERNS: DI - the container abstraction.
+    /// SOLID: I - gameplay code never sees Register; D - nobody names ServiceContainer.
+    ///
     /// The WRITING half of the container, on top of the reading half: fill it, then hand it
     /// out as an <see cref="IServiceResolver"/>.
     ///

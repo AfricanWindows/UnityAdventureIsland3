@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of "find an item on the player and put it into a slot" (weapon, animal).
+/// PATTERNS: Template Method - fills Apply and leaves PutIn; Generics.
+/// SOLID: DRY - the weapon and the animal effects share one search.
+///
 /// "Find item TItem on the player and put it into his TSlot" - the one shape shared by the
 /// weapons (IWeaponSlot) and the animals (IMountSlot).
 ///

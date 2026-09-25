@@ -2,6 +2,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The saddle: which animal he rides, its look and its attack; lost on death.
+/// PATTERNS: Observer-style - an IPlayerDeathHandler.
+/// SOLID: S - "one animal at a time" lives here; D - hands the attack over through IAttackOverride.
+///
 /// The player's saddle: WHICH animal he is riding, and what that animal costs or gives him.
 ///
 /// He owns ONE animal, a new one replaces it, and that rule is written in Mount() and

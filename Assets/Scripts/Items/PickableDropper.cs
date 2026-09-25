@@ -1,4 +1,7 @@
 /// <summary>
+/// ROLE: The dropper for pickups (weapons, animals, the fairy) - an empty closed type.
+/// PATTERNS: Generics - ItemDropper of BasePickable (Unity needs a closed class).
+///
 /// The dropper for things the player picks up: the weapons, the three animals, the fairy -
 /// whatever the egg, the bird and the frog are given to drop.
 ///

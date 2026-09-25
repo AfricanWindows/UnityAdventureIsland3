@@ -1,6 +1,9 @@
 using Game.Core;
 
 /// <summary>
+/// ROLE: Model of the power bar - empty, the rules are in ClampedCounterModel.
+/// PATTERNS: MVC (Model).
+///
 /// MODEL of the power bar.
 ///
 /// Empty on purpose: every rule it needs - clamp to Max, never below zero, announce Empty

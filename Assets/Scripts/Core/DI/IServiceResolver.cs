@@ -1,6 +1,10 @@
 namespace Game.Core.DI
 {
     /// <summary>
+    /// ROLE: The READING half of the DI container (TryResolve) - what every IInjectable is handed.
+    /// PATTERNS: DI.
+    /// SOLID: I - it can only ask, never register.
+    ///
     /// The READING half of the container: "do you have one of these?".
     ///
     /// This is what an injected class is handed. It can ask for what it needs and nothing

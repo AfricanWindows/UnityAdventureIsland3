@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: A weapon: attack, equip, unequip, owned from the start or not.
+/// PATTERNS: none - a role interface.
+/// SOLID: D - the slot and the pickups never name a weapon class.
+///
 /// A weapon that has to be FOUND before it works - the axe and the boomerang, as opposed
 /// to something the player is simply born with.
 ///

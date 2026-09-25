@@ -1,6 +1,10 @@
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: "Put yourself back the way you started" - every object with state implements it.
+    /// PATTERNS: none - a role interface; the restart calls it on every object that has it.
+    /// SOLID: O - a new object joins the restart by implementing it; I - one method.
+    ///
     /// "Put yourself back the way you started."
     ///
     /// This is the project's answer to "you may not reload the scene". A scene reload is a

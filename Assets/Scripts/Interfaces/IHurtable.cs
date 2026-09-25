@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: "Hurt me without killing me" (power cost and knockback) - used by the stone.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - kept apart from IKillable.
+///
 /// "Something hurt me, but did not kill me."
 ///
 /// Deliberately separate from IKillable. A campfire, a ghost and an enemy touch KILL - one

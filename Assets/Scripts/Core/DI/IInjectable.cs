@@ -1,6 +1,10 @@
 namespace Game.Core.DI
 {
     /// <summary>
+    /// ROLE: "Give me my dependencies" - the constructor stand-in for a MonoBehaviour.
+    /// PATTERNS: DI - method injection, called by GameInstaller before Awake.
+    /// SOLID: I - one method.
+    ///
     /// "I have dependencies that arrive from outside."
     ///
     /// A MonoBehaviour cannot have a constructor - Unity builds it - so this method is the

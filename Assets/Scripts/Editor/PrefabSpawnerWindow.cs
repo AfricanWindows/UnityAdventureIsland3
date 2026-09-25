@@ -3,6 +3,9 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Editor tool: paint level tiles in the Scene view with the mouse.
+/// PATTERNS: none - an editor utility, not part of the game.
+///
 /// Places and removes level tiles directly in the Scene view.
 /// Left click adds the selected prefab, right click deletes the object under the cursor.
 ///

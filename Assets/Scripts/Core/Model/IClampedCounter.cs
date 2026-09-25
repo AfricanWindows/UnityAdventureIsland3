@@ -3,6 +3,10 @@ using System;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: Contract of the clamped counter: Current, Max, Add, Remove, Reset, Changed, Empty.
+    /// PATTERNS: MVC (Model contract); Observer - the Changed and Empty events.
+    /// SOLID: D - the controllers depend on this, not on the class.
+    ///
     /// A number with a floor, a ceiling and two events. The lives and the power bar are both
     /// this - which is exactly why it is written once. (The fruit counter is NOT: it wraps
     /// round at its threshold instead of stopping there - see IFruitCounterModel.)

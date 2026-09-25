@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: Model of the fruit counter: counts up to 20, then starts a new lap.
+/// PATTERNS: MVC (Model) - plain C#; Observer - raises Changed and ThresholdReached.
+/// SOLID: S - it does not know that a lap gives a life.
+///
 /// MODEL of the fruit counter. It owns the DATA and the ONE rule: every Threshold fruit
 /// completes a lap, and the count starts again from what is left over.
 ///

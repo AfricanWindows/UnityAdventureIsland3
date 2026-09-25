@@ -4,6 +4,11 @@ using Game.Core.DI;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The fire-breathing snake: stands still and shoots at a fixed interval.
+/// PATTERNS: Pooling - borrows shots (the pool arrives by DI); Observer - raises Attacked;
+///           Template Method - fills OnActivated.
+/// SOLID: S - it decides only WHEN and WHERE to shoot.
+///
 /// An enemy that stands still and shoots at a fixed interval - the fire-breathing snake.
 ///
 /// It borrows its shots from a pool instead of calling Instantiate every couple of

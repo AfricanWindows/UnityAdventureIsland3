@@ -1,6 +1,10 @@
 namespace Game.Core.Controls
 {
     /// <summary>
+    /// ROLE: Contract of player input as intentions (move, jump, attack), never as keys.
+    /// PATTERNS: DI - registered once in GameInstaller, injected into every input reader.
+    /// SOLID: D - no gameplay class knows a keyboard exists; I - only members someone reads.
+    ///
     /// What the game needs from the player, expressed as INTENTIONS - "he wants to go
     /// right", "he wants to jump" - never as devices, keys or hardware.
     ///

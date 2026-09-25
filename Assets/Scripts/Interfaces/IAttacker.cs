@@ -1,6 +1,10 @@
 using System;
 
 /// <summary>
+/// ROLE: Announces "I just attacked" (the Attacked event) for the animation views.
+/// PATTERNS: Observer - the event.
+/// SOLID: S - showing an attack never lives in the attacker.
+///
 /// Something that attacks, and says so the moment it does.
 ///
 /// It exists so that showing the attack - a sprite, a sound, a puff of smoke - never has to

@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Helper: IsInAir() on any IGroundCheck.
+/// PATTERNS: none - an extension method on an interface.
+/// SOLID: D - extends the interface, so it works with any ground detector.
+///
 /// Utility methods for IGroundCheck.
 ///
 /// It extends the INTERFACE, not GameObject: there is no GetComponent hidden inside,

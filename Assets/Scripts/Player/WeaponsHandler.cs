@@ -3,6 +3,10 @@ using Game.Core.Controls;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The player's weapon slot and the attack button.
+/// PATTERNS: DI - the input arrives through InputDrivenBehaviour.
+/// SOLID: O, D - fires an IUseableWeapon, never a concrete weapon.
+///
 /// The player's single weapon slot, and the trigger finger that fires it.
 ///
 /// He carries ONE weapon, exactly as in the original game: finding the boomerang throws

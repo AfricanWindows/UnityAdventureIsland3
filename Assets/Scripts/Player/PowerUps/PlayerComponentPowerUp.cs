@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Base of effects that find one thing on the player and ask it to act.
+/// PATTERNS: Template Method - the base, subclasses fill Apply; Generics - TTarget is an interface.
+/// SOLID: DRY - the search is written once; D - the target is always an interface.
+///
 /// TEMPLATE METHOD for every power-up that works by finding ONE thing on the player and
 /// asking it to do something: the power bar, the fruit counter, the invincibility, the
 /// weapon slot, the saddle.

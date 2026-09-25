@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: The player's saddle: ride one animal, get off it.
+/// PATTERNS: none - a slot (one role over one state).
+/// SOLID: S - "one animal at a time" is kept by the slot.
+///
 /// The one animal the player is riding - his saddle, exactly as IWeaponSlot is his hand.
 ///
 /// Riding a second animal replaces the first, and that rule is the slot's to keep, so no

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Game rule: dying costs you the fairy.
+/// PATTERNS: Observer-style - an IPlayerDeathHandler.
+/// SOLID: O - a rule added as a component.
+///
 /// One rule of the game, written once: dying costs you the fairy.
 ///
 /// It is the twin of WeaponsLostOnDeath - same shape, same reasoning, the other half of

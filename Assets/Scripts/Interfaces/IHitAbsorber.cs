@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: "Can you take this hit instead of the player?" - the ridden animal.
+/// PATTERNS: none - a role interface.
+/// SOLID: O - a shield added later is just a new implementation.
+///
 /// "Something is about to hurt the player - can you take it instead of him?"
 ///
 /// The animal is the answer today: riding one, any hit costs the animal and nothing else.

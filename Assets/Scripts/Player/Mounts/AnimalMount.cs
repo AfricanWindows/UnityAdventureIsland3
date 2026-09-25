@@ -2,6 +2,10 @@ using Game.Weapons;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: One rideable animal: its look, the player's size on it, and its attack.
+/// PATTERNS: none - the attack is a BaseWeapon it holds (composition).
+/// SOLID: O - three animals are three sets of data, not three copies of code.
+///
 /// ONE animal the player can ride. There are three of them and they differ in DATA, not in
 /// behaviour: which clips the player is drawn with, how big he becomes, and which attack
 /// answers the button. So there is one class and three sets of numbers, not three classes

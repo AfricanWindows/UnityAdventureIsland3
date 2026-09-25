@@ -5,6 +5,11 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Brings back anything IRespawnable (an enemy, a fruit) N seconds after it was taken out.
+/// PATTERNS: Async and Tasks - async/await with a CancellationToken, because the object is
+///           switched off and a coroutine would stop; Observer - listens to Defeated.
+/// SOLID: S - respawning is its own component; D - talks to IRespawnable only.
+///
 /// "This comes back N seconds after it was taken out of the game."
 ///
 /// Drop it on anything that implements IRespawnable - an enemy, a fruit, an egg - set one

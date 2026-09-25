@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 namespace Game.Core.Controls
 {
     /// <summary>
+    /// ROLE: The keyboard version of IInputSource - the only class that knows about keys.
+    /// PATTERNS: DI - the concrete service GameInstaller creates and registers.
+    /// SOLID: O - a gamepad is a new class plus one line in GameInstaller.
+    ///
     /// The ONE place in the project that knows a keyboard exists.
     ///
     /// A plain C# class, not a MonoBehaviour: reading a device is not something that needs

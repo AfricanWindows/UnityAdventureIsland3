@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View - shows the fairy beside the player while the effect runs.
+/// PATTERNS: MVC-style View; Observer - listens to OnActiveChanged.
+/// SOLID: O - any timed effect can get a view like this.
+///
 /// Shows an object for as long as a TimedPlayerEffect is running - the little fairy flying
 /// beside the player, and any companion, aura or shield sprite that comes later.
 ///

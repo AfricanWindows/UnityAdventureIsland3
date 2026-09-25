@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: Base of enemies that sleep until the player is near (every enemy except the static one).
+/// PATTERNS: Template Method - Activate sets the flag, subclasses fill the OnActivated hook.
+/// SOLID: DRY - the flag and two methods once, not in four enemies; D - wakers see IActivatable.
+///
 /// An enemy that can be put to sleep and woken up again - everything except the static one,
 /// which has no behaviour to stop.
 ///

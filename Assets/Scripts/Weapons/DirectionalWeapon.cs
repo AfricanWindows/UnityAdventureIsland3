@@ -4,6 +4,9 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: Base of weapons that throw straight ahead (the axe, the animal shots).
+    /// PATTERNS: Template Method - fills Launch, leaves the OnBeforeLaunch hook; Generics.
+    ///
     /// Every weapon that throws something straight the way its owner is facing and forgets
     /// about it: the axe, and the red and blue animals' shots.
     ///

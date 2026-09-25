@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Remembers where the current level starts and moves the player there.
+/// PATTERNS: none - a plain component.
+/// SOLID: S - split out of PlayerDeath.
+///
 /// Where the player (re)appears: the start of the current level.
 ///
 /// It remembers the spawn point and moves the player there - two moments use it. A level

@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Asset with one projectile's numbers.
+    /// PATTERNS: none - a ScriptableObject config; the Director reads it.
+    /// SOLID: O - a second variant is a second asset.
+    ///
     /// Where a projectile's numbers actually live: once, in one asset on disk.
     ///
     /// The alternative is fields on the prefab, which means every copy of the axe owns

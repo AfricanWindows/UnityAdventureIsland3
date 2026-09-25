@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Hurt but not killed: loses power, is shoved, starts the recovery window.
+/// PATTERNS: none - a plain component.
+/// SOLID: D - uses IPowerWallet and IHitRecovery, never the concrete classes.
+///
 /// What happens to the player when a hazard hurts him without killing him: he loses power
 /// and he is shoved in the direction he was already going.
 ///

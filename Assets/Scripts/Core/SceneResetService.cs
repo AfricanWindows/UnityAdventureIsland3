@@ -4,6 +4,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: Finds every IResettable at restart time and resets it.
+    /// PATTERNS: DI - the concrete IResetService, created and registered by GameInstaller.
+    /// SOLID: S - the only place that knows how to find what to reset.
+    ///
     /// Finds every IResettable in the scene at the moment of the reset and resets it.
     /// The search happens at call time on purpose: objects created during play
     /// (dropped items) must be reset too, and a list cached at start-up would miss them.

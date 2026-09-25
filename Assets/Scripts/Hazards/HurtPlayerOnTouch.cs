@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: The stone's hit: costs power (3 segments) and shoves the player.
+/// PATTERNS: Template Method - fills Affect of PlayerContactEffect.
+/// SOLID: D - talks to IHurtable, never to PlayerHurt or the power bar.
+///
 /// An obstacle that costs power and shoves the player instead of killing him - the stone
 /// from the assignment, which takes three segments off the bar.
 ///

@@ -4,6 +4,10 @@ using UnityEngine.Serialization;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: The boomerang in flight: an oval loop back to the player.
+    /// PATTERNS: Template Method - fills StartMotion of BaseProjectile; Pooling.
+    /// SOLID: L - nothing inherited has to be switched off.
+    ///
     /// CONCRETE PRODUCT - the same slot ProjectileAxe fills for its weapon.
     ///
     /// It rides one oval loop the way the player faces and comes back to his hand. The loop

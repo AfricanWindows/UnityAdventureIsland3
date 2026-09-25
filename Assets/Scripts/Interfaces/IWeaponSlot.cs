@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: The player's one hand: put a weapon in, empty it.
+/// PATTERNS: none - a slot (one role over one state).
+/// SOLID: S - "one weapon at a time" is kept by the slot.
+///
 /// The player's ONE pair of hands: whatever he carries, he carries INSTEAD of what he
 /// carried before.
 ///

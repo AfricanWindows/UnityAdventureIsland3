@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: A fruit (banana, carrot...): power plus one fruit counted.
+/// PATTERNS: Factory Method - creates the effect; Composite - the effect is a CompositePowerUp of two.
+/// SOLID: O - a new fruit is a new prefab, not a new script.
+///
 /// A fruit lying in the level. Banana, carrot, melon - all the same class, told apart by
 /// the numbers in the Inspector and a different sprite (Open/Closed: a new fruit is a new
 /// prefab, never a new script).

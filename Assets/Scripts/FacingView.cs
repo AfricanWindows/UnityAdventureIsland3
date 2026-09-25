@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: View - mirrors the sprite to the side its owner faces (the player, the ghost).
+/// PATTERNS: MVC-style View - draws the IFacing answer and decides nothing.
+/// SOLID: S - one flip mechanism for everyone; D - reads IFacing, not a concrete class.
+///
 /// VIEW. Mirrors the object so it looks the way its IFacing says. Two things in the game turn:
 /// the player, who walks both ways, and the ghost, which chases him both ways. The snakes and
 /// the frog always face left, as in the original game, so they carry no IFacing and no

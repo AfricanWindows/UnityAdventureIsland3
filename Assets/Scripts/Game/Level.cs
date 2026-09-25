@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: One level in the Hierarchy: knows its spawn point, switches itself on and off.
+/// PATTERNS: none - a plain component behind ILevel.
+/// SOLID: S - knows nothing about other levels; D - everyone sees it as ILevel.
+///
 /// One level, living as a GameObject in the Hierarchy instead of as a scene.
 ///
 /// It is deliberately DUMB: it holds the one thing only this level can answer - where the

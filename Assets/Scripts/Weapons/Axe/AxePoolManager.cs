@@ -1,6 +1,9 @@
 namespace Game.Weapons
 {
     /// <summary>
+    /// ROLE: The axe pool - its size is the axe's only limit.
+    /// PATTERNS: Pooling; Generics - an empty closed type of ProjectilePoolManager.
+    ///
     /// The axe's pool. Empty for the same engine reason as the others: Unity cannot show a
     /// generic MonoBehaviour in the Inspector, so a closed type must exist.
     ///

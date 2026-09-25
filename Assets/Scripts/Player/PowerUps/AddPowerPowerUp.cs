@@ -1,6 +1,9 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Effect: refill the power bar by N segments.
+/// PATTERNS: Template Method - fills Apply of PlayerComponentPowerUp; Composite - a leaf in the fruit.
+///
 /// "Eating this refills the power bar by N segments."
 ///
 /// One class for every fruit in the game: a banana is this with 1, a carrot is this with

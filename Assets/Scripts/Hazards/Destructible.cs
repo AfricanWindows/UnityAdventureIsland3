@@ -2,6 +2,10 @@ using Game.Core;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Lets the fairy or a ridden animal wipe an obstacle (stone, campfire) out of the level.
+/// PATTERNS: none - implements IObstacle and IResettable.
+/// SOLID: O - one component on the prefab; it comes back on a restart.
+///
 /// "The fairy can wipe this out of the level" - the campfire and the stone.
 ///
 /// Enemies do not need it: BaseEnemy already knows how to die, so it answers ForceKill

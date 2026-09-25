@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Game.Core
 {
     /// <summary>
+    /// ROLE: Answers "where is the player?" so that nobody searches the scene for him.
+    /// PATTERNS: DI - a service registered in GameInstaller.
+    /// SOLID: D - the camera, the level flow and the enemies depend on this, not on a Find call.
+    ///
     /// Answers one question: where is the player right now?
     ///
     /// The camera, the level flow and anything else that needs him ask THIS instead of

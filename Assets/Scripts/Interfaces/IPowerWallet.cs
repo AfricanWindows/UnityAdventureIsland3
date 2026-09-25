@@ -1,4 +1,8 @@
 /// <summary>
+/// ROLE: The power bar as a resource: add segments, take segments.
+/// PATTERNS: none - a role interface.
+/// SOLID: I - the fruit and the stone see only these two calls.
+///
 /// The power bar seen as a resource: put segments in, take segments out.
 ///
 /// What a stone and a fruit need from the power bar is exactly these two calls - not its

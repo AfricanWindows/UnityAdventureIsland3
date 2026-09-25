@@ -3,6 +3,9 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Editor tool: removes "Missing Script" components from prefabs.
+/// PATTERNS: none - an editor utility, not part of the game.
+///
 /// Removes "Missing (Mono Script)" components left behind when a script file is deleted.
 /// Unity refuses to save a prefab while such a component is on it, and the component
 /// header is drawn empty, so it is easy to miss with a right click.

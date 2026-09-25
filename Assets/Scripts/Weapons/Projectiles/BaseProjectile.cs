@@ -5,6 +5,10 @@ using UnityEngine;
 namespace Game.Projectiles
 {
     /// <summary>
+    /// ROLE: Base of every projectile: place it, move it, let it live, hit, go back to the pool.
+    /// PATTERNS: Template Method - the base (Fire); Pooling - the pooled product (IPoolable).
+    /// SOLID: L - subclasses never switch off what they inherit.
+    ///
     /// TEMPLATE METHOD. Every projectile is fired the same way - place it, start it moving,
     /// let it live for a while, hurt what it touches - and that skeleton is written HERE,
     /// once. A subclass only fills in the steps it actually cares about; it can never reorder

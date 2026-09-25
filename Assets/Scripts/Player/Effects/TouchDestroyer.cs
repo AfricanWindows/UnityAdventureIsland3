@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: While the fairy is active, destroys what the player touches (enemies, stones, fire).
+/// PATTERNS: none - a plain component.
+/// SOLID: D - destroys through IForceKillable.
+///
 /// "While this effect is running, everything I touch that can be destroyed, is" - the fairy
 /// clearing enemies, stones and campfires out of the player's way.
 ///

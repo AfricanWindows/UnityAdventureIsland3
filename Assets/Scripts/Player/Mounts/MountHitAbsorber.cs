@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: While riding, the animal takes any hit instead of the player.
+/// PATTERNS: none - implements IHitAbsorber.
+/// SOLID: S - split out of PlayerMount.
+///
 /// "The animal takes the hit": riding one, anything that would hurt the player - a stone, a
 /// campfire, an enemy, a shot - costs the animal instead, and the player walks on with his
 /// power and his lives untouched.

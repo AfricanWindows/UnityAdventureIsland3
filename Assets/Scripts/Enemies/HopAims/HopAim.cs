@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: WHERE a hop goes - the sideways speed a hopping enemy takes off with.
+/// PATTERNS: Strategy - the abstract strategy HoppingEnemy uses.
+/// SOLID: O - a new aim never edits HoppingEnemy.
+///
 /// WHERE a hop goes: the sideways speed a hopping enemy takes off with. How high it goes and
 /// how it falls belong to the JumpBehaviour; this only decides how far to the left.
 ///

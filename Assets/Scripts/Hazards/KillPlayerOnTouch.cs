@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: Touching this kills the player (enemies, spikes, the campfire).
+/// PATTERNS: Template Method - fills Affect of PlayerContactEffect.
+/// SOLID: D - talks to IKillable.
+///
 /// Touching this kills the player outright: enemies, spikes, and the campfire from the
 /// assignment, which is described as instant death.
 ///

@@ -1,6 +1,10 @@
 using UnityEngine;
 
 /// <summary>
+/// ROLE: HOW a jump behaves: the push-off, releasing the key, gravity in the air.
+/// PATTERNS: Template Method - abstract steps; Strategy - PlayerJump and HoppingEnemy use any jump.
+/// SOLID: O - a new jump feel is a new subclass.
+///
 /// HOW a jump behaves: the push-off, what letting go of the key does, and what gravity does
 /// in the air. It knows nothing about WHEN a jump is allowed, who asked for it or which key
 /// was pressed - that is PlayerJump's job.
