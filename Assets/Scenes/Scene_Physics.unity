@@ -13236,6 +13236,7 @@ GameObject:
   - component: {fileID: 1037063893}
   - component: {fileID: 1037063892}
   - component: {fileID: 1037063895}
+  - component: {fileID: 1037063896}
   m_Layer: 0
   m_Name: Pool
   m_TagString: Untagged
@@ -13311,6 +13312,24 @@ MonoBehaviour:
   container: {fileID: 1037063894}
   prewarmCount: 8
   maxSize: 8
+  allowGrowth: 0
+--- !u!114 &1037063896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037063891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8faaca1a2ae169b49ad3eee97a95a6c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotPoolManager
+  prefab: {fileID: 1522531898555936331, guid: 652ed025a7cb5ec45a8695b150ec2d62, type: 3}
+  config: {fileID: 11400000, guid: 8935a4e51cfa62449aea483b36a40acb, type: 2}
+  container: {fileID: 1037063894}
+  prewarmCount: 3
+  maxSize: 3
   allowGrowth: 0
 --- !u!1001 &1038916173
 PrefabInstance:
@@ -24947,56 +24966,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4206183946008236365, guid: 0fa037fbee017fa46ac081ab8b046923, type: 3}
   m_PrefabInstance: {fileID: 2006802915}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2007872138
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2007872139}
-  - component: {fileID: 2007872141}
-  m_Layer: 0
-  m_Name: AnimalShotPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2007872139
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007872138}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -115.15047, y: 15.43076, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2007872141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007872138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8faaca1a2ae169b49ad3eee97a95a6c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Weapons.AnimalShotPoolManager
-  prefab: {fileID: 1522531898555936331, guid: 652ed025a7cb5ec45a8695b150ec2d62, type: 3}
-  config: {fileID: 11400000, guid: 8935a4e51cfa62449aea483b36a40acb, type: 2}
-  container: {fileID: 0}
-  prewarmCount: 3
-  maxSize: 3
-  allowGrowth: 0
 --- !u!1001 &2010581173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27095,4 +27064,3 @@ SceneRoots:
   - {fileID: 1015341590}
   - {fileID: 1647404014}
   - {fileID: 1037063894}
-  - {fileID: 2007872139}

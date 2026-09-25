@@ -14,7 +14,7 @@ namespace Game.Weapons
     ///
     /// This one class replaced a hand-written pool manager per weapon, which were the
     /// same 110 lines twice over. Everything that used to be duplicated - the null checks,
-    /// the container creation, the forwarding - is written here once.
+    /// the choice of container, the forwarding - is written here once.
     ///
     /// Note what is NOT here: no queue, no reuse logic, no Instantiate. All of that lives
     /// in GenericObjectPool, a plain C# class that knows nothing about projectiles. A
@@ -41,9 +41,9 @@ namespace Game.Weapons
         [FormerlySerializedAs("boomerangConfig")]
         [SerializeField] private ProjectileConfigSO config;
 
-        [Tooltip("Parent for every pooled object. Leave empty and one is created at the " +
-                 "root of the scene. If you assign your own, it must sit at the ROOT - a " +
-                 "container inside a level is switched off together with that level.")]
+        [Tooltip("Parent for every pooled object. Leave empty to use this object itself. " +
+                 "Either way it must sit OUTSIDE the levels - a container inside a level is " +
+                 "switched off together with that level.")]
         [SerializeField] private Transform container;
 
         [Header("Pool size")]
@@ -98,51 +98,37 @@ namespace Game.Weapons
         }
 
         /// <summary>
-        /// The container assigned in the Inspector, or a fresh one at the root of the scene.
+        /// The container assigned in the Inspector, or this pool's own object. Nothing is ever
+        /// created at run time, so every pool and its sleeping projectiles are the objects you
+        /// see in the Hierarchy before pressing Play.
         ///
         /// The warning is worth more than it looks. The levels are switched with
         /// SetActive, so a container parked inside one of them is switched off with that
         /// level - and a pooled object whose PARENT is inactive stays invisible no matter
         /// what the pool does to the object itself. The weapon would fire, the pool would
         /// report a hand-out, and nothing would appear on screen. Same story, less fatal,
-        /// for a container that rides on something that moves: every sleeping projectile
-        /// would be dragged along and re-transformed for nothing.
+        /// for a container that rides on something that moves (the pools once sat on the
+        /// player): every sleeping projectile would be dragged along and re-transformed for
+        /// nothing. So a pool object belongs at the root, standing still.
         /// </summary>
         private Transform ResolveContainer()
         {
-            if (container == null)
-                return CreateRootContainer();
+            Transform parent = container != null ? container : transform;
 
             // The test is "inside a Level", not "has a parent". Parking the pool under a
             // tidy-up object such as Scripts is fine - that object is never switched off.
             // A LEVEL is, every time the player moves on, and an inactive parent takes its
             // sleeping projectiles down with it: the weapon would fire, the pool would
             // report a hand-out, and nothing would appear on screen.
-            ILevel owningLevel = container.GetComponentInParent<ILevel>(true);
+            ILevel owningLevel = parent.GetComponentInParent<ILevel>(true);
 
             if (owningLevel != null)
-                Debug.LogWarning(LogPrefix + " pool container '" + container.name +
+                Debug.LogWarning(LogPrefix + " pool container '" + parent.name +
                                  "' sits inside level '" + owningLevel.DisplayName + "'. Move it out: " +
                                  "that container is switched off when the level changes, and " +
                                  "every pooled object inside it goes dark with it.", this);
 
-            return container;
-        }
-
-        /// <summary>
-        /// Parks the pooled objects on their own object at the root of the scene.
-        ///
-        /// This matters more than it looks. If the container were this object, every sleeping
-        /// projectile would share its fate: dragged along whenever it moves, switched off
-        /// whenever it is. The pools once sat on the player, where both happened; a container
-        /// of their own at the root keeps the hierarchy flat and still, so Unity never
-        /// recalculates those transforms.
-        /// </summary>
-        private Transform CreateRootContainer()
-        {
-            GameObject holder = new GameObject(typeof(TProjectile).Name + "Pool");
-            holder.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-            return holder.transform;
+            return parent;
         }
 
         /// <summary>
