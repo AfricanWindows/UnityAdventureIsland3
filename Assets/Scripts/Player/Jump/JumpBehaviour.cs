@@ -6,9 +6,10 @@ using UnityEngine;
 /// was pressed - that is PlayerJump's job.
 ///
 /// This is the Template pattern. The base fixes the shape of a jump - three moments, always
-/// the same three - and a subclass fills in only the ones it actually has. Begin is abstract
-/// because every jump has a push-off; the other two are empty by default, so a jump that does
-/// not care about the key being released is not forced to write an empty method to say so.
+/// the same three - and every subclass answers all three itself. None of them has an empty
+/// default: the one jump in the game both shortens its rise and falls faster, so such a
+/// default would be code that never runs. A jump with one fixed height writes an empty Cut()
+/// and says so in plain sight.
 ///
 /// PlayerJump talks to THIS type, never to a concrete jump, so a different feel is a new
 /// subclass and not an edit to any existing file (Open/Closed). Nothing here mentions a
@@ -57,19 +58,15 @@ public abstract class JumpBehaviour : MonoBehaviour
 
     /// <summary>
     /// The key was released while still rising, so the player asked for a SHORT jump.
-    /// Called at most once per jump. A jump with one fixed height ignores it.
+    /// Called at most once per jump. A jump with one fixed height leaves it empty.
     /// </summary>
-    public virtual void Cut()
-    {
-    }
+    public abstract void Cut();
 
     /// <summary>
     /// Called every fixed step while off the ground - rising, falling, or falling after simply
-    /// walking off a ledge. Empty means "plain Unity gravity, as set on the Rigidbody".
+    /// walking off a ledge. Left empty, it means "plain Unity gravity, as set on the Rigidbody".
     /// </summary>
-    public virtual void ApplyAirPhysics(float deltaTime)
-    {
-    }
+    public abstract void ApplyAirPhysics(float deltaTime);
 
     /// <summary>
     /// Writes the vertical speed and leaves the horizontal one alone.

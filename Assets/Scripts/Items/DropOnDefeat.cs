@@ -9,9 +9,10 @@ using UnityEngine;
 /// reason the dropper was never written inside EggContainer (Open/Closed) - a third trigger,
 /// say a smashed crate, is another small class like this one and no change anywhere else.
 ///
-/// It talks to IRespawnable, not to BaseEnemy, and to IItemDropper, not to PickableDropper,
+/// It talks to IDefeatable, not to BaseEnemy, and to IItemDropper, not to PickableDropper,
 /// so it never learns what an enemy or a dropper is - only that something announced it was
-/// defeated, and that something can drop an item (Dependency Inversion).
+/// defeated, and that something can drop an item (Dependency Inversion). Not IRespawnable
+/// either: whether the enemy ever comes back is none of its business (Interface Segregation).
 ///
 /// Subscribed in Start and dropped only in OnDestroy - deliberately NOT the usual
 /// OnEnable/OnDisable pair. The event we are waiting for is the one that DISABLES this
@@ -28,7 +29,7 @@ public class DropOnDefeat : MonoBehaviour
     // What drops. Found on this object; Unity cannot serialize an interface.
     private IItemDropper dropper;
 
-    private IRespawnable target;
+    private IDefeatable target;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class DropOnDefeat : MonoBehaviour
             Debug.LogError("DropOnDefeat: no IItemDropper on " + gameObject.name + " - there is " +
                            "nothing to drop. Add a Pickable Dropper.", this);
 
-        target = GetComponent<IRespawnable>();
+        target = GetComponent<IDefeatable>();
 
         if (target == null)
             Debug.LogError("DropOnDefeat: nothing on " + gameObject.name + " can be defeated - " +

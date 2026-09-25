@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 6215665566395887042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -101.46, y: 21.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065fae7abf43b314dbdfc523d809e446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableDropper
-  contentMode: 0
   specificItem: {fileID: 0}
   randomPool:
   - {fileID: 8523655383074392065, guid: c410ac921d691204498c7ea4fba881c5, type: 3}
@@ -177,8 +176,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EggContainer
   playerTag: Player
-  dropper: {fileID: 0}
-  toss: {fileID: 0}
   eggCollider: {fileID: 0}
   eggRenderer: {fileID: 0}
 --- !u!114 &7730148522268293283

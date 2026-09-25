@@ -93,8 +93,11 @@ namespace Game.Weapons
             OnAwake();
         }
 
-        /// <summary>Subclass setup. Cache references here, never in Attack().</summary>
-        protected virtual void OnAwake() { }
+        /// <summary>
+        /// Subclass setup. Cache references here, never in Attack(). Abstract, not an empty
+        /// virtual: every weapon has setup of its own, so an empty default would never run.
+        /// </summary>
+        protected abstract void OnAwake();
 
         // ================= TEMPLATE METHOD =================
         /// <summary>

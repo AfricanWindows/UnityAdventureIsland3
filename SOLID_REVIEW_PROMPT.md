@@ -1,7 +1,7 @@
 # Ревью кода AdventureIsland3: SOLID, Generics, паттерны задания
 
 > Промпт для нового чата. Прочитай целиком, прежде чем открывать код.
-> Состояние на 24.09.2026. Сдача 26.09.2026, защита 28–30.09.
+> Состояние на 25.09.2026. Сдача 26.09.2026, защита 28–30.09.
 
 ---
 
@@ -55,7 +55,7 @@ generic / паттерн» без конкретной пользы считае
 | **MVC** ×3 | Health: `PlayerHealthModel` / `PlayerHealthController` / `PlayerHealthView`. Power: `PowerModel` / `PowerController` / `PowerBarView`. Fruit: `FruitCounterModel` / `FruitCounterController` / `FruitCounterView` | Модели на чистом C# (`ClampedCounterModel` — общая база для Health и Power). View приходят через DI как интерфейсы. Два текстовых view — общая база `TextCounterView`. |
 | **Async & Tasks** | `Game/RespawnTimer.cs` | `Awaitable.NextFrameAsync` + `Time.deltaTime` (пауза учитывается), `CancellationTokenSource`, связанный с `destroyCancellationToken`, исключения логируются. |
 | **Template Method** | `BaseWeapon.Attack → CanFire / FireInternal`; `ProjectileWeapon → Launch`; `DirectionalWeapon → OnBeforeLaunch`; `BaseProjectile.Fire → OnBeforeFire / StartMotion`, `TryHit`; `DirectionalProjectile.StartMotion → ApplyMovement`; `PlayerContactEffect → Affect`; `EndScreenController → Subscribe / Unsubscribe`; `BasePickable → CreatePowerUp`; `PlayerComponentPowerUp → Apply`; `SlotPowerUp → PutIn`; `ChasingEnemy.CanMove`; `ActivatableEnemy.Activate → OnActivated`; `BaseEnemy.OnAwake` | Каждый `virtual` в проекте реально переопределён — хуков «на будущее» нет (убраны 24.09). |
-| Прочее (не требуется, но есть) | Strategy: `MovementPath` (`PingPongPath`, `SinePath`), `HopAim` (`ForwardHopAim`, `PlayerHopAim`), `JumpBehaviour`. Composite: `CompositePowerUp`. Observer: события `IOutOfLivesNotifier`, `INextLifeNotifier`, `ILevelEvents`, `IRespawnable.Defeated`, `IAttacker.Attacked`. | |
+| Прочее (не требуется, но есть) | Strategy: `MovementPath` (`PingPongPath`, `SinePath`), `HopAim` (`ForwardHopAim`, `PlayerHopAim`), `JumpBehaviour`. Composite: `CompositePowerUp`. Observer: события `IOutOfLivesNotifier`, `INextLifeNotifier`, `ILevelEvents`, `IDefeatable.Defeated`, `IAttacker.Attacked`. | |
 
 Остальные generic-классы: `ProjectileWeapon<T>`, `DirectionalWeapon<T>`, `ItemDropper<TItem>`,
 `WeaponPickable<TWeapon>`, `MountPickable<TMount>`, `EquipWeaponPowerUp<TWeapon>`,
@@ -133,9 +133,20 @@ generic / паттерн» без конкретной пользы считае
   случайный из пула.
 - **`InputDrivenBehaviour.HasInput` учитывает паузу** (`Time.timeScale > 0`): за экранами конца игры
   ввод не исполняется. Паузой по-прежнему владеет `EndScreenController`; ввод её только уважает.
-- **`virtual` только там, где есть override.** Предлагать «хук на будущее» — ошибка ревью.
+- **`virtual` только там, где есть override, а пустое тело — только там, где его использует хотя
+  бы один наследник** (25.09 такие `Cut`, `ApplyAirPhysics`, `BaseWeapon.OnAwake` стали `abstract`).
+  Предлагать «хук на будущее» — ошибка ревью. `ChasingEnemy.CanMove` не мёртвый: класс не абстрактный.
 - **`EggContainer : IRespawnable` без `RespawnTimer` на яйцах** — возможность через композицию,
   сейчас не используется намеренно.
+- **`IDefeatable` с одним клиентом (`DropOnDefeat`)** — отделён от `IRespawnable` 25.09: «побеждён»
+  и «вернётся» — разные понятия. Не сливать обратно.
+- **Разные клиенты берут разные члены одного интерфейса** (`IWeaponSlot`, `IMountSlot`,
+  `IPowerWallet`, `ILevelEvents`) — одна роль над одним состоянием, реализация честно выполняет
+  все члены. Не дробить.
+- **DI через `IInjectable.Inject`, а не Service Locator:** контейнер раздаёт `GameInstaller` один раз
+  до `Awake`, резолвер никто не хранит, статики нет.
+- **Пустые `PowerModel` / `PlayerHealthModel` и их интерфейсы** — типобезопасность:
+  `PowerDrainService` принимает только `IPowerModel`, жизни к нему не подключить.
 
 ---
 
